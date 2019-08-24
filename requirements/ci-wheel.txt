@@ -1,0 +1,8 @@
+-r flake.txt
+pytest==5.1.1
+pytest-cov==2.7.1
+tox==3.13.2
+twine==1.13.0
+
+# Using PEP 508 env markers to control dependency on runtimes:
+codecov==2.0.15

@@ -1,0 +1,6 @@
+- Contributors -
+----------------
+Andrew Svetlov
+Martijn Pieters
+Pau Freixes
+Paul Colomiets
