@@ -98,6 +98,7 @@ args = dict(
         'CI: Shippable': 'https://app.shippable.com/github/aio-libs/frozenlist',
         'CI: Travis': 'https://travis-ci.com/aio-libs/frozenlist',
         'Coverage: codecov': 'https://codecov.io/github/aio-libs/frozenlist',
+        'Docs: RTD': 'https://frozenlist.readthedocs.io',
         'GitHub: issues': 'https://github.com/aio-libs/frozenlist/issues',
         'GitHub: repo': 'https://github.com/aio-libs/frozenlist',
     },
