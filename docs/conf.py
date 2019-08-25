@@ -57,7 +57,7 @@ except ImportError:
 intersphinx_mapping = {
     'python': ('http://docs.python.org/3', None),
     'aiohttp':
-        ('https://aiohttp.readthedocs.io/en/stable/', None),
+        ('https://docs.aiohttp.org/en/stable/', None),
 }
 
 # Add any paths that contain templates here, relative to this directory.
