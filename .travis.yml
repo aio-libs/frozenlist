@@ -4,7 +4,6 @@ if: >  # Forbid running non-PR pushes from pyup bot
   not (type != pull_request AND branch =~ ^pyup\-scheduled\-update\-)
 
 dist: xenial
-sudo: required
 
 language: python
 
@@ -55,7 +54,7 @@ _helpers:
 - &osx_python_base
   stage: &stage_test_osx_name test under OS X (last chance to fail before deploy available)
   os: osx
-  language: generic
+  language: shell
   python: *pypy3
   env:
   - &env_pypy3 PYTHON_VERSION=pypy3.6-7.1.1
@@ -84,8 +83,8 @@ _helpers:
     # present in PYPI instead of failing the whole process.
     # This happens when other CI (AppVeyor etc.) has already uploaded
     # the very same dist (usually sdist).
-    skip-existing: true
-    user: __token__
+    skip_existing: true
+    username: __token__
     password:
       # Encrypted with `travis encrypt`:
       secure: "Ja3wInSJu161pf9yHxDhthYknOQLM3unzGNU7oMkVcZkt9HahTjQAQy6TV7ELfe18nYj0hNBGVbbEE4tPtf8ENtcjfU5HVxrqaLSKq/A361HfrXUiXJhq1INaf3ZBDA7kxLo9CWlWYoy0UWDgzZhkGEwjvBbLV8/6D3+5cJqzmORl3so8RHp7iJDjlL4aKc8DTwKdeBFLi0QhtA7kWUzOFUlQal5q4qDhdC3xil0m8LgvszQwYB9MuChw/qN/Y+uQ6L/ANMoZLl0Pdl6MdWtak8Tqu/a+AZMft+mjX5AzYbCBkDgsvvzIZi8GOZ0tNYpGsspwOk6xE9Auwvtdm8NXwEJ7ea8TJSiot3OuYIs9FXzmTjhtAZ11TC4UQ3krJQdZ4BmbW73CGxQuAQqe/QZBcCR6i1a1RbAXSoqqC7rfmKNHKPcPQHGsRdV5bGIMdRR+XVvizW+v8CSJU2d6rs+WqysyxQbipi6ASNeLfHO2zOgHREPQfwn2AE0PeNfN3if67SaC2uEQGc4qnkWs7gDhWZro1zBXsy7G8aKmCalE6RqcQT5JqjqJqSYWKHTUVVg2xVQTMajhYmqkvbaIgjCr0YHlLGcficLAg7r+8dJVKLyzQ13/TFh5fm2FPHFGQLNua/ZraPGSWRCOKuTKeMxvyMY4JqSQ8KB22TnYhx2yy8="
@@ -136,7 +135,7 @@ _helpers:
 
 os: linux
 
-jobs:
+matrix:
   fast_finish: true
   allow_failures:
   - python: nightly
@@ -145,7 +144,7 @@ jobs:
   - name: 3.7 without extensions
     python: 3.7
     env:
-      FROZENLIST_NO_EXTENSIONS: 1
+      FROZENLIST_NO_EXTENSIONS: "1"
 
   - <<: *_doc_base
     name: Checking docs spelling
@@ -190,7 +189,7 @@ jobs:
 
   - <<: *_lint_base
     name: Making sure that CONTRIBUTORS.txt remains sorted
-    language: minimal
+    language: shell
     install:
     - skip
     script:
