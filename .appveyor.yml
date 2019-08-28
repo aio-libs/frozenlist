@@ -9,6 +9,9 @@ environment:
     - PYTHON: "C:\\Python37"
     - PYTHON: "C:\\Python37-x64"
   MAKE: C:\MinGW\bin\mingw32-make.exe
+  TWINE_USERNAME: __token__
+  TWINE_PASSWORD:
+    secure: 4oGYDgM9gfndCpp+Fk3AwTw7KtULlx2iOQcJ8/k/t1SUW2l0UkK4WbZNUMFtkAeT3mv1ibSKI0BuuYUUjtSJPF1mSki+Ky1nSaaLj22B5Dp4XLOOGJQKQtBXMkjc6g3A3O1GjzBDfzhXlfs961ETtHE2x+3z9jbIpTYzL6HxUL6EVthyA1OPVbZ65bwvoQhRC1AaFx4Qrr6ToZ5el5PUT/XWPJpj3RnMYTz64mmu/FrpCElDqDAtGib3P5WeZ+DqIQHmiw0DdqeeVN3ZQmlx7g==
 
 cache:
   - '%LOCALAPPDATA%\pip\Cache'
@@ -38,6 +41,12 @@ after_test:
 
 artifacts:
   - path: dist\*
+
+deploy_script:
+  - ps: >-
+      if($env:appveyor_repo_tag -eq 'True') {
+          Invoke-Expression "$env:PYTHON\\python.exe -m twine upload dist/* --skip-existing"
+      }
 
 on_finish:
   - ps: >-
