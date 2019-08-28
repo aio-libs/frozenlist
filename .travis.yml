@@ -72,6 +72,67 @@ _helpers:
   - &python_version python --version
   before_cache:
   - brew --cache
+- &generic_deploy_base
+  stage: &deploy_stage_name deploy (PYPI upload itself runs only for tagged commits)
+  <<: *_mainstream_python_base
+  deploy: &deploy_step
+    provider: pypi
+    # `skip_cleanup: true` is required to preserve binary wheels, built
+    # inside of manylinux1 docker container during `script` step above.
+    skip_cleanup: true
+    # `skip-existing: true` is required to skip uploading dists, already
+    # present in PYPI instead of failing the whole process.
+    # This happens when other CI (AppVeyor etc.) has already uploaded
+    # the very same dist (usually sdist).
+    skip-existing: true
+    user: __token__
+    password:
+      # Encrypted with `travis encrypt`:
+      secure: "Ja3wInSJu161pf9yHxDhthYknOQLM3unzGNU7oMkVcZkt9HahTjQAQy6TV7ELfe18nYj0hNBGVbbEE4tPtf8ENtcjfU5HVxrqaLSKq/A361HfrXUiXJhq1INaf3ZBDA7kxLo9CWlWYoy0UWDgzZhkGEwjvBbLV8/6D3+5cJqzmORl3so8RHp7iJDjlL4aKc8DTwKdeBFLi0QhtA7kWUzOFUlQal5q4qDhdC3xil0m8LgvszQwYB9MuChw/qN/Y+uQ6L/ANMoZLl0Pdl6MdWtak8Tqu/a+AZMft+mjX5AzYbCBkDgsvvzIZi8GOZ0tNYpGsspwOk6xE9Auwvtdm8NXwEJ7ea8TJSiot3OuYIs9FXzmTjhtAZ11TC4UQ3krJQdZ4BmbW73CGxQuAQqe/QZBcCR6i1a1RbAXSoqqC7rfmKNHKPcPQHGsRdV5bGIMdRR+XVvizW+v8CSJU2d6rs+WqysyxQbipi6ASNeLfHO2zOgHREPQfwn2AE0PeNfN3if67SaC2uEQGc4qnkWs7gDhWZro1zBXsy7G8aKmCalE6RqcQT5JqjqJqSYWKHTUVVg2xVQTMajhYmqkvbaIgjCr0YHlLGcficLAg7r+8dJVKLyzQ13/TFh5fm2FPHFGQLNua/ZraPGSWRCOKuTKeMxvyMY4JqSQ8KB22TnYhx2yy8="
+    # Although Travis CI instructs `setup.py` to build source distribution,
+    # which is default value for distribution option (`distribution: sdist`),
+    # it will also upload all wheels we've previously built in manylinux1
+    # docker container using `twine upload -r pypi dist/*` command.
+    # Also since commit https://github.com/travis-ci/dpl/commit/90b5e39
+    # it is default that Travis PYPI provider has `skip_upload_docs: true`
+    # set by default.
+    # Besides above, we don't do cleanup of `dist/*`, because it's being done
+    # by Travis CI PYPI deployment provider after upload, unconditionally.
+    on:
+      tags: true
+      all_branches: true
+- &osx_pypi_deploy_base_1011
+  <<: *osx_python_base
+  <<: *generic_deploy_base
+  osx_image: xcode7.3
+  script: skip
+  after_success: []
+  env:
+  - &env_os1011_msg Build and deploy to PYPI of OS X 10.11 binary wheel=
+  - &env_py36 PYTHON_VERSION=3.6.3
+  - *env_pyenv
+  - *env_path
+  deploy:
+    <<: *deploy_step
+    skip_cleanup: false
+    distributions: bdist_wheel
+- &osx_pypi_deploy_base_1012
+  <<: *osx_pypi_deploy_base_1011
+  osx_image: xcode8.1
+  env:
+  - &env_os1012_msg Build and deploy to PYPI of OS X 10.12 binary wheel=
+  - *env_py36
+  - *env_pyenv
+  - *env_path
+- &osx_pypi_deploy_base_1010
+  <<: *osx_pypi_deploy_base_1011
+  osx_image: xcode6.4
+  env:
+  - &env_os1010_msg Build and deploy to PYPI of OS X 10.10 binary wheel=
+  - *env_py36
+  - *env_pyenv
+  - *env_path
+
 
 os: linux
 
@@ -155,11 +216,97 @@ jobs:
     - *env_path
   # pypy3.5-5.10.0 fails under OS X because it's unsupported
 
+  # Build and deploy manylinux1 binary wheels and source distribution
+  - <<: *generic_deploy_base
+    <<: *_reset_steps
+    env: Build and deploy to PYPI of manylinux1 binary wheels for all supported Pythons and source distribution=
+    services:
+    - docker
+    script:
+    - pip install -r requirements/cython.txt
+    - pip install -r requirements/ci.txt  # to compile *.c files by Cython
+    - make cythonize
+    - ./tools/run_docker.sh "frozenlist"
+    deploy:
+      <<: *deploy_step
+
+    # Build and deploy MacOS binary wheels for each OSX+Python combo possible
+    # OS X 10.10, Python 3.5
+  - <<: *osx_pypi_deploy_base_1010
+    python: 3.5
+    env:
+    - *env_os1010_msg
+    - *env_py35
+    - *env_pyenv
+    - *env_path
+    # OS X 10.10, Python 3.6
+  - <<: *osx_pypi_deploy_base_1010
+    env:
+    - *env_os1010_msg
+    - *env_py36
+    - *env_pyenv
+    - *env_path
+    # OS X 10.10, Python 3.7
+  - <<: *osx_pypi_deploy_base_1010
+    env:
+    - *env_os1010_msg
+    - *env_py37
+    - *env_pyenv
+    - *env_path
+    # OS X 10.11, Python 3.5
+  - <<: *osx_pypi_deploy_base_1011
+    python: 3.5
+    env:
+    - *env_os1011_msg
+    - *env_py35
+    - *env_pyenv
+    - *env_path
+    # OS X 10.11, Python 3.6
+  - <<: *osx_pypi_deploy_base_1011
+    env:
+    - *env_os1011_msg
+    - *env_py36
+    - *env_pyenv
+    - *env_path
+    # OS X 10.11, Python 3.7
+  - <<: *osx_pypi_deploy_base_1011
+    env:
+    - *env_os1011_msg
+    - *env_py37
+    - *env_pyenv
+    - *env_path
+    # OS X 10.12, Python 3.5
+  - <<: *osx_pypi_deploy_base_1012
+    python: 3.5
+    env:
+    - *env_os1012_msg
+    - *env_py35
+    - *env_pyenv
+    - *env_path
+    # OS X 10.12, Python 3.6
+  - <<: *osx_pypi_deploy_base_1012
+    env:
+    - *env_os1012_msg
+    - *env_py36
+    - *env_pyenv
+    - *env_path
+    # OS X 10.12, Python 3.7
+  - <<: *osx_pypi_deploy_base_1012
+    env:
+    - *env_os1012_msg
+    - *env_py37
+    - *env_pyenv
+    - *env_path
+
 stages:
 - *doc_stage_name
 - test
 - name: *stage_test_osx_name
   if: type IN (api, cron)
+- name: *deploy_stage_name
+  # This will prevent deploy unless it's a tagged commit:
+  if: tag IS present
+
 
 cache: pip
 
