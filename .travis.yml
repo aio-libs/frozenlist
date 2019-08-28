@@ -138,7 +138,7 @@ os: linux
 matrix:
   fast_finish: true
   allow_failures:
-  - python: nightly
+  - python: 3.8-dev
 
   include:
   - name: 3.7 without extensions
