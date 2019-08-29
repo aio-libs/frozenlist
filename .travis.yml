@@ -1,5 +1,3 @@
-conditions: v1
-version: "= 0"
 if: >  # Forbid running non-PR pushes from pyup bot
   not (type != pull_request AND branch =~ ^pyup\-scheduled\-update\-)
 
@@ -41,9 +39,8 @@ _helpers:
   script: skip
 
 - &lint_base
-  <<:
-    - *_mainstream_python_base
-    - *_reset_steps
+  <<: *_mainstream_python_base
+  <<: *_reset_steps
   stage: &doc_stage_name docs, linting and pre-test checks
   env:
     FROZENLIST_NO_EXTENSIONS: "1"
