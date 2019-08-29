@@ -16,8 +16,11 @@ python:
 
 install:
 - &upgrade_python_toolset pip install --upgrade pip wheel setuptools
-- make cythonize
-- pip install -r requirements/ci.txt
+- pip install -r requirements/cython.txt
+
+before_script:
+- &cythonize make cythonize
+- &ci_requirements pip install --upgrade -r requirements/ci.txt
 
 script:
 - make cov-ci-run
@@ -26,26 +29,31 @@ after_success:
  - codecov
 
 _helpers:
+  # anchor nodes to be included elsewhere.
+  # names that start with _ are only used in other helpers
 - &_mainstream_python_base
   python: *mainstream_python
 - &_reset_steps
   env: []
   before_install: skip
   install: skip
+  before_script: skip
   script: skip
-  after_success: []
-- &_lint_base
+
+- &lint_base
+  <<:
+    - *_mainstream_python_base
+    - *_reset_steps
   stage: &doc_stage_name docs, linting and pre-test checks
-  <<: *_mainstream_python_base
-  <<: *_reset_steps
+  env:
+    FROZENLIST_NO_EXTENSIONS: "1"
   install:
   - *upgrade_python_toolset
-  - pip install -U -r requirements/ci.txt
-- &_doc_base
-  <<: *_lint_base
-  install:
-  - *upgrade_python_toolset
-  - pip install -U -r requirements/doc.txt -r requirements/doc-spelling.txt
+  - *ci_requirements
+- &doc_base
+  <<: *lint_base
+  before_script:
+  - pip install --upgrade -r requirements/doc.txt -r requirements/doc-spelling.txt
   after_failure: cat docs/_build/spelling/output.txt
   addons:
     apt:
@@ -146,52 +154,42 @@ matrix:
     env:
       FROZENLIST_NO_EXTENSIONS: "1"
 
-  - <<: *_doc_base
+  - <<: *doc_base
     name: Checking docs spelling
     script:
     - make doc-spelling
 
-  - <<: *_doc_base
+  - <<: *doc_base
     name: Checking Towncrier fragments
-    install:
-    - *upgrade_python_toolset
-    - pip install -r requirements/cython.txt
-    - FROZENLIST_NO_EXTENSIONS=1 pip install -r requirements/ci.txt
+    before_script:
     - pip install -r requirements/towncrier.txt
     script:
     - towncrier --yes
 
-  - <<: *_lint_base
+  - <<: *lint_base
     name: Linting source code with flake8
-    install:
-    - *upgrade_python_toolset
+    before_script:
     - pip install -r requirements/flake.txt
     script:
     - flake8 frozenlist tests
 
-  - <<: *_lint_base
+  - <<: *lint_base
     name: Linting source code with mypy
-    install:
-    - *upgrade_python_toolset
-    - pip install -r requirements/cython.txt
-    - FROZENLIST_NO_EXTENSIONS=1 pip install -r requirements/ci.txt
     script:
     - mypy frozenlist
 
-  - <<: *_lint_base
+  - <<: *lint_base
     name: Verifying distribution package metadata
-    install:
-    - *upgrade_python_toolset
-    - FROZENLIST_NO_EXTENSIONS=1 pip install -r requirements/ci.txt -r requirements/doc.txt
+    before_script:
+    - pip install -r requirements/doc.txt
     script:
-    - FROZENLIST_NO_EXTENSIONS=1 python setup.py --verbose sdist bdist_wheel
+    - python setup.py --verbose sdist bdist_wheel
     - twine check dist/*
 
-  - <<: *_lint_base
+  - <<: *lint_base
     name: Making sure that CONTRIBUTORS.txt remains sorted
     language: shell
-    install:
-    - skip
+    install: skip
     script:
     - LC_ALL=C sort -c CONTRIBUTORS.txt
 
