@@ -116,7 +116,7 @@ _helpers:
 - &linux_pypi_deploy_base
   <<: *_generic_deploy_base
   <<: *_mainstream_python_base
-  stage: &deploy_stage Linux build and deploy
+  stage: &deploy_stage_name Linux build and deploy
   deploy:
     <<: *_deploy_defaults
     # `skip_cleanup: true` is required to preserve binary wheels, built
