@@ -212,11 +212,9 @@ matrix:
   - <<: *osx_pypi_deploy_base_1012
     name: binary wheel python 3.5 on OS X 10.12
     env: *osx_py35_env
-    # OS X 10.12, Python 3.6
   - <<: *osx_pypi_deploy_base_1012
     name: binary wheel python 3.6 on OS X 10.12
     env: *osx_py36_env
-    # OS X 10.12, Python 3.7
   - <<: *osx_pypi_deploy_base_1012
     name: binary wheel python 3.7 on OS X 10.12
     env: *osx_py37_env
