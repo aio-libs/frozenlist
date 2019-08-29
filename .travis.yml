@@ -73,7 +73,7 @@ _helpers:
   - brew update
   - |
     if brew ls --versions pyenv > /dev/null; then
-      brew outdated pyenv || brew upgra(de pyenv
+      brew outdated pyenv || brew upgrade pyenv
       if brew ls --versions pyenv-virtualenv > /dev/null; then
         brew outdated pyenv-virtualenv || brew upgrade pyenv-virtualenv
       else
