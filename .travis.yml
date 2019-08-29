@@ -73,7 +73,7 @@ _helpers:
   - brew update
   - |
     if brew ls --versions pyenv > /dev/null; then
-      brew outdated pyenv || brew upgrade pyenv
+      brew outdated pyenv || brew upgra(de pyenv
       if brew ls --versions pyenv-virtualenv > /dev/null; then
         brew outdated pyenv-virtualenv || brew upgrade pyenv-virtualenv
       else
@@ -85,7 +85,13 @@ _helpers:
   - |
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
-    PYENV_PYTHON_VERSION="$(pyenv install --list | grep -E "^\\s*$PYTHON_VERSION" | sort -n -t. -k3 | grep -v "pypy.*-.*-src$" | tail -n1)"
+    PYENV_PYTHON_VERSION="$(pyenv install --list \
+      | grep -E "^\\s*$PYTHON_VERSION" \
+      | sort -n -t. -k3 \
+      | tail -n1 \
+      | tr -d '[:space:]' \
+      )"
+    echo $PYENV_PYTHON_VERSION
   - pyenv install --skip-existing --keep --verbose "$PYENV_PYTHON_VERSION"
   - pyenv shell "$PYENV_PYTHON_VERSION"
   - python --version
