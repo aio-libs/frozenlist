@@ -133,7 +133,7 @@ matrix:
 
   include:
   - name: without extensions
-    python: &mainstream_python
+    python: *mainstream_python
     env:
       FROZENLIST_NO_EXTENSIONS: "1"
 
