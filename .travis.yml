@@ -35,7 +35,6 @@ _helpers:
   env: []
   before_install: skip
   install: skip
-  before_script: skip
   script: skip
 
 - &lint_base
@@ -47,6 +46,7 @@ _helpers:
   install:
   - *upgrade_python_toolset
   - *ci_requirements
+  before_script: skip
 
 - &_generic_deploy_base
   <<: *_reset_steps
@@ -60,7 +60,6 @@ _helpers:
     on:
       tags: true
       all_branches: true
-      condition: ! ${PYENV_PYTHON_VERSION:-"x"} =~ ^pypy*
 
 - &_osx_pypi_deploy_base
   <<: *_generic_deploy_base
@@ -110,6 +109,7 @@ _helpers:
 
 - &linux_pypi_deploy_base
   <<: *_generic_deploy_base
+  <<: *_mainstream_python_base
   stage: &deploy_stage Linux build and deploy
   deploy:
     <<: *_deploy_defaults
