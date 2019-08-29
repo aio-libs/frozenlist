@@ -63,7 +63,7 @@ _helpers:
 
 - &_osx_pypi_deploy_base
   <<: *_generic_deploy_base
-  stage: &osx_deploy_stage_name OS X deploy to PYPI
+  stage: &osx_deploy_stage_name OS X test and deploy to PYPI
   os: osx
   language: shell
   env:
@@ -251,7 +251,7 @@ stages:
 - *doc_stage_name
 - test
 - name: *osx_deploy_stage_name
-  # if: type IN (api, cron)  # temporarily enable OSX for all builds
+  if: type IN (api, cron)
 - name: *deploy_stage_name
   # This will prevent deploy unless it's a tagged commit:
   if: tag IS present
