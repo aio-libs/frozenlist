@@ -60,7 +60,6 @@ _helpers:
   stage: &stage_test_osx_name test under OS X (last chance to fail before deploy available)
   os: osx
   language: shell
-  python: *pypy3
   env:
   - &env_pypy3 PYTHON_VERSION=pypy3.6-7.1.1
   - &env_pyenv PYENV_ROOT="$HOME/.pyenv"
