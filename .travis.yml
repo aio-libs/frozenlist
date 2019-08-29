@@ -47,15 +47,6 @@ _helpers:
   install:
   - *upgrade_python_toolset
   - *ci_requirements
-- &doc_base
-  <<: *lint_base
-  before_script:
-  - pip install --upgrade -r requirements/doc.txt -r requirements/doc-spelling.txt
-  after_failure: cat docs/_build/spelling/output.txt
-  addons:
-    apt:
-      packages:
-      - libenchant-dev
 
 - &_generic_deploy_base
   <<: *_reset_steps
@@ -130,15 +121,22 @@ matrix:
     env:
       FROZENLIST_NO_EXTENSIONS: "1"
 
-  - <<: *doc_base
+  - <<: *lint_base
     name: Checking docs spelling
+    before_script:
+    - pip install --upgrade -r requirements/doc.txt -r requirements/doc-spelling.txt
     script:
     - make doc-spelling
+    after_failure: cat docs/_build/spelling/output.txt
+    addons:
+      apt:
+        packages:
+        - libenchant-dev
 
-  - <<: *doc_base
+  - <<: *lint_base
     name: Checking Towncrier fragments
     before_script:
-    - pip install -r requirements/towncrier.txt
+    - pip install --upgrade -r requirements/towncrier.txt
     script:
     - towncrier --yes
 
