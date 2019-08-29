@@ -184,60 +184,42 @@ matrix:
   # Build and deploy MacOS binary wheels for each OSX + Python combo possible
   - <<: *osx_pypi_deploy_base_1010
     name: binary wheel python 3.5 on OS X 10.10
-    env:
-    - &env_py35 PYTHON_VERSION=3.5
+    env: &osx_py35_env
+    - PYTHON_VERSION: "3.5"
     - *env_pyenv
     - *env_path
   - <<: *osx_pypi_deploy_base_1010
     name: binary wheel python 3.6 on OS X 10.10
-    env:
-    - &env_py36 PYTHON_VERSION=3.6
+    env: &osx_py36_env
+    - PYTHON_VERSION: "3.6"
     - *env_pyenv
     - *env_path
   - <<: *osx_pypi_deploy_base_1010
     name: binary wheel python 3.7 on OS X 10.10
-    env:
-    - &env_py37 PYTHON_VERSION=3.7
+    env: &osx_py37_env
+    - PYTHON_VERSION: "3.7"
     - *env_pyenv
     - *env_path
   - <<: *osx_pypi_deploy_base_1011
     name: binary wheel python 3.5 on OS X 10.11
-    env:
-    - *env_py35
-    - *env_pyenv
-    - *env_path
+    env: *osx_py35_env
   - <<: *osx_pypi_deploy_base_1011
     name: binary wheel python 3.6 on OS X 10.11
-    env:
-    - *env_py36
-    - *env_pyenv
-    - *env_path
+    env: *osx_py36_env
   - <<: *osx_pypi_deploy_base_1011
     name: binary wheel python 3.7 on OS X 10.11
-    env:
-    - *env_py37
-    - *env_pyenv
-    - *env_path
+    env: *osx_py37_env
   - <<: *osx_pypi_deploy_base_1012
     name: binary wheel python 3.5 on OS X 10.12
-    env:
-    - *env_py35
-    - *env_pyenv
-    - *env_path
+    env: *osx_py35_env
     # OS X 10.12, Python 3.6
   - <<: *osx_pypi_deploy_base_1012
     name: binary wheel python 3.6 on OS X 10.12
-    env:
-    - *env_py36
-    - *env_pyenv
-    - *env_path
+    env: *osx_py36_env
     # OS X 10.12, Python 3.7
   - <<: *osx_pypi_deploy_base_1012
     name: binary wheel python 3.7 on OS X 10.12
-    env:
-    - *env_py37
-    - *env_pyenv
-    - *env_path
+    env: *osx_py37_env
 
   # Build and deploy manylinux1 binary wheels and source distribution
   - <<: *linux_pypi_deploy_base
