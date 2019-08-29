@@ -72,8 +72,17 @@ _helpers:
   - &env_path PATH="$PYENV_ROOT/bin:$PATH"
   before_install:
   - brew update
-  - brew outdated pyenv || brew upgrade pyenv
-  - brew outdated pyenv-virtualenv || brew upgrade pyenv-virtualenv
+  - |
+    if brew ls --versions pyenv > /dev/null; then
+      brew outdated pyenv || brew upgrade pyenv
+      if brew ls --versions pyenv-virtualenv > /dev/null; then
+        brew outdated pyenv-virtualenv || brew upgrade pyenv-virtualenv
+      else
+        brew install pyenv-virtualenv
+      fi
+    else
+      brew install pyenv pyenv-virtualenv
+    fi
   - |
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
@@ -117,8 +126,8 @@ matrix:
   - python: 3.8-dev
 
   include:
-  - name: 3.7 without extensions
-    python: 3.7
+  - name: without extensions
+    python: &mainstream_python
     env:
       FROZENLIST_NO_EXTENSIONS: "1"
 
