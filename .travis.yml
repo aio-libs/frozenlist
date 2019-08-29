@@ -73,6 +73,7 @@ _helpers:
   before_install:
   - brew update
   - brew outdated pyenv || brew upgrade pyenv
+  - brew outdated pyenv-virtualenv || brew upgrade pyenv-virtualenv
   - |
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
