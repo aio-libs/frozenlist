@@ -17,7 +17,7 @@ install:
 - pip install --upgrade -r requirements/cython.txt
 
 before_script:
-- make cythonize
+- &cythonize make cythonize
 - &ci_requirements pip install --upgrade -r requirements/ci.txt
 
 script:
@@ -53,6 +53,11 @@ _helpers:
   deploy: &_deploy_defaults
     provider: pypi
     skip_existing: true
+    # `skip_cleanup: true` is required to preserve binary wheels, built
+    # inside of manylinux1 docker container during `script` step, and
+    # to preserve the generated .c files from the `before_script` stage
+    # in OS X builds.
+    skip_cleanup: true
     username: __token__
     password:
       # Encrypted with `travis encrypt`:
@@ -100,7 +105,6 @@ _helpers:
   - brew --cache
   deploy:
     <<: *_deploy_defaults
-    skip_cleanup: false
     distributions: bdist_wheel
 
 # OS X test and deploy matrix helpers
@@ -141,11 +145,6 @@ _helpers:
   <<: *_generic_deploy_base
   <<: *_mainstream_python_base
   stage: &deploy_stage_name Linux build and deploy
-  deploy:
-    <<: *_deploy_defaults
-    # `skip_cleanup: true` is required to preserve binary wheels, built
-    # inside of manylinux1 docker container during `script` step above.
-    skip_cleanup: true
 
 
 os: linux
