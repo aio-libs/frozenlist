@@ -103,6 +103,16 @@ _helpers:
     skip_cleanup: false
     distributions: bdist_wheel
 
+# OS X test and deploy matrix helpers
+# These are used to build a matrix, with
+# N OSX image options and M python options,
+# of the form:
+#
+#   - <<: *osx_pypi_deploy_base_<osx version>
+#     name: <build name (optional)>
+#     env: *osx_env_<python version>
+
+# OS X image options
 - &osx_pypi_deploy_base_1010
   <<: *_osx_pypi_deploy_base
   osx_image: xcode6.4
@@ -112,6 +122,20 @@ _helpers:
 - &osx_pypi_deploy_base_1012
   <<: *_osx_pypi_deploy_base
   osx_image: xcode8.3
+
+# OS X Python options
+- &osx_env_py35
+  - PYTHON_VERSION: "3.5"
+  - *env_pyenv
+  - *env_path
+- &osx_env_py36
+  - PYTHON_VERSION: "3.6"
+  - *env_pyenv
+  - *env_path
+- &osx_env_py37
+  - PYTHON_VERSION: "3.7"
+  - *env_pyenv
+  - *env_path
 
 - &linux_pypi_deploy_base
   <<: *_generic_deploy_base
@@ -184,40 +208,31 @@ matrix:
   # Build and deploy MacOS binary wheels for each OSX + Python combo possible
   - <<: *osx_pypi_deploy_base_1010
     name: binary wheel python 3.5 on OS X 10.10
-    env: &osx_py35_env
-    - PYTHON_VERSION: "3.5"
-    - *env_pyenv
-    - *env_path
+    env: *osx_env_py35
   - <<: *osx_pypi_deploy_base_1010
     name: binary wheel python 3.6 on OS X 10.10
-    env: &osx_py36_env
-    - PYTHON_VERSION: "3.6"
-    - *env_pyenv
-    - *env_path
+    env: *osx_env_py36
   - <<: *osx_pypi_deploy_base_1010
     name: binary wheel python 3.7 on OS X 10.10
-    env: &osx_py37_env
-    - PYTHON_VERSION: "3.7"
-    - *env_pyenv
-    - *env_path
+    env: *osx_env_py37
   - <<: *osx_pypi_deploy_base_1011
     name: binary wheel python 3.5 on OS X 10.11
-    env: *osx_py35_env
+    env: *osx_env_py35
   - <<: *osx_pypi_deploy_base_1011
     name: binary wheel python 3.6 on OS X 10.11
-    env: *osx_py36_env
+    env: *osx_env_py36
   - <<: *osx_pypi_deploy_base_1011
     name: binary wheel python 3.7 on OS X 10.11
-    env: *osx_py37_env
+    env: *osx_env_py37
   - <<: *osx_pypi_deploy_base_1012
     name: binary wheel python 3.5 on OS X 10.12
-    env: *osx_py35_env
+    env: *osx_env_py35
   - <<: *osx_pypi_deploy_base_1012
     name: binary wheel python 3.6 on OS X 10.12
-    env: *osx_py36_env
+    env: *osx_env_py36
   - <<: *osx_pypi_deploy_base_1012
     name: binary wheel python 3.7 on OS X 10.12
-    env: *osx_py37_env
+    env: *osx_env_py37
 
   # Build and deploy manylinux1 binary wheels and source distribution
   - <<: *linux_pypi_deploy_base
