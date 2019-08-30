@@ -246,9 +246,9 @@ stages:
 - *doc_stage_name
 - test
 - name: *osx_deploy_stage_name
-  if: type IN (api, cron)
+  if: type IN (api, cron) OR tag IS present
 - name: *deploy_stage_name
-  if: type IN (api, cron)
+  if: type IN (api, cron) OR tag IS present
 
 
 cache: pip
