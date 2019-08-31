@@ -100,6 +100,9 @@ _helpers:
   - pyenv install --skip-existing --keep --verbose "$PYENV_PYTHON_VERSION"
   - pyenv shell "$PYENV_PYTHON_VERSION"
   - python --version
+  # upgrade pip in the virtualenv so the PIP_USER pip dpl_pypi installs
+  # doesn't break.
+  - pip install --upgrade pip
   script: skip
   before_cache:
   - brew --cache
