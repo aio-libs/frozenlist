@@ -1,3 +1,6 @@
+[build-system]
+requires= ['setuptools', 'wheel', 'Cython']
+
 [tool.towncrier]
 package = "frozenlist"
 filename = "CHANGES.rst"

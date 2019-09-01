@@ -1,54 +1,58 @@
-import codecs
 import os
 import pathlib
 import re
 import sys
-from distutils.command.build_ext import build_ext
-from distutils.errors import (CCompilerError, DistutilsExecError,
-                              DistutilsPlatformError)
 
-from setuptools import Extension, setup
+from setuptools import setup, Extension
+
+try:
+    from Cython.Build import cythonize
+    CYTHON = True
+except ImportError:
+    CYTHON = False
 
 
 if sys.version_info < (3, 5, 3):
     raise RuntimeError("frozenlist 1.x requires Python 3.5.3+")
 
 
-NO_EXTENSIONS = bool(os.environ.get('FROZENLIST_NO_EXTENSIONS'))  # type: bool
-
-if sys.implementation.name != "cpython":
-    NO_EXTENSIONS = True
-
+NO_EXTENSIONS = (
+    bool(os.environ.get('FROZENLIST_NO_EXTENSIONS')) or
+    sys.implementation.name != "cpython"
+)
 
 here = pathlib.Path(__file__).parent
 
-# NOTE: makefile cythonizes all Cython modules
+if CYTHON:
+    # convert .pyx files to .c files
+    # this happens for pure-python builds too because
+    # we'd want to be able to include the .c file
+    # in source distributions.
+    modules = cythonize('frozenlist/_frozenlist.pyx')
+else:
+    # No Cython, fall back to a distributed .c source
+    # file, if available.
+    c_source = here / 'frozenlist' / '_frozenlist.c'
+    if c_source.exists():
+        modules = [
+            Extension('frozenlist._frozenlist', [str(c_source)])
+        ]
+    else:
+        if not NO_EXTENSIONS:
+            print(
+                "Cython not available to produce .c file\n"
+                "Falling back to pure Python build.\n"
+            )
+        NO_EXTENSIONS = True
 
-extensions = [
-    Extension('frozenlist._frozenlist', ['frozenlist/_frozenlist.c'])
-]
+if NO_EXTENSIONS:
+    print("*********************")
+    print("* Pure Python build *")
+    print("*********************")
+    ext_modules = None
 
-
-class BuildFailed(Exception):
-    pass
-
-
-class ve_build_ext(build_ext):
-    # This class allows C extension building to fail.
-
-    def run(self):
-        try:
-            build_ext.run(self)
-        except (DistutilsPlatformError, FileNotFoundError):
-            raise BuildFailed()
-
-    def build_extension(self, ext):
-        try:
-            build_ext.build_extension(self, ext)
-        except (CCompilerError, DistutilsExecError,
-                DistutilsPlatformError, ValueError):
-            raise BuildFailed()
-
+else:
+    ext_modules = modules
 
 txt = (here / 'frozenlist' / '__init__.py').read_text('utf-8')
 try:
@@ -64,7 +68,7 @@ def read(f):
     return (here / f).read_text('utf-8').strip()
 
 
-args = dict(
+setup(
     name='frozenlist',
     version=version,
     description=(
@@ -104,20 +108,8 @@ args = dict(
     },
     license='Apache 2',
     packages=['frozenlist'],
+    ext_modules=ext_modules,
     python_requires='>=3.5.3',
     install_requires=install_requires,
     include_package_data=True,
 )
-
-if not NO_EXTENSIONS:
-    print("**********************")
-    print("* Accellerated build *")
-    print("**********************")
-    setup(ext_modules=extensions,
-          cmdclass=dict(build_ext=ve_build_ext),
-          **args)
-else:
-    print("*********************")
-    print("* Pure Python build *")
-    print("*********************")
-    setup(**args)

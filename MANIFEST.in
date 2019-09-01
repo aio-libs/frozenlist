@@ -2,11 +2,9 @@ include LICENSE.txt
 include CHANGES.rst
 include README.rst
 include CONTRIBUTORS.txt
-include Makefile
 graft frozenlist
 graft docs
 graft tests
-global-include frozenlist *.pyi
 global-exclude *.pyc
 global-exclude *.pyd
 global-exclude *.so
@@ -16,3 +14,4 @@ global-exclude *.a
 global-exclude *.obj
 exclude frozenlist/*.html
 prune docs/_build
+exclude docs/spelling_wordlist.txt
