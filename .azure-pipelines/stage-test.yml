@@ -20,7 +20,7 @@ stages:
           ${{ each os in parameters.operatingSystems }}:
             ${{ each variant in parameters.variants }}:
               ${{ if or(eq(os, 'Linux'), eq(variant, 'Cython')) }}:
-                ${{ format('Py{0} {1} {2}', py, os) }}:
+                ${{ format('Py{0} {1} {2}', py, os, variant) }}:
                   python.version: ${{ py }}
                   ${{ if eq(variant, 'Cython') }}:
                     no_extensions: ''
