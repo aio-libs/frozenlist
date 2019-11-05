@@ -54,7 +54,7 @@ stages:
 
     - script: |
         make cythonize
-      condition: eq(variables['no_extensions'], '')
+      condition: and(succeeded(), eq(variables['no_extensions'], ''))
       displayName: 'Cythonize'
 
     - script: |
@@ -75,6 +75,6 @@ stages:
         pip install codecov
         python -m codecov -f coverage.xml -X gcov
       displayName: 'Upload coverage reports'
-      condition: ne(variables['codecov.token'], '')
+      condition: and(succeeded(), ne(variables['codecov.token'], ''))
       env:
         CODECOV_TOKEN: $(codecov.token)
