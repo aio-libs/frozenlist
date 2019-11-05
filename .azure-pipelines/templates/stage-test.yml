@@ -49,7 +49,7 @@ stages:
 
   # This job is allowed to fail
   - job:
-    continueOnError: true
+    # continueOnError: true
     strategy:
       matrix:
         ${{ each py in parameters.pythonVersions }}:
@@ -77,3 +77,5 @@ stages:
 
     steps:
     - template: stage-test-steps.yml
+      parameters:
+        ignoreFailed: true
