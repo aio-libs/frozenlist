@@ -7,7 +7,6 @@ steps:
   submodules: true
 
 - task: UsePythonVersion@0
-  name: py
   continueOnError: true
   inputs:
     versionSpec: '$(python.version)'
@@ -18,29 +17,29 @@ steps:
     echo "Failing job because $PYTHON_VERSION is not available"
     echo "##vso[task.setvariable variable=Agent.JobStatus;]Failed"
     exit 1
-  condition: and(not('$(py.pythonLocation)'), not(${{ parameters.ignoreFailed }}))
+  condition: and(not(variables.UsePythonVersion.pythonLocation)'), not(${{ parameters.ignoreFailed }}))
   displayName: 'Fail for missing python version'
 
 - script: |
     python -m pip install --upgrade pip setuptools
-  condition: and(succeeded(), '$(py.pythonLocation)')
+  condition: and(succeeded(), variables.UsePythonVersion.pythonLocation)
   displayName: 'Update pip'
 
 - script: |
     make cythonize
-  condition: and(succeeded(), '$(py.pythonLocation)', eq(variables['no_extensions'], ''))
+  condition: and(succeeded(), variables.UsePythonVersion.pythonLocation, eq(variables['no_extensions'], ''))
   displayName: 'Cythonize'
 
 - script: |
     pip install -r requirements/dev.txt pytest-azurepipelines
   displayName: 'Install dependencies'
-  condition: and(succeeded(), '$(py.pythonLocation)')
+  condition: and(succeeded(), variables.UsePythonVersion.pythonLocation)
   env:
     FROZENLIST_NO_EXTENSIONS: '$(no_extensions)'
 
 - script: |
     pytest tests -vv --no-coverage-upload
-  condition: and(succeeded(), '$(py.pythonLocation)')
+  condition: and(succeeded(), variables.UsePythonVersion.pythonLocation)
   displayName: 'pytest'
 
 - script: |
