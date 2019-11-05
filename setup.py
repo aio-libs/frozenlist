@@ -3,7 +3,7 @@ import pathlib
 import re
 import sys
 
-from setuptools import setup, Extension
+from setuptools import Extension, setup
 
 try:
     from Cython.Build import cythonize
