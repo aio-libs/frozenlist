@@ -41,7 +41,7 @@ flake8:
 	flake8 $(SRC)
 
 mypy: .flake
-    mypy frozenlist
+	mypy frozenlist
 
 isort-check:
 	@if ! isort -rc --check-only $(SRC); then \
