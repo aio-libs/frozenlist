@@ -13,10 +13,11 @@ steps:
     architecture: 'x64'
 
 - script: |
+    env
     echo "Failing job because $PYTHONLOCATION is not set"
     echo "##vso[task.setvariable variable=Agent.JobStatus;]Failed"
     exit 1
-  condition: and(not(variables['pythonLocation']), not(variables['parameters.ignoreFailed']))
+  condition: and(not(variables.pythonLocation), not(${{ parameters.ignoreFailed }}))
   displayName: 'Fail for missing python version'
 
 - script: |
