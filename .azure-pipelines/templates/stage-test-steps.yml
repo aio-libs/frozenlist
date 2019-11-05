@@ -7,6 +7,7 @@ steps:
   submodules: true
 
 - task: UsePythonVersion@0
+  name: py
   continueOnError: true
   inputs:
     versionSpec: '$(python.version)'
@@ -14,43 +15,43 @@ steps:
 
 - script: |
     env
-    echo "Failing job because $PYTHONLOCATION is not set"
+    echo "Failing job because $PYTHON_VERSION is not available"
     echo "##vso[task.setvariable variable=Agent.JobStatus;]Failed"
     exit 1
-  condition: and(not(variables.pythonLocation), not(${{ parameters.ignoreFailed }}))
+  condition: and(not('$(py.pythonLocation)'), not(${{ parameters.ignoreFailed }}))
   displayName: 'Fail for missing python version'
 
 - script: |
     python -m pip install --upgrade pip setuptools
-  condition: and(succeeded(), variables['pythonLocation'])
+  condition: and(succeeded(), '$(py.pythonLocation)')
   displayName: 'Update pip'
 
 - script: |
     make cythonize
-  condition: and(succeeded(), variables['pythonLocation'], eq(variables['no_extensions'], ''))
+  condition: and(succeeded(), '$(py.pythonLocation)', eq(variables['no_extensions'], ''))
   displayName: 'Cythonize'
 
 - script: |
     pip install -r requirements/dev.txt pytest-azurepipelines
   displayName: 'Install dependencies'
-  condition: and(succeeded(), variables['pythonLocation'])
+  condition: and(succeeded(), '$(py.pythonLocation)')
   env:
     FROZENLIST_NO_EXTENSIONS: '$(no_extensions)'
 
 - script: |
     pytest tests -vv --no-coverage-upload
-  condition: and(succeeded(), variables['pythonLocation'])
+  condition: and(succeeded(), '$(py.pythonLocation)')
   displayName: 'pytest'
 
 - script: |
     python -m coverage xml
   displayName: 'Prepare coverage'
-  condition: and(succeeded(), variables['pythonLocation'])
+  condition: and(succeeded(), variables.py.pythonLocation)
 
 - script: |
     pip install codecov
     python -m codecov -f coverage.xml -X gcov
   displayName: 'Upload coverage reports'
-  condition: and(succeeded(), variables['pythonLocation'], ne(variables['codecov.token'], ''))
+  condition: and(succeeded(), variables.py.pythonLocation, ne(variables['codecov.token'], ''))
   env:
     CODECOV_TOKEN: $(codecov.token)
