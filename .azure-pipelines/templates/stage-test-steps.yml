@@ -17,7 +17,7 @@ steps:
     echo "Failing job because $PYTHON_VERSION is not available"
     echo "##vso[task.setvariable variable=Agent.JobStatus;]Failed"
     exit 1
-  condition: and(not(variables.UsePythonVersion.pythonLocation)'), not(${{ parameters.ignoreFailed }}))
+  condition: and(not(variables.UsePythonVersion.pythonLocation), not(${{ parameters.ignoreFailed }}))
   displayName: 'Fail for missing python version'
 
 - script: |
