@@ -16,40 +16,40 @@ steps:
     echo "Failing job because $PYTHONLOCATION is not set"
     echo "##vso[task.setvariable variable=Agent.JobStatus;]Failed"
     exit 1
-  condition: and(eq(variables['pythonLocation'], Null), not(variables['parameters.ignoreFailed']))
+  condition: and(eq(variables['pythonLocation'], null), not(variables['parameters.ignoreFailed']))
   displayName: 'Fail for missing python version'
 
 - script: |
     python -m pip install --upgrade pip setuptools
-  condition: and(succeeded(), ne(variables['pythonLocation'], Null))
+  condition: and(succeeded(), ne(variables['pythonLocation'], null))
   displayName: 'Update pip'
 
 - script: |
     make cythonize
-  condition: and(succeeded(), ne(variables['pythonLocation'], Null), eq(variables['no_extensions'], ''))
+  condition: and(succeeded(), ne(variables['pythonLocation'], null), eq(variables['no_extensions'], ''))
   displayName: 'Cythonize'
 
 - script: |
     pip install -r requirements/dev.txt pytest-azurepipelines
   displayName: 'Install dependencies'
-  condition: and(succeeded(), ne(variables['pythonLocation'], Null))
+  condition: and(succeeded(), ne(variables['pythonLocation'], null))
   env:
     FROZENLIST_NO_EXTENSIONS: '$(no_extensions)'
 
 - script: |
     pytest tests -vv --no-coverage-upload
-  condition: and(succeeded(), ne(variables['pythonLocation'], Null))
+  condition: and(succeeded(), ne(variables['pythonLocation'], null))
   displayName: 'pytest'
 
 - script: |
     python -m coverage xml
   displayName: 'Prepare coverage'
-  condition: and(succeeded(), ne(variables['pythonLocation'], Null))
+  condition: and(succeeded(), ne(variables['pythonLocation'], null))
 
 - script: |
     pip install codecov
     python -m codecov -f coverage.xml -X gcov
   displayName: 'Upload coverage reports'
-  condition: and(succeeded(), ne(variables['pythonLocation'], Null), ne(variables['codecov.token'], ''))
+  condition: and(succeeded(), ne(variables['pythonLocation'], null), ne(variables['codecov.token'], ''))
   env:
     CODECOV_TOKEN: $(codecov.token)
