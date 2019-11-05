@@ -95,6 +95,8 @@ stages:
         architecture: 'x64'
 
     - script: |
+        apt install libenchant-dev
+        pip install -r requirements/doc-spelling.txt
         pip install -r requirements/towncrier.txt
       displayName: 'Install deps'
 
