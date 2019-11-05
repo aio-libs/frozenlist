@@ -64,7 +64,7 @@ stages:
         FROZENLIST_NO_EXTENSIONS: '$(no_extensions)'
 
     - script: |
-        pytest tests -vv
+        pytest tests -vv --no-coverage-upload
       displayName: 'pytest'
 
     - script: |
