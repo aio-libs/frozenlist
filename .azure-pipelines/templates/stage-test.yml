@@ -1,0 +1,79 @@
+parameters:
+  pythonVersions: []
+  operatingSystems:
+    - 'Linux'
+    - 'Windows'
+    - 'Mac'
+  variants:
+    - 'Cython'
+    - 'Pure'
+  # This version is a prerelease version and is marked
+  # as possibly failing, either because the version might
+  # not be available on Azure yet or because tests are
+  # allowed to fail on this version.
+  pyMayFail: '3.8'
+
+stages:
+- stage: test
+  displayName: 'Run tests'
+
+  jobs:
+  - job:
+    strategy:
+      matrix:
+        ${{ each py in parameters.pythonVersions }}:
+          ${{ if ne(py, parameters.pyMayFail) }}:
+            ${{ each os in parameters.operatingSystems }}:
+              ${{ each variant in parameters.variants }}:
+                ${{ if or(eq(os, 'Linux'), eq(variant, 'Cython')) }}:
+                  ${{ format('Py{0} {1} {2}', py, os, variant) }}:
+                    python.version: ${{ py }}
+                    ${{ if eq(variant, 'Cython') }}:
+                      no_extensions: ''
+                    ${{ if eq(variant, 'Pure') }}:
+                      no_extensions: 'Y'
+                    ${{ if eq(os, 'Linux') }}:
+                      image: 'ubuntu-latest'
+                    ${{ if eq(os, 'Windows') }}:
+                      image: 'windows-latest'
+                    ${{ if eq(os, 'Mac') }}:
+                      image: 'macos-latest'
+
+    pool:
+      vmImage: '$(image)'
+
+    timeoutInMinutes: 10
+
+    steps:
+    - template: stage-test-steps.yml
+
+  # This job is allowed to fail
+  - job:
+    continueOnError: true
+    strategy:
+      matrix:
+        ${{ each py in parameters.pythonVersions }}:
+          ${{ if eq(py, parameters.pyMayFail) }}:
+            ${{ each os in parameters.operatingSystems }}:
+              ${{ each variant in parameters.variants }}:
+                ${{ if or(eq(os, 'Linux'), eq(variant, 'Cython')) }}:
+                  ${{ format('Py{0} {1} {2}', py, os, variant) }}:
+                    python.version: ${{ py }}
+                    ${{ if eq(variant, 'Cython') }}:
+                      no_extensions: ''
+                    ${{ if eq(variant, 'Pure') }}:
+                      no_extensions: 'Y'
+                    ${{ if eq(os, 'Linux') }}:
+                      image: 'ubuntu-latest'
+                    ${{ if eq(os, 'Windows') }}:
+                      image: 'windows-latest'
+                    ${{ if eq(os, 'Mac') }}:
+                      image: 'macos-latest'
+
+    pool:
+      vmImage: '$(image)'
+
+    timeoutInMinutes: 10
+
+    steps:
+    - template: stage-test-steps.yml
