@@ -7,7 +7,6 @@ steps:
   submodules: true
 
 - task: UsePythonVersion@0
-  name: UsePythonVersion
   continueOnError: true
   inputs:
     versionSpec: '$(python.version)'
