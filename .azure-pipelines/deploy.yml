@@ -25,12 +25,11 @@ stages:
 
 - template: stage-test.yml
 
-- template: deploy-matrix.yml
+- template: stage-deploy.yml
   parameters:
     pythonVersions:
       - '3.6'
       - '3.7'
-      - '3.8'
 
 - template: templates/stage-publish.yml@templates
   parameters:
