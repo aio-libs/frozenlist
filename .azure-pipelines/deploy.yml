@@ -24,6 +24,11 @@ stages:
 - template: stage-lint.yml
 
 - template: stage-test.yml
+  parameters:
+    pythonVersions:
+      - '3.6'
+      - '3.7'
+      - '3.8'
 
 - template: stage-deploy.yml
   parameters:
