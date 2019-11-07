@@ -46,7 +46,7 @@ stages:
       clean: true
 
     - task: UsePythonVersion@0
-      ${{ if eq(py, parameters.pyMayFail) }}:
+      ${{ if eq(variables['python.version'], parameters.pyMayFail) }}:
         continueOnError: true
       inputs:
         versionSpec: '$(python.version)'
@@ -65,7 +65,7 @@ stages:
     - script: |
         pip install -r requirements/dev.txt pytest-azurepipelines
       env:
-        ${{ if no_extensions }}:
+        ${{ if variables['no_extensions'] }}:
           FROZENLIST_NO_EXTENSIONS: 'Y'
       condition: and(succeeded(), variables['UsePythonVersion.pythonLocation'])
       displayName: 'Install dependencies'

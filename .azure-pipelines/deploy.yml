@@ -30,6 +30,7 @@ stages:
     pythonVersions:
       - '3.6'
       - '3.7'
+      # - '3.8' when properly rolled out on the Azure fleet.
 
 - template: templates/stage-publish.yml@templates
   parameters:
