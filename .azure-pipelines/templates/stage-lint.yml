@@ -70,9 +70,9 @@ stages:
 
     - script: |
         pip install -e .
-      displayName: 'Install itself'
       env:
         FROZENLIST_NO_EXTENSIONS: 1
+      displayName: 'Install itself'
 
     - script: |
         make mypy
@@ -100,9 +100,9 @@ stages:
     - script: |
         towncrier --yes
         make doc
-      displayName: 'Run docs checker'
       env:
         FROZENLIST_NO_EXTENSIONS: 1
+      displayName: 'Run docs checker'
 
   - job: 'twine'
     pool:
@@ -120,9 +120,9 @@ stages:
     - script: |
         pip install -U twine wheel
         python setup.py sdist bdist_wheel
-      displayName: 'Install deps'
       env:
         FROZENLIST_NO_EXTENSIONS: 1
+      displayName: 'Install deps and create pure-python distributions'
 
     - script: |
         twine check dist/*

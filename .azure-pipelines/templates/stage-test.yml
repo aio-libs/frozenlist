@@ -19,25 +19,22 @@ stages:
 
   jobs:
   - job:
+
     strategy:
       matrix:
         ${{ each py in parameters.pythonVersions }}:
-          ${{ if ne(py, parameters.pyMayFail) }}:
-            ${{ each os in parameters.operatingSystems }}:
-              ${{ each variant in parameters.variants }}:
-                ${{ if or(eq(os, 'Linux'), eq(variant, 'Cython')) }}:
-                  ${{ format('Py{0} {1} {2}', py, os, variant) }}:
-                    python.version: ${{ py }}
-                    ${{ if eq(variant, 'Cython') }}:
-                      no_extensions: ''
-                    ${{ if eq(variant, 'Pure') }}:
-                      no_extensions: 'Y'
-                    ${{ if eq(os, 'Linux') }}:
-                      image: 'ubuntu-latest'
-                    ${{ if eq(os, 'Windows') }}:
-                      image: 'windows-latest'
-                    ${{ if eq(os, 'Mac') }}:
-                      image: 'macos-latest'
+          ${{ each os in parameters.operatingSystems }}:
+            ${{ each variant in parameters.variants }}:
+              ${{ if or(eq(os, 'Linux'), eq(variant, 'Cython')) }}:
+                ${{ format('Py{0} {1} {2}', py, os, variant) }}:
+                  python.version: ${{ py }}
+                  no_extensions: ${{ eq(variant, 'Pure') }}
+                  ${{ if eq(os, 'Linux') }}:
+                    image: 'ubuntu-latest'
+                  ${{ if eq(os, 'Windows') }}:
+                    image: 'windows-latest'
+                  ${{ if eq(os, 'Mac') }}:
+                    image: 'macos-latest'
 
     pool:
       vmImage: '$(image)'
@@ -45,37 +42,49 @@ stages:
     timeoutInMinutes: 10
 
     steps:
-    - template: stage-test-steps.yml
+    - checkout: self
+      clean: true
 
-  # This job is allowed to fail
-  - job:
-    # continueOnError: true
-    strategy:
-      matrix:
-        ${{ each py in parameters.pythonVersions }}:
-          ${{ if eq(py, parameters.pyMayFail) }}:
-            ${{ each os in parameters.operatingSystems }}:
-              ${{ each variant in parameters.variants }}:
-                ${{ if or(eq(os, 'Linux'), eq(variant, 'Cython')) }}:
-                  ${{ format('Py{0} {1} {2}', py, os, variant) }}:
-                    python.version: ${{ py }}
-                    ${{ if eq(variant, 'Cython') }}:
-                      no_extensions: ''
-                    ${{ if eq(variant, 'Pure') }}:
-                      no_extensions: 'Y'
-                    ${{ if eq(os, 'Linux') }}:
-                      image: 'ubuntu-latest'
-                    ${{ if eq(os, 'Windows') }}:
-                      image: 'windows-latest'
-                    ${{ if eq(os, 'Mac') }}:
-                      image: 'macos-latest'
+    - task: UsePythonVersion@0
+      ${{ if eq(py, parameters.pyMayFail) }}:
+        continueOnError: true
+      inputs:
+        versionSpec: '$(python.version)'
+        architecture: 'x64'
 
-    pool:
-      vmImage: '$(image)'
+    - script: |
+        python -m pip install --upgrade pip setuptools
+      condition: and(succeeded(), variables['UsePythonVersion.pythonLocation'])
+      displayName: 'Update pip'
 
-    timeoutInMinutes: 10
+    - script: |
+        make cythonize
+      condition: and(variables['no_extensions'], succeeded(), variables['UsePythonVersion.pythonLocation'])
+      displayName: 'Cythonize'
 
-    steps:
-    - template: stage-test-steps.yml
-      parameters:
-        ignoreFailed: true
+    - script: |
+        pip install -r requirements/dev.txt pytest-azurepipelines
+      env:
+        ${{ if no_extensions }}:
+          FROZENLIST_NO_EXTENSIONS: 'Y'
+      condition: and(succeeded(), variables['UsePythonVersion.pythonLocation'])
+      displayName: 'Install dependencies'
+
+
+    - script: |
+        pytest tests -vv --no-coverage-upload
+      condition: and(succeeded(), variables['UsePythonVersion.pythonLocation'])
+      displayName: 'pytest'
+
+    - script: |
+        python -m coverage xml
+      displayName: 'Prepare coverage'
+      condition: and(succeeded(), variables['UsePythonVersion.pythonLocation'])
+
+    - script: |
+        pip install codecov
+        python -m codecov -f coverage.xml -X gcov
+      env:
+        CODECOV_TOKEN: $(codecov.token)
+      condition: and(variables['codecov.token'], succeeded(), variables['UsePythonVersion.pythonLocation'])
+      displayName: 'Upload coverage reports'
