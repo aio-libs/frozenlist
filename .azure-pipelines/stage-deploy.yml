@@ -71,6 +71,7 @@ stages:
           folder: wheelhouse
 
   - job:
+    displayName: 'Wheels for other operating systems'
     strategy:
       matrix:
         ${{ each py in parameters.pythonVersions }}:
