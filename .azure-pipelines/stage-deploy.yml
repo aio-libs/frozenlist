@@ -75,7 +75,7 @@ stages:
       matrix:
         ${{ each py in parameters.pythonVersions }}:
           ${{ each os in parameters.operatingSystems }}:
-            ${{ if neq(os, 'Linux') }}:
+            ${{ if ne(os, 'Linux') }}:
               ${{ format('yy{0} {1} x64', py, os) }}:
                 python.version: ${{ py }}
                 python.architecture: 'x64'
