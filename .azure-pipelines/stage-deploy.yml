@@ -49,7 +49,7 @@ stages:
 
       - script: |
           /opt/python/$(python.code)/bin/python -m venv .build-venv
-        displayName: 'Use Python $(python.code)'
+        displayName: 'Create virtualenv'
 
       - script: |
           source .build-venv/bin/activate
