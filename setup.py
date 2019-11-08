@@ -3,7 +3,7 @@ import pathlib
 import re
 import sys
 
-from setuptools import setup, Extension
+from setuptools import Extension, setup
 
 try:
     from Cython.Build import cythonize
@@ -99,7 +99,8 @@ setup(
         'Chat: Gitter': 'https://gitter.im/aio-libs/Lobby',
         'CI: AppVeyor': 'https://ci.appveyor.com/project/aio-libs/frozenlist',
         'CI: Circle': 'https://circleci.com/gh/aio-libs/frozenlist',
-        'CI: Shippable': 'https://app.shippable.com/github/aio-libs/frozenlist',
+        'CI: Shippable':
+            'https://app.shippable.com/github/aio-libs/frozenlist',
         'CI: Travis': 'https://travis-ci.com/aio-libs/frozenlist',
         'Coverage: codecov': 'https://codecov.io/github/aio-libs/frozenlist',
         'Docs: RTD': 'https://frozenlist.readthedocs.io',

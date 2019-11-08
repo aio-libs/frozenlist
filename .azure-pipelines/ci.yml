@@ -1,0 +1,28 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - azure-pipelines
+  tags:
+    exclude:
+    - '*'
+pr:
+  autoCancel: true
+  branches:
+    include:
+    - master
+
+variables:
+- group: codecov
+
+stages:
+- template: stage-lint.yml
+- template: stage-test.yml
+  parameters:
+    pythonVersions:
+      - '3.5'
+      - '3.6'
+      - '3.7'
+      - '3.8'
+
