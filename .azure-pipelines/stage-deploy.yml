@@ -4,6 +4,11 @@ parameters:
     - 'Linux'
     - 'Windows'
     - 'Mac'
+  # This version is a prerelease version and is marked
+  # as possibly failing, either because the version might
+  # not be available on Azure yet or because tests are
+  # allowed to fail on this version.
+  pyMayFail: '3.8'
 
 stages:
 - stage: build
@@ -27,11 +32,11 @@ stages:
               displayName: 'Make tarball'
 
   - job: manylinux
-    displayName: 'Manylinux'
+    displayName: 'Linux wheels'
     strategy:
       matrix:
         ${{ each py in parameters.pythonVersions }}:
-          ${{ format('py{0} Linux x64', py) }}:
+          ${{ format('Py{0} Linux x64', py) }}:
             python.version: ${{ py }}
             manylinux: 'manylinux_64'
     pool:
@@ -73,24 +78,26 @@ stages:
           folder: wheelhouse
 
   - job:
-    displayName: 'Wheels for other operating systems'
+    displayName: 'non-Linux wheels'
     strategy:
       matrix:
         ${{ each py in parameters.pythonVersions }}:
-          ${{ each os in parameters.operatingSystems }}:
-            ${{ if ne(os, 'Linux') }}:
-              ${{ format('yy{0} {1} x64', py, os) }}:
-                python.version: ${{ py }}
-                python.architecture: 'x64'
-                ${{ if eq(os, 'Windows') }}:
-                  image: 'windows-latest' 
-                ${{ if eq(os, 'Mac') }}:
-                  image: 'macos-latest'
-            ${{ if eq(os, 'Windows') }}:
-              ${{ format('yy{0} {1} x86', py, os) }}:
-                python.version: ${{ py }}
-                python.architecture: 'x86'
-                image: 'windows-latest'
+          ${{ if ne(py, parameters.pyMayFail) }}:
+            ${{ each os in parameters.operatingSystems }}:
+              ${{ if ne(os, 'Linux') }}:
+                ${{ format('Py{0} {1} x64', py, os) }}:
+                  python.version: ${{ py }}
+                  python.architecture: 'x64'
+                  ${{ if eq(os, 'Windows') }}:
+                    image: 'windows-latest' 
+                  ${{ if eq(os, 'Mac') }}:
+                    image: 'macos-latest'
+              # For Windows, add in a i386 32-bit build too
+              ${{ if eq(os, 'Windows') }}:
+                ${{ format('Py{0} {1} x86', py, os) }}:
+                  python.version: ${{ py }}
+                  python.architecture: 'x86'
+                  image: 'windows-latest'
     pool:
       vmImage: '$(image)'
     steps:
