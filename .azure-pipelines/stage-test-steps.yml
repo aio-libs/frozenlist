@@ -19,7 +19,7 @@ steps:
 
 - script: |
     make cythonize
-  condition: and(variables['no_extensions'], succeeded(), variables['UsePythonVersion.pythonLocation'])
+  condition: and(eq(variables['no_extensions'], 'true'), succeeded(), variables['UsePythonVersion.pythonLocation'])
   displayName: 'Cythonize'
 
 - script: |

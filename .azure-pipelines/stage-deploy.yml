@@ -51,7 +51,7 @@ stages:
           PYV=`echo "$PYTHON_VERSION" | cut -b1,3-`
           PYCODE="cp${PYV}-cp${PYV}m"
           echo "##vso[task.setvariable variable=python.code;]$PYCODE"
-          echo "##[section]Set python.code to $PYCODE"`
+          echo "##[section]Set python.code to $PYCODE"
         displayName: 'Set python.code from $(python.version)'
 
       - script: |
