@@ -49,7 +49,11 @@ stages:
       - bash: |
           # "3.7" -> "37", "3.10" -> "310"
           PYV=`echo "$PYTHON_VERSION" | cut -b1,3-`
-          PYCODE="cp${PYV}-cp${PYV}m"
+          PYCODE="cp${PYV}-cp${PYV}"
+          # attach a build variant flag if needed
+          if [ -d "/opt/python/${PYCODE}m" ]; then
+            PYCODE="${PYCODE}m"
+          fi
           echo "##vso[task.setvariable variable=python.code;]$PYCODE"
           echo "##[section]Set python.code to $PYCODE"
         displayName: 'Set python.code from $(python.version)'
