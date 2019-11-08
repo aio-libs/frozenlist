@@ -16,6 +16,8 @@ parameters:
 stages:
 - stage: test
   displayName: 'Run tests'
+  variables:
+    no_extensions: ''
 
   jobs:
   - job:
@@ -29,7 +31,8 @@ stages:
                 ${{ if or(eq(os, 'Linux'), eq(variant, 'Cython')) }}:
                   ${{ format('Py{0} {1} {2}', py, os, variant) }}:
                     python.version: ${{ py }}
-                    no_extensions: ${{ eq(variant, 'Pure') }}
+                    ${{ if eq(variant, 'Pure') }}:
+                      no_extensions: 'Y'
                     ${{ if eq(os, 'Linux') }}:
                       image: 'ubuntu-latest'
                     ${{ if eq(os, 'Windows') }}:

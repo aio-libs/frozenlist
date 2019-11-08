@@ -19,14 +19,13 @@ steps:
 
 - script: |
     make cythonize
-  condition: and(eq(variables['no_extensions'], 'False'), succeeded(), variables['UsePythonVersion.pythonLocation'])
+  condition: and(ne(variables['no_extensions'], 'Y'), succeeded(), variables['UsePythonVersion.pythonLocation'])
   displayName: 'Cythonize'
 
 - script: |
     pip install -r requirements/dev.txt pytest-azurepipelines
   env:
-    ${{ if variables['no_extensions'] }}:
-      FROZENLIST_NO_EXTENSIONS: 'Y'
+    FROZENLIST_NO_EXTENSIONS: $(no_extensions)
   condition: and(succeeded(), variables['UsePythonVersion.pythonLocation'])
   displayName: 'Install dependencies'
 
