@@ -92,7 +92,7 @@ stages:
                     image: 'windows-latest' 
                   ${{ if eq(os, 'Mac') }}:
                     image: 'macos-latest'
-              # For Windows, add in a i386 32-bit build too
+              # For Windows, add in a i686 32-bit build too
               ${{ if eq(os, 'Windows') }}:
                 ${{ format('Py{0} {1} x86', py, os) }}:
                   python.version: ${{ py }}
