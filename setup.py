@@ -97,11 +97,7 @@ setup(
     url='https://github.com/aio-libs/frozenlist',
     project_urls={
         'Chat: Gitter': 'https://gitter.im/aio-libs/Lobby',
-        'CI: AppVeyor': 'https://ci.appveyor.com/project/aio-libs/frozenlist',
-        'CI: Circle': 'https://circleci.com/gh/aio-libs/frozenlist',
-        'CI: Shippable':
-            'https://app.shippable.com/github/aio-libs/frozenlist',
-        'CI: Travis': 'https://travis-ci.com/aio-libs/frozenlist',
+        'CI: Azure Pipelines': 'https://dev.azure.com/aio-libs/frozenlib/_build',
         'Coverage: codecov': 'https://codecov.io/github/aio-libs/frozenlist',
         'Docs: RTD': 'https://frozenlist.readthedocs.io',
         'GitHub: issues': 'https://github.com/aio-libs/frozenlist/issues',
