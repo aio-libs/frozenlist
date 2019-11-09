@@ -2,13 +2,9 @@
 frozenlist
 ==========
 
-.. image:: https://travis-ci.com/aio-libs/frozenlist.svg?branch=master
-   :target: https://travis-ci.com/aio-libs/frozenlist
-   :alt: Travis status for master branch
-
-.. image:: https://ci.appveyor.com/api/projects/status/tnddy9k6pphl8w7k/branch/master?svg=true
-   :target: https://ci.appveyor.com/project/aio-libs/frozenlist
-   :alt: AppVeyor status for master branch
+.. image:: https://dev.azure.com/aio-libs/frozenlib/_build/latest?definitionId=12&branchName=master
+   :target: https://dev.azure.com/aio-libs/frozenlib/_apis/build/status/CD?branchName=master
+   :alt: Azure status for master branch
 
 .. image:: https://codecov.io/gh/aio-libs/frozenlist/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/aio-libs/frozenlist
