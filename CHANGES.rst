@@ -22,6 +22,3 @@ Deprecations and Removals
 
 - Dropped support for Python 3.5; only 3.6, 3.7 and 3.8 are supported going forward.
   `#24 <https://github.com/aio-libs/frozenlist/issues/24>`_
-
-
-----

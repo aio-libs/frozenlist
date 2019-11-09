@@ -27,7 +27,7 @@ frozenlist
    :alt: Chat on Gitter
 
 Introduction
-------------
+============
 
 ``frozenlist.FrozenList`` is a list-like structure which implements
 ``collections.abc.MutableSequence``. The list is *mutable* until ``FrozenList.freeze``
