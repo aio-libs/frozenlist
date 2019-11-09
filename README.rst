@@ -2,8 +2,8 @@
 frozenlist
 ==========
 
-.. image:: https://dev.azure.com/aio-libs/frozenlib/_build/latest?definitionId=12&branchName=master
-   :target: https://dev.azure.com/aio-libs/frozenlib/_apis/build/status/CD?branchName=master
+.. image:: https://dev.azure.com/aio-libs/frozenlib/_apis/build/status/CD?branchName=master
+   :target: https://dev.azure.com/aio-libs/frozenlib/_build/latest?definitionId=12&branchName=master
    :alt: Azure status for master branch
 
 .. image:: https://codecov.io/gh/aio-libs/frozenlist/branch/master/graph/badge.svg
