@@ -81,22 +81,21 @@ stages:
     strategy:
       matrix:
         ${{ each py in parameters.pythonVersions }}:
-          ${{ if ne(py, parameters.pyMayFail) }}:
-            ${{ each os in parameters.operatingSystems }}:
-              ${{ if ne(os, 'Linux') }}:
-                ${{ format('Py{0} {1} x64', py, os) }}:
-                  python.version: ${{ py }}
-                  python.architecture: 'x64'
-                  ${{ if eq(os, 'Windows') }}:
-                    image: 'windows-latest' 
-                  ${{ if eq(os, 'Mac') }}:
-                    image: 'macos-latest'
-              # For Windows, add in a i686 32-bit build too
-              ${{ if eq(os, 'Windows') }}:
-                ${{ format('Py{0} {1} x86', py, os) }}:
-                  python.version: ${{ py }}
-                  python.architecture: 'x86'
-                  image: 'windows-latest'
+          ${{ each os in parameters.operatingSystems }}:
+            ${{ if ne(os, 'Linux') }}:
+              ${{ format('Py{0} {1} x64', py, os) }}:
+                python.version: ${{ py }}
+                python.architecture: 'x64'
+                ${{ if eq(os, 'Windows') }}:
+                  image: 'windows-latest' 
+                ${{ if eq(os, 'Mac') }}:
+                  image: 'macos-latest'
+            # For Windows, add in a i686 32-bit build too
+            ${{ if eq(os, 'Windows') }}:
+              ${{ format('Py{0} {1} x86', py, os) }}:
+                python.version: ${{ py }}
+                python.architecture: 'x86'
+                image: 'windows-latest'
     pool:
       vmImage: '$(image)'
     steps:
