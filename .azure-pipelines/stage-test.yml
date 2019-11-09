@@ -7,11 +7,6 @@ parameters:
   variants:
     - 'Cython'
     - 'Pure'
-  # This version is a prerelease version and is marked
-  # as possibly failing, either because the version might
-  # not be available on Azure yet or because tests are
-  # allowed to fail on this version.
-  pyMayFail: '3.8'
 
 stages:
 - stage: test
@@ -25,20 +20,19 @@ stages:
     strategy:
       matrix:
         ${{ each py in parameters.pythonVersions }}:
-          ${{ if ne(py, parameters.pyMayFail) }}:
-            ${{ each os in parameters.operatingSystems }}:
-              ${{ each variant in parameters.variants }}:
-                ${{ if or(eq(os, 'Linux'), eq(variant, 'Cython')) }}:
-                  ${{ format('Py{0} {1} {2}', py, os, variant) }}:
-                    python.version: ${{ py }}
-                    ${{ if eq(variant, 'Pure') }}:
-                      no_extensions: 'Y'
-                    ${{ if eq(os, 'Linux') }}:
-                      image: 'ubuntu-latest'
-                    ${{ if eq(os, 'Windows') }}:
-                      image: 'windows-latest'
-                    ${{ if eq(os, 'Mac') }}:
-                      image: 'macos-latest'
+          ${{ each os in parameters.operatingSystems }}:
+            ${{ each variant in parameters.variants }}:
+              ${{ if or(eq(os, 'Linux'), eq(variant, 'Cython')) }}:
+                ${{ format('Py{0} {1} {2}', py, os, variant) }}:
+                  python.version: ${{ py }}
+                  ${{ if eq(variant, 'Pure') }}:
+                    no_extensions: 'Y'
+                  ${{ if eq(os, 'Linux') }}:
+                    image: 'ubuntu-latest'
+                  ${{ if eq(os, 'Windows') }}:
+                    image: 'windows-latest'
+                  ${{ if eq(os, 'Mac') }}:
+                    image: 'macos-latest'
 
     pool:
       vmImage: '$(image)'
@@ -46,33 +40,42 @@ stages:
     timeoutInMinutes: 10
 
     steps:
-    - template: stage-test-steps.yml
+    - checkout: self
+      clean: true
 
-  - job:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(python.version)'
+        architecture: 'x64'
 
-    strategy:
-      matrix:
-        ${{ each py in parameters.pythonVersions }}:
-          ${{ if eq(py, parameters.pyMayFail) }}:
-            ${{ each os in parameters.operatingSystems }}:
-              ${{ each variant in parameters.variants }}:
-                ${{ if or(eq(os, 'Linux'), eq(variant, 'Cython')) }}:
-                  ${{ format('Py{0} {1} {2}', py, os, variant) }}:
-                    python.version: ${{ py }}
-                    no_extensions: ${{ eq(variant, 'Pure') }}
-                    ${{ if eq(os, 'Linux') }}:
-                      image: 'ubuntu-latest'
-                    ${{ if eq(os, 'Windows') }}:
-                      image: 'windows-latest'
-                    ${{ if eq(os, 'Mac') }}:
-                      image: 'macos-latest'
+    - script: |
+        python -m pip install --upgrade pip setuptools
+      displayName: 'Update pip'
 
-    pool:
-      vmImage: '$(image)'
+    - script: |
+        make cythonize
+      condition: and(ne(variables['no_extensions'], 'Y'), succeeded())
+      displayName: 'Cythonize'
 
-    timeoutInMinutes: 10
+    - script: |
+        pip install -r requirements/dev.txt pytest-azurepipelines
+      env:
+        FROZENLIST_NO_EXTENSIONS: $(no_extensions)
+      displayName: 'Install dependencies'
 
-    steps:
-    - template: stage-test-steps.yml
-      parameters:
-        toleratePythonMissing: true
+
+    - script: |
+        pytest tests -vv --no-coverage-upload
+      displayName: 'pytest'
+
+    - script: |
+        python -m coverage xml
+      displayName: 'Prepare coverage'
+
+    - script: |
+        pip install codecov
+        python -m codecov -f coverage.xml -X gcov
+      env:
+        CODECOV_TOKEN: $(codecov.token)
+      condition: and(variables['codecov.token'], succeeded())
+      displayName: 'Upload coverage reports'
