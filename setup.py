@@ -12,8 +12,8 @@ except ImportError:
     CYTHON = False
 
 
-if sys.version_info < (3, 5, 3):
-    raise RuntimeError("frozenlist 1.x requires Python 3.5.3+")
+if sys.version_info < (3, 6):
+    raise RuntimeError("frozenlist 1.x requires Python 3.6+")
 
 
 NO_EXTENSIONS = (
@@ -82,7 +82,6 @@ setup(
         'Intended Audience :: Developers',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Development Status :: 5 - Production/Stable',
@@ -107,7 +106,7 @@ setup(
     license='Apache 2',
     packages=['frozenlist'],
     ext_modules=ext_modules,
-    python_requires='>=3.5.3',
+    python_requires='>=3.6',
     install_requires=install_requires,
     include_package_data=True,
 )

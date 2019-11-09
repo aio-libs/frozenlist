@@ -56,7 +56,7 @@ Installation
 
    $ pip install frozenlist
 
-The library requires Python 3.5.3 or newer.
+The library requires Python 3.6 or newer.
 
 
 Documentation
@@ -76,7 +76,7 @@ Feel free to post your questions and ideas here.
 Requirements
 ============
 
-- Python >= 3.5.3
+- Python >= 3.6
 
 License
 =======
