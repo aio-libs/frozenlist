@@ -4,11 +4,6 @@ parameters:
     - 'Linux'
     - 'Windows'
     - 'Mac'
-  # This version is a prerelease version and is marked
-  # as possibly failing, either because the version might
-  # not be available on Azure yet or because tests are
-  # allowed to fail on this version.
-  pyMayFail: '3.8'
 
 stages:
 - stage: build
