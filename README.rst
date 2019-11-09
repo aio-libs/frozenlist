@@ -4,7 +4,7 @@ frozenlist
 
 .. image:: https://dev.azure.com/aio-libs/frozenlib/_apis/build/status/CI?branchName=master
    :target: https://dev.azure.com/aio-libs/frozenlib/_build/latest?definitionId=11&branchName=master
-   :alt: Azure status for master branch
+   :alt: Azure Pipelines status for master branch
 
 .. image:: https://codecov.io/gh/aio-libs/frozenlist/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/aio-libs/frozenlist
