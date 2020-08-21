@@ -53,7 +53,24 @@ Traceback (most recent call last):
     raise RuntimeError("Cannot modify frozen list.")
 RuntimeError: Cannot modify frozen list.
 
-FrozenList is also hashable, but only when frozen. Otherwise it also throws a RuntimeError.
+
+FrozenList is also hashable, but only when frozen. Otherwise it also throws a RuntimeError:
+
+
+>>> fl = FrozenList([17, 42, 'spam'])
+>>> hash(fl)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "frozenlist/frozenlist/__init__.py", line 77, in __hash__
+    raise RuntimeError("Cannot hash unfrozen list.")
+RuntimeError: Cannot hash unfrozen list.
+>>> fl.freeze()
+>>> hash(fl)
+3713081631934410656
+>>> dictionary = {fl: 'Vikings'} # frozen fl can be a dict. key
+>>> dictionary
+{<FrozenList(frozen=True, [1, 2])>: 'Vikings'}
+
 
 Installation
 ------------
