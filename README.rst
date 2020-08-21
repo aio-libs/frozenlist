@@ -52,6 +52,7 @@ Traceback (most recent call last):
     raise RuntimeError("Cannot modify frozen list.")
 RuntimeError: Cannot modify frozen list.
 
+FrozenList is also hashable, but only when frozen. Otherwise it also throws a RuntimeError.
 
 Installation
 ------------
