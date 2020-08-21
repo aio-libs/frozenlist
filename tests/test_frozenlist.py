@@ -229,9 +229,9 @@ class FrozenListMixin:
     def test_dict_key(self) -> None:
         _list = self.FrozenList([1, 2])
         with pytest.raises(RuntimeError):
-            d = {_list: 'hello'}
+            {_list: 'hello'}
         _list.freeze()
-        d = {_list: 'hello'}
+        {_list: 'hello'}
 
     def test_count(self) -> None:
         _list = self.FrozenList([1, 2])
