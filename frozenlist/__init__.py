@@ -71,10 +71,10 @@ class FrozenList(MutableSequence):
                                                       self._items)
 
     def __hash__(self):
-        if self.frozen:
+        if self._frozen:
             return hash(tuple(self))
         else:
-            raise RuntimeError("Cannot hash unfrozen list")
+            raise RuntimeError("Cannot hash unfrozen list.")
 
 PyFrozenList = FrozenList
 
