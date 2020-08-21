@@ -104,5 +104,10 @@ cdef class FrozenList:
         return '<FrozenList(frozen={}, {!r})>'.format(self.frozen,
                                                       self._items)
 
+    def __hash__(self):
+    if self.frozen:
+        return hash(tuple(self))
+    else:
+        raise RuntimeError("Cannot hash unfrozen list.")
 
 MutableSequence.register(FrozenList)
