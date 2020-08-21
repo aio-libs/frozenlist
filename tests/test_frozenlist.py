@@ -224,7 +224,14 @@ class FrozenListMixin:
         _list = self.FrozenList([1, 2])
         _list.freeze()
         h = hash(_list)
-        assert h == hash((1,2))
+        assert h == hash((1, 2))
+
+    def test_dict_key(self) -> None:
+        _list = self.FrozenList([1, 2])
+        with pytest.raises(RuntimeError):
+            d = {_list: 'hello'}
+        _list.freeze()
+        d = {_list: 'hello'}
 
     def test_count(self) -> None:
         _list = self.FrozenList([1, 2])
