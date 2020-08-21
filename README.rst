@@ -36,7 +36,8 @@ is called, after which list modifications raise ``RuntimeError``:
 
 >>> from frozenlist import FrozenList
 >>> fl = FrozenList([17, 42])
->>> fl
+>>> fl.append('spam')
+>>> fl.append('Vikings')
 <FrozenList(frozen=False, [17, 42, 'spam', 'Vikings'])>
 >>> fl.freeze()
 >>> fl
