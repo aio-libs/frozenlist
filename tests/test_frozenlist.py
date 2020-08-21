@@ -215,6 +215,17 @@ class FrozenListMixin:
             _list.append(3)
         assert _list == [1, 2]
 
+    def test_hash(self) -> None:
+        _list = self.FrozenList([1, 2])
+        with pytest.raises(RuntimeError):
+            hash(_list)
+
+    def test_hash_frozen(self) -> None:
+        _list = self.FrozenList([1, 2])
+        _list.freeze()
+        h = hash(_list)
+        assert h == hash((1,2))
+
     def test_count(self) -> None:
         _list = self.FrozenList([1, 2])
         assert _list.count(1) == 1
