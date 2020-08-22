@@ -38,6 +38,7 @@ is called, after which list modifications raise ``RuntimeError``:
 >>> fl = FrozenList([17, 42])
 >>> fl.append('spam')
 >>> fl.append('Vikings')
+>>> fl
 <FrozenList(frozen=False, [17, 42, 'spam', 'Vikings'])>
 >>> fl.freeze()
 >>> fl
@@ -61,13 +62,13 @@ FrozenList is also hashable, but only when frozen. Otherwise it also throws a Ru
 >>> hash(fl)
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
-  File "frozenlist/frozenlist/__init__.py", line 77, in __hash__
+  File "frozenlist/_frozenlist.pyx", line 111, in frozenlist._frozenlist.FrozenList.__hash__
     raise RuntimeError("Cannot hash unfrozen list.")
 RuntimeError: Cannot hash unfrozen list.
 >>> fl.freeze()
 >>> hash(fl)
 3713081631934410656
->>> dictionary = {fl: 'Vikings'} # frozen fl can be a dict. key
+>>> dictionary = {fl: 'Vikings'} # frozen fl can be a dict key
 >>> dictionary
 {<FrozenList(frozen=True, [1, 2])>: 'Vikings'}
 

@@ -110,4 +110,5 @@ cdef class FrozenList:
         else:
             raise RuntimeError("Cannot hash unfrozen list.")
 
+
 MutableSequence.register(FrozenList)
