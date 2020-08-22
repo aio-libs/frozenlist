@@ -70,6 +70,12 @@ class FrozenList(MutableSequence):
         return '<FrozenList(frozen={}, {!r})>'.format(self._frozen,
                                                       self._items)
 
+    def __hash__(self):
+        if self._frozen:
+            return hash(tuple(self))
+        else:
+            raise RuntimeError("Cannot hash unfrozen list.")
+
 
 PyFrozenList = FrozenList
 
