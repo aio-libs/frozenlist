@@ -106,6 +106,7 @@ gunicorn
 gunicorn’s
 gzipped
 hackish
+hashable
 highlevel
 hostnames
 HTTPException
