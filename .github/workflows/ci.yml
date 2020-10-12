@@ -71,7 +71,7 @@ jobs:
       run: |
         twine check dist/*
     - name: Make sure that CONTRIBUTORS.txt remains sorted
-    - run: |
+      run: |
         LC_ALL=C sort -c CONTRIBUTORS.txt
 
   test:
