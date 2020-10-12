@@ -3,6 +3,6 @@
 coverage==5.3
 pytest==6.1.1
 pytest-cov==2.10.1
-tox==3.20.0
+tox==3.20.1
 twine==3.2.0
 codecov==2.1.9
