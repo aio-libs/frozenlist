@@ -5,7 +5,6 @@ import sys
 
 from setuptools import Extension, setup
 
-
 if sys.version_info < (3, 6):
     raise RuntimeError("frozenlist 1.x requires Python 3.6+")
 

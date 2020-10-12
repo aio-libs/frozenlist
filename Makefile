@@ -21,7 +21,7 @@ cythonize: .install-cython $(PYXS:.pyx=.c)
 lint: flake isort-check flake8
 
 isort:
-	isort -rc $(SRC)
+	isort $(SRC)
 
 flake: .flake
 
@@ -29,9 +29,9 @@ flake: .flake
                       $(shell find tests -type f)
 	flake8 frozenlist tests
 	python setup.py check -rms
-	@if ! isort -c -rc frozenlist tests; then \
+	@if ! isort -c frozenlist tests; then \
             echo "Import sort errors, run 'make isort' to fix them!"; \
-            isort --diff -rc frozenlist tests; \
+            isort --diff frozenlist tests; \
             false; \
 	fi
 	@if ! LC_ALL=C sort -c CONTRIBUTORS.txt; then \
@@ -46,9 +46,9 @@ mypy: .flake
 	mypy frozenlist
 
 isort-check:
-	@if ! isort -rc --check-only $(SRC); then \
+	@if ! isort --check-only $(SRC); then \
             echo "Import sort errors, run 'make isort' to fix them!!!"; \
-            isort --diff -rc $(SRC); \
+            isort --diff $(SRC); \
             false; \
 	fi
 
