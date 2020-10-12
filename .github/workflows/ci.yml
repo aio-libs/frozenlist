@@ -124,7 +124,7 @@ jobs:
     - name: Install dependencies
       uses: py-actions/py-dependency-install@v2
       with:
-        path: requirements/ci.txt
+        path: requirements/dev.txt
       env:
         FROZENLIST_NO_EXTENSIONS: ${{ matrix.no-extensions }}
     - name: Run unittests
