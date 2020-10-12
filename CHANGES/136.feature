@@ -1,1 +1,0 @@
-Add support for hashing of a frozen list.

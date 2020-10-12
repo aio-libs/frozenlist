@@ -14,6 +14,24 @@ Changelog
 
 .. towncrier release notes start
 
+1.1.0 (2020-10-XX)
+==================
+
+Features
+--------
+
+- Add support for hashing of a frozen list.
+  `#136 <https://github.com/aio-libs/frozenlist/issues/136>`_
+
+- Support Python 3.8 and 3.9.
+
+- Provide wheels for ``aarch64``, ``i686``, ``ppc64le``, ``s390x`` architectures on
+  Linux as well as ``x86_64``.
+
+
+----
+
+
 1.0.0 (2019-11-09)
 ==================
 
