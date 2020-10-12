@@ -25,7 +25,7 @@ else:
     print("**********************")
     print("* Accellerated build *")
     print("**********************")
-    extensions = [
+    ext_modules = [
         Extension('frozenlist._frozenlist', ['frozenlist/_frozenlist.c'])
     ]
 
