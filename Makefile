@@ -18,6 +18,8 @@ cythonize: .install-cython $(PYXS:.pyx=.c)
 	pip install -r requirements/dev.txt
 	@touch .install-deps
 
+lint: flake isort-check flake8
+
 isort:
 	isort -rc $(SRC)
 
