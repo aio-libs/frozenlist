@@ -132,7 +132,7 @@ jobs:
         COLOR: 'yes'
         FROZENLIST_NO_EXTENSIONS: ${{ matrix.no-extensions }}
       run: |
-        python -m pytest tests -vv --no-coverage-upload
+        python -m pytest tests -vv
         python -m coverage xml
     - name: Upload coverage
       uses: codecov/codecov-action@v1
