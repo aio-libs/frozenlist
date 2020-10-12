@@ -14,4 +14,3 @@ global-exclude *.a
 global-exclude *.obj
 exclude frozenlist/*.html
 prune docs/_build
-exclude docs/spelling_wordlist.txt
