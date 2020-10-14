@@ -74,8 +74,8 @@ setup(
     url='https://github.com/aio-libs/frozenlist',
     project_urls={
         'Chat: Gitter': 'https://gitter.im/aio-libs/Lobby',
-        'CI: Azure Pipelines':
-            'https://dev.azure.com/aio-libs/frozenlib/_build',
+        'CI: Github Actions':
+            'https://github.com/aio-libs/frozenlist/actions',
         'Coverage: codecov': 'https://codecov.io/github/aio-libs/frozenlist',
         'Docs: RTD': 'https://frozenlist.readthedocs.io',
         'GitHub: issues': 'https://github.com/aio-libs/frozenlist/issues',
