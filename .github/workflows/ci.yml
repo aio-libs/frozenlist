@@ -155,6 +155,16 @@ jobs:
         flags: unit
         fail_ci_if_error: false
 
+  test-summary:
+    name: Test matrix status
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Check build matrix status
+        if: ${{ needs.test.result != 'success' }}
+        run: exit 1
+
   pre-deploy:
     name: Pre-Deploy
     runs-on: ubuntu-latest
