@@ -16,6 +16,18 @@ on:
 
 jobs:
 
+  pre_job:
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@master
+        with:
+          github_token: ${{ github.token }}
+          paths_ignore: '["CHANGES/**", "CHANGES.rst", "LICENSE.txt", "README.rst", "tools/**"]'
+
   lint:
     name: Linter
     runs-on: ubuntu-latest
@@ -76,7 +88,8 @@ jobs:
 
   test:
     name: Test
-    needs: lint
+    needs: [lint, pre_job]
+    if: ${{ needs.pre_job.outputs.should_skip == 'false' }}
     strategy:
       matrix:
         pyver: [3.6, 3.7, 3.8, 3.9]
