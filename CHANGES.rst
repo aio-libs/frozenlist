@@ -14,6 +14,19 @@ Changelog
 
 .. towncrier release notes start
 
+1.1.1 (2020-11-14)
+==================
+
+Bugfixes
+--------
+
+- Provide x86 Windows wheels.
+  `#169 <https://github.com/aio-libs/frozenlist/issues/169>`_
+
+
+----
+
+
 1.1.0 (2020-10-13)
 ==================
 
