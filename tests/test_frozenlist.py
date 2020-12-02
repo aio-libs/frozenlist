@@ -15,10 +15,7 @@ class FrozenListMixin:
 
     def test_iface(self) -> None:
         for name in set(dir(MutableSequence)) - self.SKIP_METHODS:
-            if (
-                (name.startswith('_') and
-                 not name.endswith('_'))
-            ):
+            if name.startswith('_') and not name.endswith('_'):
                 continue
             assert hasattr(self.FrozenList, name)
 
