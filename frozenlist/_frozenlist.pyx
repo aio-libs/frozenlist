@@ -1,7 +1,14 @@
+import types
 from collections.abc import MutableSequence
 
 
 cdef class FrozenList:
+
+    try:
+        # Python 3.9 PEP 585
+        __class_getitem__ = classmethod(types.GenericAlias)
+    except AttributeError:
+        pass
 
     cdef readonly bint frozen
     cdef list _items

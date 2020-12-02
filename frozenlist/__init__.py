@@ -1,4 +1,5 @@
 import os
+import types
 from collections.abc import MutableSequence
 from functools import total_ordering
 from typing import Tuple
@@ -17,6 +18,12 @@ NO_EXTENSIONS = bool(os.environ.get('FROZENLIST_NO_EXTENSIONS'))  # type: bool
 class FrozenList(MutableSequence):
 
     __slots__ = ('_frozen', '_items')
+
+    try:
+        # Python 3.9 PEP 585
+        __class_getitem__ = classmethod(types.GenericAlias)
+    except AttributeError:
+        pass
 
     def __init__(self, items=None):
         self._frozen = False

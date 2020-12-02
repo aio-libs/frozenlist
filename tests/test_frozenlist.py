@@ -17,8 +17,7 @@ class FrozenListMixin:
         for name in set(dir(MutableSequence)) - self.SKIP_METHODS:
             if (
                 (name.startswith('_') and
-                 not name.endswith('_')) or
-                name == '__class_getitem__'
+                 not name.endswith('_'))
             ):
                 continue
             assert hasattr(self.FrozenList, name)
