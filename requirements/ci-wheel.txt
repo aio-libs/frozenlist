@@ -1,6 +1,6 @@
 -r flake.txt
 -r cython.txt
-coverage==5.5
+coverage==6.0.2
 pytest==6.2.4
 pytest-cov==2.11.1
 tox==3.24.4
