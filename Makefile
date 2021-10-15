@@ -26,16 +26,17 @@ isort:
 flake: .flake
 
 .flake: .install-deps $(shell find frozenlist -type f) \
-                      $(shell find tests -type f)
+					  $(shell find tests -type f)
 	flake8 frozenlist tests
-	python setup.py check -rms
+	python setup.py sdist bdist_wheel
+	twine check dist/*
 	@if ! isort -c frozenlist tests; then \
-            echo "Import sort errors, run 'make isort' to fix them!"; \
-            isort --diff frozenlist tests; \
-            false; \
+			echo "Import sort errors, run 'make isort' to fix them!"; \
+			isort --diff frozenlist tests; \
+			false; \
 	fi
 	@if ! LC_ALL=C sort -c CONTRIBUTORS.txt; then \
-            echo "CONTRIBUTORS.txt sort error"; \
+			echo "CONTRIBUTORS.txt sort error"; \
 	fi
 	@touch .flake
 
@@ -47,9 +48,9 @@ mypy: .flake
 
 isort-check:
 	@if ! isort --check-only $(SRC); then \
-            echo "Import sort errors, run 'make isort' to fix them!!!"; \
-            isort --diff $(SRC); \
-            false; \
+			echo "Import sort errors, run 'make isort' to fix them!!!"; \
+			isort --diff $(SRC); \
+			false; \
 	fi
 
 check_changes:
