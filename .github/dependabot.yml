@@ -6,6 +6,8 @@ updates:
   labels:
     - dependencies
     - autosquash
+  schedule:
+    interval: "daily"
   # Maintain dependencies for Python
 - package-ecosystem: pip
   directory: "/"
@@ -13,3 +15,5 @@ updates:
     - dependencies
     - autosquash
   open-pull-requests-limit: 10
+  schedule:
+    interval: "daily"
