@@ -1,8 +1,9 @@
 import os
+import sys
 import types
 from collections.abc import MutableSequence
 from functools import total_ordering
-from typing import Tuple
+from typing import Tuple, Type
 
 __version__ = '1.1.1'
 
@@ -19,11 +20,12 @@ class FrozenList(MutableSequence):
 
     __slots__ = ('_frozen', '_items')
 
-    try:
-        # Python 3.9 PEP 585
+    if sys.version_info >= (3, 9):
         __class_getitem__ = classmethod(types.GenericAlias)
-    except AttributeError:
-        pass
+    else:
+        @classmethod
+        def __class_getitem__(cls: Type['FrozenList']) -> Type['FrozenList']:
+            return cls
 
     def __init__(self, items=None):
         self._frozen = False
