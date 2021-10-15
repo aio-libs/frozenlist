@@ -237,11 +237,16 @@ jobs:
 
   deploy:
     name: Deploy
+    environment: release
     needs: [build-tarball, build-wheels]
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2.3.4
+    - name: Download dist
+      uses: actions/download-artifact@v2
+      with:
+        name: dist
     - name: Login
       run: |
         echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
@@ -253,6 +258,5 @@ jobs:
         version_file: frozenlist/__init__.py
         github_token: ${{ secrets.GITHUB_TOKEN }}
         pypi_token: ${{ secrets.PYPI_API_TOKEN }}
-        artifact: dist
         fix_issue_regex: "`#(\\d+) <https://github.com/aio-libs/frozenlist/issues/\\1>`"
         fix_issue_repl: "(#\\1)"
