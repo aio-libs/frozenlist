@@ -10,7 +10,8 @@ template = "CHANGES/.TEMPLATE.rst"
 issue_format = "`#{issue} <https://github.com/aio-libs/frozenlist/issues/{issue}>`_"
 
 [tool.cibuildwheel]
-test-requires = "-r requirements/ci-wheel.txt"
-test-command = "pytest {project}/tests"
+# test-requires = "-r requirements/ci-wheel.txt"
+# test-command = "pytest {project}/tests"
+
 # don't build PyPy wheels, install from source instead
 skip = "pp*"
