@@ -22,10 +22,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Setup Python 3.8
+    - name: Setup Python
       uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
     - name: Cache PyPI
       uses: actions/cache@v2
       with:
@@ -78,7 +76,7 @@ jobs:
     needs: [lint]
     strategy:
       matrix:
-        pyver: [3.6, 3.7, 3.8, 3.9]
+        pyver: [3.6, 3.7, 3.8, 3.9, 3.10]
         no-extensions: ['', 'Y']
         os: [ubuntu, macos, windows]
         exclude:
@@ -168,10 +166,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Setup Python 3.8
+    - name: Setup Python
       uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
     - name: Install cython
       uses: py-actions/py-dependency-install@v2
       with:
@@ -192,7 +188,7 @@ jobs:
     name: Linux
     strategy:
       matrix:
-        pyver: [cp36-cp36m, cp37-cp37m, cp38-cp38, cp39-cp39]
+        pyver: [cp36-cp36m, cp37-cp37m, cp38-cp38, cp39-cp39, cp310-cp310]
         arch: [x86_64, aarch64, i686, ppc64le, s390x]
       fail-fast: false
     runs-on: ubuntu-latest
@@ -208,10 +204,8 @@ jobs:
       uses: docker/setup-qemu-action@v1
     - name: Available platforms
       run: echo ${{ steps.qemu.outputs.platforms }}
-    - name: Setup Python 3.8
+    - name: Setup Python
       uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
     - name: Install cython
       if: matrix.no-extensions == ''
       uses: py-actions/py-dependency-install@v2
@@ -243,7 +237,7 @@ jobs:
     name: Binary wheels
     strategy:
       matrix:
-        pyver: [3.6, 3.7, 3.8, 3.9]
+        pyver: [3.6, 3.7, 3.8, 3.9, 3.10]
         os: [macos, windows]
         arch: [x86, x64]
         exclude:
@@ -255,7 +249,7 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Setup Python 3.8
+    - name: Setup Python
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.pyver }}
@@ -286,10 +280,8 @@ jobs:
     needs: [build-linux, build-binary, build-tarball]
     runs-on: ubuntu-latest
     steps:
-    - name: Setup Python 3.8
+    - name: Setup Python
       uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
     - name: Install twine
       run: |
         python -m pip install twine
