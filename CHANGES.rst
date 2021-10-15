@@ -14,6 +14,25 @@ Changelog
 
 .. towncrier release notes start
 
+1.2.0a0 (2021-10-15)
+====================
+
+Features
+--------
+
+- ``FrozenList`` now supports being used as a generic type as per PEP 585, e.g. ``frozen_int_list: FrozenList[int]`` (requires Python 3.9 or newer).
+  `#172 <https://github.com/aio-libs/frozenlist/issues/172>`_
+- Added support for Python 3.10.
+  `#227 <https://github.com/aio-libs/frozenlist/issues/227>`_
+- Started shipping platform-specific wheels with the ``musl`` tag targeting typical Alpine Linux runtimes.
+  `#227 <https://github.com/aio-libs/frozenlist/issues/227>`_
+- Started shipping platform-specific arm64 wheels for Apple Silicon.
+  `#227 <https://github.com/aio-libs/frozenlist/issues/227>`_
+
+
+----
+
+
 1.1.1 (2020-11-14)
 ==================
 
