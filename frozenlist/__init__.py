@@ -5,7 +5,7 @@ from collections.abc import MutableSequence
 from functools import total_ordering
 from typing import Tuple, Type
 
-__version__ = "1.2.0a4"
+__version__ = "1.2.0a5"
 
 __all__ = (
     "FrozenList", "PyFrozenList"
