@@ -5,26 +5,26 @@ from collections.abc import MutableSequence
 from functools import total_ordering
 from typing import Tuple, Type
 
-__version__ = '1.2.0a3'
+__version__ = "1.2.0a4"
 
 __all__ = (
-    'FrozenList', 'PyFrozenList'
+    "FrozenList", "PyFrozenList"
 )  # type: Tuple[str, ...]
 
 
-NO_EXTENSIONS = bool(os.environ.get('FROZENLIST_NO_EXTENSIONS'))  # type: bool
+NO_EXTENSIONS = bool(os.environ.get("FROZENLIST_NO_EXTENSIONS"))  # type: bool
 
 
 @total_ordering
 class FrozenList(MutableSequence):
 
-    __slots__ = ('_frozen', '_items')
+    __slots__ = ("_frozen", "_items")
 
     if sys.version_info >= (3, 9):
         __class_getitem__ = classmethod(types.GenericAlias)
     else:
         @classmethod
-        def __class_getitem__(cls: Type['FrozenList']) -> Type['FrozenList']:
+        def __class_getitem__(cls: Type["FrozenList"]) -> Type["FrozenList"]:
             return cls
 
     def __init__(self, items=None):
@@ -76,7 +76,7 @@ class FrozenList(MutableSequence):
         self._items.insert(pos, item)
 
     def __repr__(self):
-        return '<FrozenList(frozen={}, {!r})>'.format(self._frozen,
+        return "<FrozenList(frozen={}, {!r})>".format(self._frozen,
                                                       self._items)
 
     def __hash__(self):
