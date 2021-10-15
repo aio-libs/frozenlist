@@ -247,6 +247,9 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: dist
+        path: dist
+    - run: |
+        tree
     - name: Login
       run: |
         echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
