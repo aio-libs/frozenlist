@@ -1,9 +1,9 @@
 -r flake.txt
 -r cython.txt
-coverage==5.3
-pytest==6.1.2
-pytest-cov==2.10.1
-tox==3.20.1
-twine==3.2.0
-codecov==2.1.10
+coverage==5.5
+pytest==6.2.4
+pytest-cov==2.11.1
+tox==3.23.0
+twine==3.4.1
+codecov==2.1.11
 wheel==0.37.0
