@@ -87,4 +87,5 @@ setup(
     python_requires='>=3.6',
     install_requires=install_requires,
     include_package_data=True,
+    exclude_package_data={"": ["*.c"]},
 )
