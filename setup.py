@@ -3,7 +3,6 @@ import sys
 
 from setuptools import Extension, setup
 
-
 NO_EXTENSIONS = (
     bool(os.environ.get('FROZENLIST_NO_EXTENSIONS')) or
     sys.implementation.name != "cpython"
