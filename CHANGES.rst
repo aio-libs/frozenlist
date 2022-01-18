@@ -14,6 +14,26 @@ Changelog
 
 .. towncrier release notes start
 
+1.3.0a0 (2022-01-18)
+====================
+
+Bugfixes
+--------
+
+- Do not install C sources with binary distributions.
+  `#250 <https://github.com/aio-libs/frozenlist/issues/250>`_
+
+
+Deprecations and Removals
+-------------------------
+
+- Dropped Python 3.6 support
+  `#274 <https://github.com/aio-libs/frozenlist/issues/274>`_
+
+
+----
+
+
 1.2.0 (2021-10-16)
 ==================
 
