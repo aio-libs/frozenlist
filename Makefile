@@ -6,7 +6,7 @@ SRC = frozenlist tests setup.py
 all: test
 
 .install-cython:
-	pip install -r requirements/cython.txt
+	pip install -r requirements/ci.txt
 	touch .install-cython
 
 frozenlist/%.c: frozenlist/%.pyx
@@ -15,7 +15,7 @@ frozenlist/%.c: frozenlist/%.pyx
 cythonize: .install-cython $(PYXS:.pyx=.c)
 
 .install-deps: cythonize $(shell find requirements -type f)
-	pip install -r requirements/dev.txt
+	pip install -r requirements/ci.txt
 	@touch .install-deps
 
 lint: flake isort-check flake8
@@ -57,7 +57,7 @@ check_changes:
 	./tools/check_changes.py
 
 .develop: .install-deps $(shell find frozenlist -type f) .flake check_changes mypy
-	# pip install -e .
+	pip install -e .
 	@touch .develop
 
 test: .develop
