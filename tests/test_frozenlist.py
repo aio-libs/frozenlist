@@ -8,14 +8,14 @@ from frozenlist import FrozenList, PyFrozenList
 class FrozenListMixin:
     FrozenList = NotImplemented
 
-    SKIP_METHODS = {'__abstractmethods__', '__slots__'}
+    SKIP_METHODS = {"__abstractmethods__", "__slots__"}
 
     def test_subclass(self) -> None:
         assert issubclass(self.FrozenList, MutableSequence)
 
     def test_iface(self) -> None:
         for name in set(dir(MutableSequence)) - self.SKIP_METHODS:
-            if name.startswith('_') and not name.endswith('_'):
+            if name.startswith("_") and not name.endswith("_"):
                 continue
             assert hasattr(self.FrozenList, name)
 
@@ -40,9 +40,9 @@ class FrozenListMixin:
 
     def test_repr(self) -> None:
         _list = self.FrozenList([1])
-        assert repr(_list) == '<FrozenList(frozen=False, [1])>'
+        assert repr(_list) == "<FrozenList(frozen=False, [1])>"
         _list.freeze()
-        assert repr(_list) == '<FrozenList(frozen=True, [1])>'
+        assert repr(_list) == "<FrozenList(frozen=True, [1])>"
 
     def test_getitem(self) -> None:
         _list = self.FrozenList([1, 2])
@@ -229,9 +229,9 @@ class FrozenListMixin:
     def test_dict_key(self) -> None:
         _list = self.FrozenList([1, 2])
         with pytest.raises(RuntimeError):
-            {_list: 'hello'}
+            {_list: "hello"}
         _list.freeze()
-        {_list: 'hello'}
+        {_list: "hello"}
 
     def test_count(self) -> None:
         _list = self.FrozenList([1, 2])
