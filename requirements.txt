@@ -1,25 +1,17 @@
-
+-e .
 aiohttp-theme==0.1.6
 cherry_picker==2.1.0; python_version>="3.6"
 codecov==2.1.12
 coverage==6.2
 cython==0.29.26
--e .
 flake8==4.0.1
 isort==5.10.1
 mypy==0.931; implementation_name=="cpython"
-mypy-extensions==0.4.3; implementation_name=="cpython"
 pygments>=2.1
 pytest==6.2.5
 pytest-cov==3.0.0
--r ci.txt
--r ci-wheel.txt
--r cython.txt
--r doc.txt
--r flake.txt
--r towncrier.txt
 sphinx==4.4.0
-sphinxcontrib-spelling==7.3.2; platform_system!="Windows"  # We only use it in Travis CI
+sphinxcontrib-spelling==7.3.2; platform_system!="Windows"
 towncrier==21.3.0
 tox==3.24.5
 twine==3.7.1
