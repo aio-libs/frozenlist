@@ -112,6 +112,7 @@ jobs:
       uses: py-actions/py-dependency-install@v3
       with:
         path: requirements/dev.txt
+    - name: Cythonize
       if: matrix.no-extensions == ''
       run: |
         make cythonize
