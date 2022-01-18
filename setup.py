@@ -51,7 +51,7 @@ setup(
         'A list-like structure which implements '
         'collections.abc.MutableSequence'
     ),
-    long_description='\n\n'.join((read('README.rst'), read('CHANGES.rst'))),
+    long_description=read('README.rst'),
     long_description_content_type="text/x-rst",
     classifiers=[
         'License :: OSI Approved :: Apache Software License',
