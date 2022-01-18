@@ -34,7 +34,7 @@ jobs:
     - name: Install dependencies
       uses: py-actions/py-dependency-install@v3
       with:
-        path: requirements/flake.txt
+        path: requirements/ci.txt
     - name: Install itself
       run: |
         python setup.py install
@@ -52,8 +52,7 @@ jobs:
     - name: Install spell checker
       run: |
         sudo apt install libenchant-dev
-        pip install -r requirements/doc-spelling.txt
-        pip install -r requirements/towncrier.txt
+        pip install -r requirements/doc.txt
     - name: Run docs spelling
       run: |
         towncrier --yes
@@ -113,7 +112,7 @@ jobs:
       if: matrix.no-extensions == ''
       uses: py-actions/py-dependency-install@v3
       with:
-        path: requirements/cython.txt
+        path: requirements/ci.txt
     - name: Cythonize
       if: matrix.no-extensions == ''
       run: |
@@ -171,7 +170,7 @@ jobs:
     - name: Install cython
       uses: py-actions/py-dependency-install@v3
       with:
-        path: requirements/cython.txt
+        path: requirements/ci.txt
     - name: Cythonize
       run: |
         make cythonize
@@ -222,7 +221,7 @@ jobs:
     - name: Install cython
       uses: py-actions/py-dependency-install@v3
       with:
-        path: requirements/cython.txt
+        path: requirements/ci.txt
     - name: Cythonize
       run: |
         make cythonize
