@@ -119,6 +119,8 @@ jobs:
     - name: Install itself
       run: |
         pip install .
+      env:
+        FROZENLIST_NO_EXTENSIONS: ${{ matrix.no-extensions }}
     - name: Run unittests
       env:
         COLOR: 'yes'
