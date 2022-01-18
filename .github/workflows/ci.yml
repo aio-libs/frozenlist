@@ -40,15 +40,9 @@ jobs:
         pip install .
       env:
         FROZENLIST_NO_EXTENSIONS: 1
-    - name: Run flake8
+    - name: Run linters
       run: |
-        make flake8
-    - name: Run isort-check
-      run: |
-        make isort-check
-    - name: Run mypy checker
-      run: |
-        make mypy
+        make lint
     - name: Install spell checker
       run: |
         sudo apt install libenchant-dev
@@ -60,7 +54,7 @@ jobs:
     - name: Prepare twine checker
       run: |
         pip install -U twine wheel
-        python setup.py sdist bdist_wheel
+        python -m build
       env:
         FROZENLIST_NO_EXTENSIONS: 1
     - name: Run twine checker
@@ -170,7 +164,7 @@ jobs:
         make cythonize
     - name: Make sdist
       run:
-        python setup.py sdist
+        python -m build --sdist
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:

@@ -1,0 +1,98 @@
+repos:
+- repo: local
+  hooks:
+  - id: check-changes
+    name: Check CHANGES
+    language: system
+    entry: ./tools/check_changes.py
+    pass_filenames: false
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: 'v4.1.0'
+  hooks:
+  - id: check-merge-conflict
+- repo: https://github.com/asottile/yesqa
+  rev: v1.3.0
+  hooks:
+  - id: yesqa
+- repo: https://github.com/PyCQA/isort
+  rev: '5.10.1'
+  hooks:
+  - id: isort
+- repo: https://github.com/psf/black
+  rev: '21.12b0'
+  hooks:
+    - id: black
+      language_version: python3 # Should be a command that runs python3.6+
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: 'v4.1.0'
+  hooks:
+  - id: end-of-file-fixer
+    exclude: >-
+      ^docs/[^/]*\.svg$
+  - id: requirements-txt-fixer
+    exclude: >-
+      ^requirements/constraints[.]txt$
+  - id: trailing-whitespace
+  - id: file-contents-sorter
+    args: ['--ignore-case']
+    files: |
+      CONTRIBUTORS.txt|
+      docs/spelling_wordlist.txt|
+      .gitignore|
+      .gitattributes
+  - id: check-case-conflict
+  - id: check-json
+  - id: check-xml
+  - id: check-executables-have-shebangs
+  - id: check-toml
+  - id: check-yaml
+  - id: debug-statements
+  - id: check-added-large-files
+  - id: check-symlinks
+  - id: fix-byte-order-marker
+  - id: fix-encoding-pragma
+    args: ['--remove']
+  - id: detect-aws-credentials
+    args: ['--allow-missing-credentials']
+  - id: detect-private-key
+    exclude: ^examples/
+- repo: https://github.com/asottile/pyupgrade
+  rev: 'v2.31.0'
+  hooks:
+  - id: pyupgrade
+    args: ['--py36-plus']
+- repo: https://github.com/PyCQA/flake8
+  rev: '4.0.1'
+  hooks:
+  - id: flake8
+    exclude: "^docs/"
+- repo: git://github.com/Lucas-C/pre-commit-hooks-markup
+  rev: v1.0.1
+  hooks:
+  - id: rst-linter
+    files: >-
+      ^[^/]+[.]rst$
+    exclude: >-
+      ^CHANGES\.rst$
+- repo: https://github.com/rhysd/actionlint
+  rev: v1.6.8
+  hooks:
+  - id: actionlint-docker
+    args:
+    - -ignore
+    - 'SC2155:'
+    - -ignore
+    - 'SC2157:'
+    - -ignore
+    - 'SC2086:'
+    - -ignore
+    - 'SC1004:'
+- repo: https://github.com/sirosen/check-jsonschema
+  rev: 0.10.0
+  hooks:
+  - id: check-github-actions
+ci:
+  skip:
+  - actionlint-docker
+  - check-github-actions
+  - check-changes

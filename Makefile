@@ -16,45 +16,16 @@ cythonize: .install-cython $(PYXS:.pyx=.c)
 
 .install-deps: cythonize $(shell find requirements -type f)
 	pip install -r requirements/ci.txt
+	pre-commit install
 	@touch .install-deps
 
-lint: flake isort-check flake8
-
-isort:
-	isort $(SRC)
-
-flake: .flake
-
-.flake: .install-deps $(shell find frozenlist -type f) \
-					  $(shell find tests -type f)
-	flake8 frozenlist tests
-	python setup.py sdist bdist_wheel
-	twine check dist/*
-	@if ! isort -c frozenlist tests; then \
-			echo "Import sort errors, run 'make isort' to fix them!"; \
-			isort --diff frozenlist tests; \
-			false; \
-	fi
-	@if ! LC_ALL=C sort -c CONTRIBUTORS.txt; then \
-			echo "CONTRIBUTORS.txt sort error"; \
-	fi
-	@touch .flake
-
-flake8:
-	flake8 $(SRC)
-
-mypy: .flake
-	mypy frozenlist
-
-isort-check:
-	@if ! isort --check-only $(SRC); then \
-			echo "Import sort errors, run 'make isort' to fix them!!!"; \
-			isort --diff $(SRC); \
-			false; \
-	fi
-
-check_changes:
-	./tools/check_changes.py
+lint: .install-deps
+ifdef CI
+	python -m pre_commit run --all-files --show-diff-on-failure
+else
+	python -m pre_commit run --all-files
+endif
+	python -m mypy frozenlist --show-error-codes
 
 .develop: .install-deps $(shell find frozenlist -type f) .flake check_changes mypy
 	pip install -e .

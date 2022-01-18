@@ -19,7 +19,7 @@
 - [ ] Documentation reflects the changes
 - [ ] If you provide code modifications, please add yourself to `CONTRIBUTORS.txt`
   * The format is &lt;Name&gt; &lt;Surname&gt;.
-  * Please keep the list in alphabetical order, the file is sorted by name. 
+  * Please keep the list in alphabetical order, the file is sorted by name.
 - [ ] Add a new news fragment into the `CHANGES` folder
   * name it `<issue_id>.<type>` for example (588.bugfix)
   * if you don't have an `issue_id` change it to the pr id after creating the pr

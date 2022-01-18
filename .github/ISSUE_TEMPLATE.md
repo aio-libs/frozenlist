@@ -20,5 +20,5 @@
 
 <!-- Describe the environment you have that lead to your issue.
      This includes the frozenlist version, OS, proxy server and other
-     relevant software that is related to your case. 
+     relevant software that is related to your case.
      -->

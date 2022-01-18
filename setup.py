@@ -4,8 +4,8 @@ import sys
 from setuptools import Extension, setup
 
 NO_EXTENSIONS = (
-    bool(os.environ.get('FROZENLIST_NO_EXTENSIONS')) or
-    sys.implementation.name != "cpython"
+    bool(os.environ.get("FROZENLIST_NO_EXTENSIONS"))
+    or sys.implementation.name != "cpython"
 )
 
 if NO_EXTENSIONS:
@@ -17,9 +17,7 @@ else:
     print("**********************")
     print("* Accellerated build *")
     print("**********************")
-    ext_modules = [
-        Extension('frozenlist._frozenlist', ['frozenlist/_frozenlist.c'])
-    ]
+    ext_modules = [Extension("frozenlist._frozenlist", ["frozenlist/_frozenlist.c"])]
 
 
 setup(
