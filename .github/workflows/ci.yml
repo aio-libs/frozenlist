@@ -37,7 +37,7 @@ jobs:
         path: requirements/ci.txt
     - name: Install itself
       run: |
-        python setup.py install
+        pip install .
       env:
         FROZENLIST_NO_EXTENSIONS: 1
     - name: Run flake8
@@ -108,21 +108,16 @@ jobs:
         path: ${{ steps.pip-cache.outputs.dir }}
         restore-keys: |
             pip-ci-${{ runner.os }}-${{ matrix.pyver }}-{{ matrix.no-extensions }}-
-    - name: Install cython
-      if: matrix.no-extensions == ''
-      uses: py-actions/py-dependency-install@v3
-      with:
-        path: requirements/ci.txt
-    - name: Cythonize
-      if: matrix.no-extensions == ''
-      run: |
-        make cythonize
     - name: Install dependencies
       uses: py-actions/py-dependency-install@v3
       with:
         path: requirements/dev.txt
-      env:
-        FROZENLIST_NO_EXTENSIONS: ${{ matrix.no-extensions }}
+      if: matrix.no-extensions == ''
+      run: |
+        make cythonize
+    - name: Install itself
+      run: |
+        pip install .
     - name: Run unittests
       env:
         COLOR: 'yes'
