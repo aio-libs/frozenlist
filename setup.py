@@ -51,17 +51,17 @@ setup(
         'A list-like structure which implements '
         'collections.abc.MutableSequence'
     ),
-    long_description='\n\n'.join((read('README.rst'), read('CHANGES.rst'))),
+    long_description=read('README.rst'),
     long_description_content_type="text/x-rst",
     classifiers=[
         'License :: OSI Approved :: Apache Software License',
         'Intended Audience :: Developers',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'Development Status :: 5 - Production/Stable',
         'Operating System :: POSIX',
         'Operating System :: MacOS :: MacOS X',
@@ -84,7 +84,7 @@ setup(
     license='Apache 2',
     packages=['frozenlist'],
     ext_modules=ext_modules,
-    python_requires='>=3.6',
+    python_requires='>=3.7',
     install_requires=install_requires,
     include_package_data=True,
     exclude_package_data={"": ["*.c"]},
