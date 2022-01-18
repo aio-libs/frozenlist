@@ -83,10 +83,6 @@ jobs:
             no-extensions: 'Y'
           - os: windows
             no-extensions: 'Y'
-        include:
-          - pyver: pypy3
-            no-extensions: 'Y'
-            os: ubuntu
       fail-fast: false
     runs-on: ${{ matrix.os }}-latest
     timeout-minutes: 15
