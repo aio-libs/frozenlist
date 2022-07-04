@@ -24,6 +24,8 @@ jobs:
       uses: actions/checkout@v3
     - name: Setup Python
       uses: actions/setup-python@v4
+      with:
+        python-version: 3.x
     - name: Cache PyPI
       uses: actions/cache@v3
       with:
@@ -155,6 +157,8 @@ jobs:
       uses: actions/checkout@v3
     - name: Setup Python
       uses: actions/setup-python@v4
+      with:
+        python-version: 3.x
     - name: Install cython
       uses: py-actions/py-dependency-install@v3
       with:
@@ -206,6 +210,8 @@ jobs:
       shell: bash
     - name: Setup Python
       uses: actions/setup-python@v4
+      with:
+        python-version: 3.x
     - name: Install cython
       uses: py-actions/py-dependency-install@v3
       with:
