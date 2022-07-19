@@ -15,4 +15,5 @@ jobs:
         with:
           python-version: 3.11-dev
       - run: python3.11 -m pip install --upgrade pip wheel
+      - run: python3.11 -m pip install --upgrade Cython
       - run: python3.11 -m pip install ${{ matrix.package }}
