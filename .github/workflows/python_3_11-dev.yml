@@ -1,5 +1,7 @@
 name: python_3_11-dev
 on:
+  push:
+  pull_request:
   workflow_dispatch:
 jobs:
   python_3_11-dev:
