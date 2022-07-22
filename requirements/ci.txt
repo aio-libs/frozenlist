@@ -1,10 +1,10 @@
-build==0.7.0
-coverage==6.2
+build==0.8.0
+coverage==6.4.2
 cython==0.29.30
-mypy==0.931; implementation_name=="cpython"
-pre-commit==2.16.0
-pytest==6.2.5
+mypy==0.971; implementation_name=="cpython"
+pre-commit==2.20.0
+pytest==7.1.2
 pytest-cov==3.0.0
-towncrier==21.3.0
-tox==3.24.5
-twine==3.7.1
+towncrier==21.9.0
+tox==3.25.1
+twine==4.0.1
