@@ -14,9 +14,9 @@ if NO_EXTENSIONS:
     print("*********************")
     ext_modules = None
 else:
-    print("**********************")
-    print("* Accellerated build *")
-    print("**********************")
+    print("*********************")
+    print("* Accelerated build *")
+    print("*********************")
     ext_modules = [Extension("frozenlist._frozenlist", ["frozenlist/_frozenlist.c"])]
 
 
