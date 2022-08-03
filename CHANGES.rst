@@ -14,6 +14,16 @@ Changelog
 
 .. towncrier release notes start
 
+1.3.1 (2022-08-02)
+==================
+
+The published source distribution package became buildable
+under Python 3.11.
+
+
+----
+
+
 1.3.0 (2022-01-18)
 ==================
 
