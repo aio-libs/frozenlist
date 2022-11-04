@@ -1,0 +1,1 @@
+Removed deprecated `::set-output` command from GitHub actions workflow
