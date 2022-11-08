@@ -14,6 +14,16 @@ Changelog
 
 .. towncrier release notes start
 
+1.3.3 (2022-11-08)
+==================
+
+- Fixed CI runs when creating a new release, where new towncrier versions
+  fail when the current version section is already present.
+
+
+----
+
+
 1.3.2 (2022-11-08)
 ==================
 
