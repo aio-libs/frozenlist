@@ -16,13 +16,13 @@ cythonize: .install-cython $(PYXS:.pyx=.c)
 
 .install-deps: cythonize $(shell find requirements -type f)
 	pip install -r requirements/ci.txt
+ifndef CI
 	pre-commit install
+endif
 	@touch .install-deps
 
 lint: .install-deps
-ifdef CI
-	python -m pre_commit run --all-files --show-diff-on-failure
-else
+ifndef CI
 	python -m pre_commit run --all-files
 endif
 	python -m mypy frozenlist --show-error-codes
