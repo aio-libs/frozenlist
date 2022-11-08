@@ -30,7 +30,7 @@ jobs:
         cache-dependency-path:
           requirements/*.txt
     - name: Install dependencies
-      uses: py-actions/py-dependency-install@v3
+      uses: py-actions/py-dependency-install@v4
       with:
         path: requirements/ci.txt
     - name: Install itself
@@ -89,7 +89,7 @@ jobs:
         cache-dependency-path:
           requirements/*.txt
     - name: Install dependencies
-      uses: py-actions/py-dependency-install@v3
+      uses: py-actions/py-dependency-install@v4
       with:
         path: requirements/ci.txt
     - name: Cythonize
@@ -151,7 +151,7 @@ jobs:
         cache-dependency-path:
           requirements/*.txt
     - name: Install cython
-      uses: py-actions/py-dependency-install@v3
+      uses: py-actions/py-dependency-install@v4
       with:
         path: requirements/ci.txt
     - name: Cythonize
@@ -207,7 +207,7 @@ jobs:
         cache-dependency-path:
           requirements/*.txt
     - name: Install cython
-      uses: py-actions/py-dependency-install@v3
+      uses: py-actions/py-dependency-install@v4
       with:
         path: requirements/ci.txt
     - name: Cythonize
