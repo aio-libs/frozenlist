@@ -14,13 +14,13 @@ Changelog
 
 .. towncrier release notes start
 
-1.3.1 (2022-11-08)
+1.3.2 (2022-11-08)
 ==================
 
 Misc
 ----
 
-- `#327 <https://github.com/aio-libs/frozenlist/issues/327>`_
+- Updated the CI runs to better check for test results and to avoid deprecated syntax. `#327 <https://github.com/aio-libs/frozenlist/issues/327>`_
 
 
 ----
