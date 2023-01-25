@@ -1,4 +1,4 @@
-build==0.9.0
+build==0.10.0
 coverage==7.1.0
 cython==0.29.32
 mypy==0.991; implementation_name=="cpython"
