@@ -27,7 +27,7 @@ ifndef CI
 endif
 	python -m mypy frozenlist --show-error-codes
 
-.develop: .install-deps $(shell find frozenlist -type f) .flake check_changes mypy
+.develop: .install-deps $(shell find frozenlist -type f) lint
 	pip install -e .
 	@touch .develop
 
@@ -89,4 +89,4 @@ install:
 
 install-dev: .develop
 
-.PHONY: all build flake test vtest cov clean doc mypy
+.PHONY: all build test vtest cov clean doc lint
