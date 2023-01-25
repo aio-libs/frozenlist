@@ -3,7 +3,7 @@ import sys
 import types
 from collections.abc import MutableSequence
 from functools import total_ordering
-from typing import Tuple, Type
+from typing import Type
 
 __version__ = "1.3.3"
 
