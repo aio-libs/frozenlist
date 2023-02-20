@@ -15,7 +15,6 @@ NO_EXTENSIONS = bool(os.environ.get("FROZENLIST_NO_EXTENSIONS"))  # type: bool
 
 @total_ordering
 class FrozenList(MutableSequence):
-
     __slots__ = ("_frozen", "_items")
 
     if sys.version_info >= (3, 9):
