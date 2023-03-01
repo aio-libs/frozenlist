@@ -67,17 +67,28 @@ jobs:
     needs: [lint]
     strategy:
       matrix:
-        pyver: ['3.8', '3.9', '3.10', '~3.11.0-0']
+        pyver: ['3.8', '3.9', '3.10', '3.11']
         no-extensions: ['', 'Y']
+        experimental: [false]
         os: [ubuntu, macos, windows]
         exclude:
           - os: macos
             no-extensions: 'Y'
           - os: windows
             no-extensions: 'Y'
+        include:
+          - pyver: 3.12-dev
+            no-extensions: ''
+            experimental: true
+            os: ubuntu
+          - pyver: 3.12-dev
+            no-extensions: 'Y'
+            experimental: true
+            os: ubuntu
       fail-fast: false
     runs-on: ${{ matrix.os }}-latest
     timeout-minutes: 15
+    continue-on-error: ${{ matrix.experimental }}
     steps:
     - name: Checkout
       uses: actions/checkout@v3
