@@ -1,5 +1,5 @@
 build==0.10.0
-coverage==7.2.2
+coverage==7.2.3
 cython==3.0.0b2
 mypy==1.1.1; implementation_name=="cpython"
 pre-commit==3.2.2
