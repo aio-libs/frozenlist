@@ -12,10 +12,9 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import io
 import os
 import re
-import sys
+from contextlib import suppress
 
 _docs_path = os.path.dirname(__file__)
 _version_path = os.path.abspath(
@@ -50,12 +49,11 @@ extensions = [
 ]
 
 
-try:
+with suppress(ImportError):
+    # spelling extension is optional, only add it when installed
     import sphinxcontrib.spelling  # noqa
 
     extensions.append("sphinxcontrib.spelling")
-except ImportError:
-    pass
 
 
 intersphinx_mapping = {
