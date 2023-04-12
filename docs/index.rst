@@ -4,11 +4,11 @@ frozenlist
 A list-like structure which implements
 :class:`collections.abc.MutableSequence`.
 
-The list is *mutable* until :meth:`FrozenList.freeze` is called,
+The list is *mutable* until :meth:`~frozenlist.FrozenList.freeze` is called,
 after which list modifications raise :exc:`RuntimeError`. A
-:class:`FrozenList` instance is hashable, but only when frozen.
-Attempts to hash a non-frozen instance will result in a
-:exc:`RuntimeError` exception.
+:class:`~frozenlist.FrozenList` instance is hashable, but only when frozen.
+Attempts to hash a non-frozen instance will result in a :exc:`RuntimeError`
+exception.
 
 API
 ---

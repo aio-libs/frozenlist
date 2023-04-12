@@ -51,7 +51,7 @@ extensions = [
 
 with suppress(ImportError):
     # spelling extension is optional, only add it when installed
-    import sphinxcontrib.spelling  # noqa
+    import sphinxcontrib.spelling  # noqa # type: ignore
 
     extensions.append("sphinxcontrib.spelling")
 
@@ -139,7 +139,9 @@ html_theme = "aiohttp_theme"
 # documentation.
 html_theme_options = {
     "logo": None,
-    "description": "A list-like structure which implements collections.abc.MutableSequence",
+    "description": (
+        "A list-like structure which implements collections.abc.MutableSequence"
+    ),
     "canonical_url": "http://frozenlist.readthedocs.org/en/stable/",
     "github_user": "aio-libs",
     "github_repo": "frozenlist",
@@ -154,7 +156,10 @@ html_theme_options = {
             "alt": "Github CI status for master branch",
         },
         {
-            "image": "https://codecov.io/github/aio-libs/frozenlist/coverage.svg?branch=master",
+            "image": (
+                "https://codecov.io/github/aio-libs/frozenlist/coverage.svg"
+                "?branch=master"
+            ),
             "target": "https://codecov.io/github/aio-libs/frozenlist",
             "height": "20",
             "alt": "Code coverage status",
@@ -166,7 +171,10 @@ html_theme_options = {
             "alt": "Latest PyPI package version",
         },
         {
-            "image": "https://img.shields.io/discourse/topics?server=https%3A%2F%2Faio-libs.discourse.group%2F",
+            "image": (
+                "https://img.shields.io/discourse/topics"
+                "?server=https%3A%2F%2Faio-libs.discourse.group%2F"
+            ),
             "target": "https://aio-libs.discourse.group/",
             "height": "20",
             "alt": "Discourse group for io-libs",
@@ -343,3 +351,7 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 # texinfo_no_detailmenu = False
+
+# -- Strictness options --------------------------------------------------
+nitpicky = True
+nitpick_ignore = []

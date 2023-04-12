@@ -77,11 +77,11 @@ clean:
 	@rm -rf frozenlist.egg-info
 
 doc:
-	@make -C docs html SPHINXOPTS="-W -E"
+	@make -C docs html SPHINXOPTS="-W --keep-going -n -E"
 	@echo "open file://`pwd`/docs/_build/html/index.html"
 
 doc-spelling:
-	@make -C docs spelling SPHINXOPTS="-W -E"
+	@make -C docs spelling SPHINXOPTS="-W --keep-going -n -E"
 
 install:
 	@pip install -U 'pip'
