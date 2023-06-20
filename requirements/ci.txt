@@ -6,5 +6,5 @@ pre-commit==3.3.3
 pytest==7.3.2
 pytest-cov==4.1.0
 towncrier==23.6.0
-tox==4.6.2
+tox==4.6.3
 twine==4.0.2
