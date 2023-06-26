@@ -3,7 +3,7 @@ coverage==7.2.7
 cython==3.0.0b3
 mypy==1.4.0; implementation_name=="cpython"
 pre-commit==3.3.3
-pytest==7.3.2
+pytest==7.4.0
 pytest-cov==4.1.0
 towncrier==23.6.0
 tox==4.6.3
