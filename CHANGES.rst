@@ -14,6 +14,39 @@ Changelog
 
 .. towncrier release notes start
 
+1.4.0 (2023-07-12)
+==================
+
+The published source distribution package became buildable
+under Python 3.12.
+
+
+----
+
+
+Bugfixes
+--------
+
+- Removed an unused :py:data:`typing.Tuple` import
+  `#411 <https://github.com/aio-libs/frozenlist/issues/411>`_
+
+
+Deprecations and Removals
+-------------------------
+
+- Dropped Python 3.7 support.
+  `#413 <https://github.com/aio-libs/frozenlist/issues/413>`_
+
+
+Misc
+----
+
+- `#410 <https://github.com/aio-libs/frozenlist/issues/410>`_, `#433 <https://github.com/aio-libs/frozenlist/issues/433>`_
+
+
+----
+
+
 1.3.3 (2022-11-08)
 ==================
 
