@@ -18,10 +18,6 @@ frozenlist
    :target: https://frozenlist.aio-libs.org
    :alt: Read The Docs build status badge
 
-.. image:: https://img.shields.io/discourse/topics?server=https%3A%2F%2Faio-libs.discourse.group%2F
-   :target: https://aio-libs.discourse.group/
-   :alt: Discourse group for io-libs
-
 .. image:: https://img.shields.io/matrix/aio-libs:matrix.org?label=Discuss%20on%20Matrix%20at%20%23aio-libs%3Amatrix.org&logo=matrix&server_fqdn=matrix.org&style=flat
    :target: https://matrix.to/#/%23aio-libs:matrix.org
    :alt: Matrix Room — #aio-libs:matrix.org
@@ -94,10 +90,6 @@ https://frozenlist.aio-libs.org
 
 Communication channels
 ======================
-
-*aio-libs discourse group*: https://aio-libs.discourse.group
-
-Feel free to post your questions and ideas here.
 
 We have a *Matrix Space* `#aio-libs-space:matrix.org
 <https://matrix.to/#/%23aio-libs-space:matrix.org>`_ which is

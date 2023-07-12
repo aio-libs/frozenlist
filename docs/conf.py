@@ -171,15 +171,6 @@ html_theme_options = {
             "alt": "Latest PyPI package version",
         },
         {
-            "image": (
-                "https://img.shields.io/discourse/topics"
-                "?server=https%3A%2F%2Faio-libs.discourse.group%2F"
-            ),
-            "target": "https://aio-libs.discourse.group/",
-            "height": "20",
-            "alt": "Discourse group for io-libs",
-        },
-        {
             "image": "https://img.shields.io/matrix/aio-libs-space:matrix.org?label=Discuss%20on%20Matrix%20at%20%23aio-libs-space%3Amatrix.org&logo=matrix&server_fqdn=matrix.org&style=flat",
             "target": "https://matrix.to/#/%23aio-libs-space:matrix.org",
             "height": "20",

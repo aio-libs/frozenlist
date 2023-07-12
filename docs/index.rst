@@ -48,10 +48,6 @@ https://frozenlist.aio-libs.org
 Communication channels
 ======================
 
-*aio-libs discourse group*: https://aio-libs.discourse.group
-
-Feel free to post your questions and ideas here.
-
 We have a *Matrix Space* `#aio-libs-space:matrix.org
 <https://matrix.to/#/%23aio-libs-space:matrix.org>`_ which is
 also accessible via Gitter.
