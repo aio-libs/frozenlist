@@ -52,7 +52,9 @@ Communication channels
 
 Feel free to post your questions and ideas here.
 
-*gitter chat* https://gitter.im/aio-libs/Lobby
+We have a *Matrix Space* `#aio-libs-space:matrix.org
+<https://matrix.to/#/%23aio-libs-space:matrix.org>`_ which is
+also accessible via Gitter.
 
 Requirements
 ============

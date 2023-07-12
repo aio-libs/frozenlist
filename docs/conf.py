@@ -180,10 +180,10 @@ html_theme_options = {
             "alt": "Discourse group for io-libs",
         },
         {
-            "image": "https://badges.gitter.im/Join%20Chat.svg",
-            "target": "https://gitter.im/aio-libs/Lobby",
+            "image": "https://img.shields.io/matrix/aio-libs-space:matrix.org?label=Discuss%20on%20Matrix%20at%20%23aio-libs-space%3Amatrix.org&logo=matrix&server_fqdn=matrix.org&style=flat",
+            "target": "https://matrix.to/#/%23aio-libs-space:matrix.org",
             "height": "20",
-            "alt": "Chat on Gitter",
+            "alt": "Matrix Space",
         },
     ],
 }
