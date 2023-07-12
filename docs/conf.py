@@ -142,7 +142,7 @@ html_theme_options = {
     "description": (
         "A list-like structure which implements collections.abc.MutableSequence"
     ),
-    "canonical_url": "http://frozenlist.readthedocs.org/en/stable/",
+    "canonical_url": "https://frozenlist.aio-libs.org/en/stable/",
     "github_user": "aio-libs",
     "github_repo": "frozenlist",
     "github_button": True,

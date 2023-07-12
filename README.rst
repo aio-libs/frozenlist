@@ -15,8 +15,8 @@ frozenlist
    :alt: Latest PyPI package version
 
 .. image:: https://readthedocs.org/projects/frozenlist/badge/?version=latest
-   :target: https://frozenlist.readthedocs.io/
-   :alt: Latest Read The Docs
+   :target: https://frozenlist.aio-libs.org
+   :alt: Read The Docs build status badge
 
 .. image:: https://img.shields.io/discourse/topics?server=https%3A%2F%2Faio-libs.discourse.group%2F
    :target: https://aio-libs.discourse.group/
@@ -86,7 +86,7 @@ The library requires Python 3.8 or newer.
 Documentation
 =============
 
-https://frozenlist.readthedocs.io/
+https://frozenlist.aio-libs.org
 
 Communication channels
 ======================

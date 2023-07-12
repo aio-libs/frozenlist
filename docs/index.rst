@@ -43,7 +43,7 @@ The library requires Python 3.8 or newer.
 Documentation
 =============
 
-https://frozenlist.readthedocs.io/
+https://frozenlist.aio-libs.org
 
 Communication channels
 ======================
