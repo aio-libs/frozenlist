@@ -10,9 +10,9 @@ frozenlist
    :target: https://codecov.io/gh/aio-libs/frozenlist
    :alt: codecov.io status for master branch
 
-.. image:: https://badge.fury.io/py/frozenlist.svg
+.. image:: https://img.shields.io/pypi/v/frozenlist.svg?logo=Python&logoColor=white
    :target: https://pypi.org/project/frozenlist
-   :alt: Latest PyPI package version
+   :alt: frozenlist @ PyPI
 
 .. image:: https://readthedocs.org/projects/frozenlist/badge/?version=latest
    :target: https://frozenlist.aio-libs.org
