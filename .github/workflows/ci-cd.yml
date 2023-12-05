@@ -67,7 +67,15 @@ jobs:
     needs: [lint]
     strategy:
       matrix:
-        pyver: ['3.8', '3.9', '3.10', '3.11']
+        pyver:
+          - '3.12'
+          - '3.11'
+          - '3.10'
+          - '3.9'
+          - '3.8'
+          - 'pypy3.10'
+          - 'pypy3.9'
+          - 'pypy3.8'
         no-extensions: ['', 'Y']
         experimental: [false]
         os: [ubuntu, macos, windows]
@@ -76,15 +84,12 @@ jobs:
             no-extensions: 'Y'
           - os: windows
             no-extensions: 'Y'
-        include:
-          - pyver: 3.12-dev
+          - pyver: pypy3.10
             no-extensions: ''
-            experimental: true
-            os: ubuntu
-          - pyver: 3.12-dev
-            no-extensions: 'Y'
-            experimental: true
-            os: ubuntu
+          - pyver: pypy3.9
+            no-extensions: ''
+          - pyver: pypy3.8
+            no-extensions: ''
       fail-fast: false
     runs-on: ${{ matrix.os }}-latest
     timeout-minutes: 15
