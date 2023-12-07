@@ -23,9 +23,10 @@ endif
 
 lint: .install-deps
 ifndef CI
-	python -m pre_commit run --all-files
+	python -Im pre_commit run --all-files
+else
+	python -Im pre_commit run mypy --all-files
 endif
-	python -m mypy frozenlist --show-error-codes
 
 .develop: .install-deps $(shell find frozenlist -type f) lint
 	pip install -e .
