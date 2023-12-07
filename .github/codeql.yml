@@ -1,3 +1,7 @@
+---
+
 query-filters:
-  - exclude:
-      id: py/unsafe-cyclic-import
+- exclude:
+    id: py/unsafe-cyclic-import
+
+...

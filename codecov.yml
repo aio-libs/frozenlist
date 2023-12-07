@@ -1,8 +1,10 @@
+---
+
 coverage:
   range: "95..100"
 
   status:
-    project: no
+    project: false
 
 flags:
   library:
@@ -30,3 +32,5 @@ flags:
   tools:
     paths:
     - tools/
+
+...

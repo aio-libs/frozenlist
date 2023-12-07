@@ -1,3 +1,5 @@
+---
+
 name: Dependabot auto-merge
 on: pull_request_target
 
@@ -10,20 +12,22 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
-      - name: Dependabot metadata
-        id: metadata
-        uses: dependabot/fetch-metadata@v1.6.0
-        with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-      - name: Enable auto-merge for Dependabot PRs
-        # only auto-approve direct deps that are minor or patch updates
-        #   dependency type is indirect, direct:development or direct:production
-        #   version-update is semver-major, semver-minor or semver-patch
-        if: |
-          steps.metadata.outputs.dependency-type != 'indirect'
-          && steps.metadata.outputs.update-type != 'version-update:semver-major'
-        run: |
-            gh pr merge --auto --squash "$PR_URL"
-        env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    - name: Dependabot metadata
+      id: metadata
+      uses: dependabot/fetch-metadata@v1.6.0
+      with:
+        github-token: "${{ secrets.GITHUB_TOKEN }}"
+    - name: Enable auto-merge for Dependabot PRs
+      # only auto-approve direct deps that are minor or patch updates
+      #   dependency type is indirect, direct:development or direct:production
+      #   version-update is semver-major, semver-minor or semver-patch
+      if: |
+        steps.metadata.outputs.dependency-type != 'indirect'
+        && steps.metadata.outputs.update-type != 'version-update:semver-major'
+      run: |
+          gh pr merge --auto --squash "$PR_URL"
+      env:
+        PR_URL: ${{github.event.pull_request.html_url}}
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+...

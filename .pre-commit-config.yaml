@@ -1,3 +1,5 @@
+---
+
 repos:
 - repo: local
   hooks:
@@ -21,8 +23,8 @@ repos:
 - repo: https://github.com/psf/black
   rev: '23.11.0'
   hooks:
-    - id: black
-      language_version: python3 # Should be a command that runs python3.8+
+  - id: black
+    language_version: python3  # Should be a command that runs python3.8+
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: 'v4.5.0'
   hooks:
@@ -66,6 +68,14 @@ repos:
   hooks:
   - id: flake8
     exclude: "^docs/"
+
+- repo: https://github.com/adrienverge/yamllint.git
+  rev: v1.33.0
+  hooks:
+  - id: yamllint
+    args:
+    - --strict
+
 - repo: https://github.com/Lucas-C/pre-commit-hooks-markup
   rev: v1.0.1
   hooks:
@@ -96,3 +106,5 @@ ci:
   - actionlint-docker
   - check-github-actions
   - check-changes
+
+...
