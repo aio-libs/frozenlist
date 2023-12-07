@@ -16,6 +16,8 @@ repos:
   rev: v1.5.0
   hooks:
   - id: yesqa
+    additional_dependencies:
+    - wemake-python-styleguide
 - repo: https://github.com/PyCQA/isort
   rev: '5.12.0'
   hooks:

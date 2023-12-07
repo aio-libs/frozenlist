@@ -1,2 +1,2 @@
--e .
+-e . --config-settings=pure-python=false
 -r ci.txt

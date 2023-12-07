@@ -1,6 +1,6 @@
 ---
 
-name: CI
+name: CI/CD
 
 on:
   push:
@@ -20,6 +20,80 @@ on:
 
 
 jobs:
+
+  pre-setup:
+    name: ⚙️ Pre-set global build settings
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    defaults:
+      run:
+        shell: python
+    outputs:
+      # NOTE: These aren't env vars because the `${{ env }}` context is
+      # NOTE: inaccessible when passing inputs to reusable workflows.
+      dists-artifact-name: python-package-distributions
+      sdist-name: frozenlist-*.tar.gz
+      wheel-name: frozenlist-*.whl
+    steps:
+    - run: >-
+        print('No-op')
+
+
+  build-pure-python-dists:
+    name: 📦 Build distribution packages
+    needs:
+    - pre-setup
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    outputs:
+      sdist-filename: >-
+        ${{ steps.dist-filenames-detection.outputs.sdist-filename }}
+      wheel-filename: >-
+        ${{ steps.dist-filenames-detection.outputs.wheel-filename }}
+    steps:
+    - name: Checkout project
+      uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.x
+        cache: pip
+        cache-dependency-path:
+          requirements/*.txt
+    - name: Install core libraries for build
+      run: python -Im pip install build
+    - name: Build sdists and pure-python wheel
+      env:
+        PIP_CONSTRAINT: requirements/ci.txt
+      run: python -Im build --config-setting=pure-python=true
+    - name: Determine actual created filenames
+      id: dist-filenames-detection
+      run: >-
+        {
+        echo -n sdist-filename=
+        ;
+        basename "$(ls -1 dist/${{ needs.pre-setup.outputs.sdist-name }})"
+        ;
+        echo -n wheel-filename=
+        ;
+        basename "$(ls -1 dist/${{ needs.pre-setup.outputs.wheel-name }})"
+        ;
+        }
+        >> "${GITHUB_OUTPUT}"
+    - name: Upload built artifacts for testing
+      uses: actions/upload-artifact@v3
+      with:
+        if-no-files-found: error
+        name: ${{ needs.pre-setup.outputs.dists-artifact-name  }}
+        # NOTE: Exact expected file names are specified here
+        # NOTE: as a safety measure — if anything weird ends
+        # NOTE: up being in this dir or not all dists will be
+        # NOTE: produced, this will fail the workflow.
+        path: |
+          dist/${{ steps.dist-filenames-detection.outputs.sdist-filename }}
+          dist/${{ steps.dist-filenames-detection.outputs.wheel-filename }}
+        retention-days: 15
+
   lint:
     name: Linter
     runs-on: ubuntu-latest
@@ -38,11 +112,9 @@ jobs:
       uses: py-actions/py-dependency-install@v4
       with:
         path: requirements/ci.txt
-    - name: Install itself
+    - name: Self-install
       run: |
-        pip install .
-      env:
-        FROZENLIST_NO_EXTENSIONS: 1
+        pip install . --config-settings=pure-python=true
     - name: Run linters
       run: |
         make lint
@@ -56,10 +128,8 @@ jobs:
         make doc-spelling
     - name: Prepare twine checker
       run: |
-        pip install -U twine wheel
-        python -m build
-      env:
-        FROZENLIST_NO_EXTENSIONS: 1
+        pip install -U build twine
+        python -m build --config-setting=pure-python=true
     - name: Run twine checker
       run: |
         twine check --strict dist/*
@@ -67,15 +137,55 @@ jobs:
       run: |
         LC_ALL=C sort -c CONTRIBUTORS.txt
 
+  build-wheels-for-tested-arches:
+    needs:
+    - build-pure-python-dists
+    - pre-setup  # transitive, for accessing settings
+    strategy:
+      matrix:
+        os:
+        - ubuntu
+        - windows
+        - macos
+    uses: ./.github/workflows/reusable-build-wheel.yml
+    with:
+      os: ${{ matrix.os }}
+      wheel-tags-to-skip: >-
+        ${{
+        (github.event_name != 'push' || !contains(github.ref, 'refs/tags/'))
+        && '*_i686
+        *-macosx_x86_64
+        *-musllinux_*
+        *-win32
+        *_arm64
+        pp*'
+        || ''
+        }}
+      source-tarball-name: >-
+        ${{ needs.build-pure-python-dists.outputs.sdist-filename }}
+      dists-artifact-name: ${{ needs.pre-setup.outputs.dists-artifact-name }}
+      cython-tracing: >-  # Cython line tracing for coverage collection
+        ${{
+          (
+            github.event_name == 'push'
+            && contains(github.ref, 'refs/tags/')
+          )
+          && 'false'
+          || 'true'
+        }}
+
   test:
     name: Test
-    needs: [lint]
+    needs:
+    - build-pure-python-dists  # transitive, for accessing settings
+    - build-wheels-for-tested-arches
+    - pre-setup  # transitive, for accessing settings
     strategy:
       matrix:
         pyver: ['3.8', '3.9', '3.10', '3.11']
         no-extensions: ['', 'Y']
-        experimental: [false]
         os: [ubuntu, macos, windows]
+        experimental: [false]
         exclude:
         - os: macos
           no-extensions: 'Y'
@@ -95,8 +205,19 @@ jobs:
     timeout-minutes: 15
     continue-on-error: ${{ matrix.experimental }}
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+    - name: Retrieve the project source from an sdist inside the GHA artifact
+      uses: re-actors/checkout-python-sdist@release/v1
+      with:
+        source-tarball-name: >-
+          ${{ needs.build-pure-python-dists.outputs.sdist-filename }}
+        workflow-artifact-name: >-
+          ${{ needs.pre-setup.outputs.dists-artifact-name }}
+    - name: Download distributions
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ needs.pre-setup.outputs.dists-artifact-name }}
+        path: dist
+
     - name: Setup Python ${{ matrix.pyver }}
       uses: actions/setup-python@v4
       with:
@@ -108,22 +229,57 @@ jobs:
       uses: py-actions/py-dependency-install@v4
       with:
         path: requirements/ci.txt
-    - name: Cythonize
-      if: matrix.no-extensions == ''
-      run: |
-        make cythonize
-    - name: Install itself
-      run: |
-        pip install .
+    - name: Determine pre-compiled compatible wheel
       env:
-        FROZENLIST_NO_EXTENSIONS: ${{ matrix.no-extensions }}
+        # NOTE: When `pip` is forced to colorize output piped into `jq`,
+        # NOTE: the latter can't parse it. So we're overriding the color
+        # NOTE: preference here via https://no-color.org.
+        # NOTE: Setting `FORCE_COLOR` to any value (including 0, an empty
+        # NOTE: string, or a "YAML null" `~`) doesn't have any effect and
+        # NOTE: `pip` (through its verndored copy of `rich`) treats the
+        # NOTE: presence of the variable as "force-color" regardless.
+        #
+        # NOTE: This doesn't actually work either, so we'll resort to unsetting
+        # NOTE: in the Bash script.
+        # NOTE: Ref: https://github.com/Textualize/rich/issues/2622
+        NO_COLOR: 1
+      id: wheel-file
+      run: >
+        echo -n path= | tee -a "${GITHUB_OUTPUT}"
+
+
+        unset FORCE_COLOR
+
+
+        python
+        -X utf8
+        -u -I
+        -m pip install
+        --find-links=./dist
+        --no-index
+        frozenlist
+        --force-reinstall
+        --no-color
+        --no-deps
+        --only-binary=:all:
+        --dry-run
+        --report=-
+        --quiet
+        | jq --raw-output .install[].download_info.url
+        | tee -a "${GITHUB_OUTPUT}"
+      shell: bash
+    - name: Self-install
+      run: python -Im pip install '${{ steps.wheel-file.outputs.path }}'
     - name: Run unittests
       env:
         COLOR: 'yes'
         FROZENLIST_NO_EXTENSIONS: ${{ matrix.no-extensions }}
-      run: |
-        python -m pytest tests -vv
-        python -m coverage xml
+      run: >-
+        python -Im
+        pytest
+        tests
+        -vv
+        --cov-report xml
     - name: Upload coverage
       uses: codecov/codecov-action@v3
       with:
@@ -134,9 +290,9 @@ jobs:
 
   test-summary:
     name: Test matrix status
-    runs-on: ubuntu-latest
-    needs: [test]
     if: always()
+    runs-on: ubuntu-latest
+    needs: [lint, test]
     steps:
     - name: Decide whether the needed jobs succeeded or failed
       uses: re-actors/alls-green@release/v1
@@ -146,103 +302,39 @@ jobs:
   pre-deploy:
     name: Pre-Deploy
     runs-on: ubuntu-latest
-    needs: test
+    needs: test-summary
     # Run only on pushing a tag
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
     - name: Dummy
       run: |
-          echo "Predeploy step"
+        echo "Predeploy step"
 
-  build-tarball:
-    name: Tarball
-    runs-on: ubuntu-latest
-    needs: pre-deploy
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.x
-        cache: pip
-        cache-dependency-path:
-          requirements/*.txt
-    - name: Install cython
-      uses: py-actions/py-dependency-install@v4
-      with:
-        path: requirements/ci.txt
-    - name: Cythonize
-      run: |
-        make cythonize
-    - name: Make sdist
-      run:
-        python -m build --sdist
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: dist
-        path: dist
-
-  build-wheels:
-    name: Build wheels on ${{ matrix.os }} ${{ matrix.qemu }}
-    runs-on: ${{ matrix.os }}-latest
-    needs: pre-deploy
+  build-wheels-for-odd-archs:
+    needs:
+    - build-pure-python-dists
+    - pre-deploy
+    - pre-setup  # transitive, for accessing settings
     strategy:
       matrix:
-        os: [ubuntu, windows, macos]
-        qemu: ['']
-        include:
-        # Split ubuntu job for the sake of speed-up
-        - os: ubuntu
-          qemu: aarch64
-        - os: ubuntu
-          qemu: ppc64le
-        - os: ubuntu
-          qemu: s390x
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Set up QEMU
-      if: ${{ matrix.qemu }}
-      uses: docker/setup-qemu-action@v3
-      with:
-        platforms: all
-      id: qemu
-    - name: Prepare emulation
-      run: |
-        if [[ -n "${{ matrix.qemu }}" ]]; then
-          # Build emulated architectures only if QEMU is set,
-          # use default "auto" otherwise
-          echo "CIBW_ARCHS_LINUX=${{ matrix.qemu }}" >> $GITHUB_ENV
-        fi
-      shell: bash
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.x
-        cache: pip
-        cache-dependency-path:
-          requirements/*.txt
-    - name: Install cython
-      uses: py-actions/py-dependency-install@v4
-      with:
-        path: requirements/ci.txt
-    - name: Cythonize
-      run: |
-        make cythonize
-    - name: Build wheels
-      uses: pypa/cibuildwheel@v2.16.2
-      env:
-        CIBW_ARCHS_MACOS: x86_64 arm64 universal2
-    - uses: actions/upload-artifact@v3
-      with:
-        name: dist
-        path: ./wheelhouse/*.whl
+        qemu:
+        - aarch64
+        - ppc64le
+        - s390x
+    uses: ./.github/workflows/reusable-build-wheel.yml
+    with:
+      qemu: ${{ matrix.qemu }}
+      source-tarball-name: >-
+        ${{ needs.build-pure-python-dists.outputs.sdist-filename }}
+      dists-artifact-name: ${{ needs.pre-setup.outputs.dists-artifact-name }}
 
   deploy:
     name: Deploy
-    needs: [build-tarball, build-wheels]
+    needs:
+    - build-pure-python-dists
+    - build-wheels-for-odd-archs
+    - build-wheels-for-tested-arches
+    - pre-setup  # transitive, for accessing settings
     runs-on: ubuntu-latest
 
     permissions:
@@ -254,12 +346,18 @@ jobs:
       url: https://pypi.org/p/frozenlist
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Download dist
+    - name: Retrieve the project source from an sdist inside the GHA artifact
+      uses: re-actors/checkout-python-sdist@release/v1
+      with:
+        source-tarball-name: >-
+          ${{ needs.build-pure-python-dists.outputs.sdist-filename }}
+        workflow-artifact-name: >-
+          ${{ needs.pre-setup.outputs.dists-artifact-name }}
+
+    - name: Download distributions
       uses: actions/download-artifact@v3
       with:
-        name: dist
+        name: ${{ needs.pre-setup.outputs.dists-artifact-name }}
         path: dist
     - run: |
         tree
@@ -286,7 +384,7 @@ jobs:
       uses: sigstore/gh-action-sigstore-python@v2.1.0
       with:
         inputs: >-
-          ./dist/*.tar.gz
+          ./dist/${{ needs.build-pure-python-dists.outputs.sdist-filename }}
           ./dist/*.whl
 
     - name: Upload artifact signatures to GitHub Release
