@@ -1,11 +1,15 @@
+include pyproject.toml
+include pytest.ini
+include pytest.ci.ini
 include LICENSE
 include CHANGES.rst
 include README.rst
 include CONTRIBUTORS.txt
 graft frozenlist
+graft packaging
 graft docs
+graft requirements
 graft tests
-include frozenlist/*.c
 global-exclude *.pyc
 global-exclude *.pyd
 global-exclude *.so
@@ -13,5 +17,6 @@ global-exclude *.lib
 global-exclude *.dll
 global-exclude *.a
 global-exclude *.obj
+exclude frozenlist/*.c
 exclude frozenlist/*.html
 prune docs/_build

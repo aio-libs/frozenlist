@@ -14,7 +14,7 @@ frozenlist/%.c: frozenlist/%.pyx
 
 cythonize: .install-cython $(PYXS:.pyx=.c)
 
-.install-deps: cythonize $(shell find requirements -type f)
+.install-deps: $(shell find requirements -type f)
 	pip install -r requirements/ci.txt
 ifndef CI
 	pre-commit install
@@ -29,7 +29,7 @@ else
 endif
 
 .develop: .install-deps $(shell find frozenlist -type f) lint
-	pip install -e .
+	pip install -e . --config-settings=pure-python=false
 	@touch .develop
 
 test: .develop
