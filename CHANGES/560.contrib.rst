@@ -14,3 +14,13 @@ Here's a usage example:
 
 For editable installs, this setting is on by default. Otherwise, it's
 off unless requested explicitly.
+
+The following produces C-files required for the Cython coverage
+plugin to map the measurements back to the PYX-files:
+
+.. code-block:: console
+
+    $ python -Im pip install -e .
+
+Alternatively, the `FROZENLIST_CYTHON_TRACING=1` environment variable
+can be set to do the same as the :pep:`517` config setting.

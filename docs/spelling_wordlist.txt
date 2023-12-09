@@ -50,6 +50,7 @@ ClientSession
 cls
 cmd
 codec
+Codecov
 Codings
 committer
 committers
