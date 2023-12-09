@@ -338,7 +338,15 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [("index", github_repo_name, f"{github_repo_name} Documentation", [github_repo_name], 1)]
+man_pages = [
+    (
+        "index",
+        github_repo_name,
+        f"{github_repo_name} Documentation",
+        [github_repo_name],
+        1,
+    )
+]
 
 # If true, show URL addresses after external links.
 # man_show_urls = False
@@ -382,4 +390,4 @@ nitpick_ignore = []
 towncrier_draft_autoversion_mode = "draft"  # or: 'sphinx-version', 'sphinx-release'
 towncrier_draft_include_empty = True
 towncrier_draft_working_directory = PROJECT_ROOT_DIR
-towncrier_draft_config_path = 'pyproject.toml'  # relative to cwd
+towncrier_draft_config_path = "pyproject.toml"  # relative to cwd
