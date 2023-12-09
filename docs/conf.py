@@ -12,15 +12,17 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import os
 import re
 from contextlib import suppress
+from pathlib import Path
 
-_docs_path = os.path.dirname(__file__)
-_version_path = os.path.abspath(
-    os.path.join(_docs_path, "..", "frozenlist", "__init__.py")
-)
-with open(_version_path, encoding="latin1") as fp:
+PROJECT_ROOT_DIR = Path(__file__).parents[1].resolve()
+
+_docs_path = Path(__file__).parent
+_version_path = _docs_path / ".." / "frozenlist" / "__init__.py"
+
+
+with _version_path.open(encoding="utf-8") as fp:
     try:
         _version_info = re.search(
             r'^__version__ = "'
@@ -48,6 +50,8 @@ extensions = [
     "sphinx.ext.extlinks",
     "sphinx.ext.viewcode",
     "sphinx.ext.intersphinx",
+    # Third-party extensions:
+    "sphinxcontrib.towncrier.ext",  # provides `towncrier-draft-entries` directive
 ]
 
 
@@ -372,3 +376,10 @@ texinfo_documents = [
 # -- Strictness options --------------------------------------------------
 nitpicky = True
 nitpick_ignore = []
+
+# -- Options for towncrier_draft extension -----------------------------------
+
+towncrier_draft_autoversion_mode = "draft"  # or: 'sphinx-version', 'sphinx-release'
+towncrier_draft_include_empty = True
+towncrier_draft_working_directory = PROJECT_ROOT_DIR
+towncrier_draft_config_path = 'pyproject.toml'  # relative to cwd

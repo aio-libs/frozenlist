@@ -86,6 +86,11 @@ Feel free to improve this package and send a pull request to GitHub_.
 .. toctree::
    :maxdepth: 2
 
+.. toctree::
+   :caption: What's new
+
+   changes
+
 Indices and tables
 ==================
 
