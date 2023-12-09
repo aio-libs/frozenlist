@@ -236,6 +236,32 @@ jobs:
       shell: bash
     - name: Self-install
       run: python -Im pip install '${{ steps.wheel-file.outputs.path }}'
+    - name: Produce the C-files for the Coverage.py Cython plugin
+      if: >-  # Only works if the dists were built with line tracing
+        !matrix.no-extensions
+        && (
+          github.event_name != 'push'
+          || !contains(github.ref, 'refs/tags/')
+        )
+      env:
+        PYTHONPATH: packaging/
+      run: |
+        set -eEuo pipefail
+
+        python -Im pip install expandvars
+        python -m pep517_backend.cli translate-cython
+      shell: bash
+    - name: Disable the Cython.Coverage Produce plugin
+      if: >-  # Only works if the dists were built with line tracing
+        matrix.no-extensions
+        || (
+          github.event_name == 'push'
+          && contains(github.ref, 'refs/tags/')
+        )
+      run: |
+        set -eEuo pipefail
+        sed -i.bak 's/^plugins = .*//g' .coveragerc
+      shell: bash
     - name: Run unittests
       env:
         COLOR: 'yes'
