@@ -34,6 +34,7 @@ BodyPartReader
 boolean
 botocore
 Bugfixes
+buildable
 builtin
 bugfix
 BytesIO
@@ -83,6 +84,7 @@ Django
 dns
 DNSResolver
 docstring
+downstreams
 Dup
 elasticsearch
 encodings
@@ -236,9 +238,11 @@ resolvers
 reusage
 reuseconn
 Runit
+runtimes
 sa
 Satisfiable
 schemas
+sdist
 sendfile
 serializable
 shourtcuts
