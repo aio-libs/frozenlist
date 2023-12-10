@@ -1,0 +1,55 @@
+---
+
+codecov:
+  notify:
+    after_n_builds: 23  # The number of test matrix jobs uploading coverage
+    wait_for_ci: false
+
+  require_ci_to_pass: false
+
+comment:
+  require_changes: true
+
+coverage:
+  range: 99.09..100
+  status:
+    project:
+      default:
+        target: 100%
+      lib:
+        paths:
+        - frozenlist/
+        target: 97.79%
+      tests:
+        paths:
+        - tests/
+        target: 100%
+
+flags:
+  library:
+    paths:
+    - frozenlist/
+  configs:
+    paths:
+    - requirements/
+    - ".git*"
+    - "*.toml"
+    - "*.yml"
+  changelog:
+    paths:
+    - CHANGES/
+    - CHANGES.rst
+  docs:
+    paths:
+    - docs/
+    - "*.md"
+    - "*.rst"
+    - "*.txt"
+  tests:
+    paths:
+    - tests/
+  tools:
+    paths:
+    - tools/
+
+...

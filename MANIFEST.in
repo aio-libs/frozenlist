@@ -1,3 +1,4 @@
+include .coveragerc
 include pyproject.toml
 include pytest.ini
 include pytest.ci.ini
