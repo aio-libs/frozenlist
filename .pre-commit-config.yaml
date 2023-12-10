@@ -1,13 +1,6 @@
 ---
 
 repos:
-- repo: local
-  hooks:
-  - id: check-changes
-    name: Check CHANGES
-    language: system
-    entry: ./tools/check_changes.py
-    pass_filenames: false
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: 'v4.5.0'
   hooks:
@@ -86,6 +79,50 @@ repos:
       ^[^/]+[.]rst$
     exclude: >-
       ^CHANGES\.rst$
+
+- repo: local
+  hooks:
+  - id: changelogs-rst
+    name: changelog filenames
+    language: fail
+    entry: >-
+      Changelog files must be named
+      ####.(
+      bugfix
+      | feature
+      | deprecation
+      | breaking
+      | doc
+      | packaging
+      | contrib
+      | misc
+      )(.#)?(.rst)?
+    exclude: >-
+      (?x)
+      ^
+        docs/changelog-fragments/(
+          \.gitignore
+          |\d+\.(
+            bugfix
+            |feature
+            |deprecation
+            |breaking
+            |doc
+            |packaging
+            |contrib
+            |misc
+          )(\.\d+)?(\.rst)?
+          |README\.rst
+          |\.TEMPLATE\.j2
+        )
+      $
+    files: ^CHANGES/
+  - id: changelogs-user-role
+    name: Changelog files should use a non-broken :user:`name` role
+    language: pygrep
+    entry: :user:([^`]+`?|`[^`]+[\s,])
+    pass_filenames: true
+    types: [file, rst]
 
 - repo: https://github.com/pre-commit/mirrors-mypy.git
   rev: v1.7.1
