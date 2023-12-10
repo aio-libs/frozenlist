@@ -1,5 +1,10 @@
 ---
 
+ci:
+  skip:
+  - actionlint-docker
+  - check-github-actions
+
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: 'v4.5.0'
@@ -184,10 +189,5 @@ repos:
   rev: 0.27.2
   hooks:
   - id: check-github-actions
-ci:
-  skip:
-  - actionlint-docker
-  - check-github-actions
-  - check-changes
 
 ...
