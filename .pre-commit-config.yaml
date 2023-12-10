@@ -106,7 +106,7 @@ repos:
     exclude: >-
       (?x)
       ^
-        docs/changelog-fragments/(
+        CHANGES/(
           \.gitignore
           |\d+\.(
             bugfix
