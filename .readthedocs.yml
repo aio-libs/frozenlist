@@ -11,4 +11,9 @@ python:
   install:
   - requirements: requirements/doc.txt
 
+sphinx:
+  builder: dirhtml
+  configuration: docs/conf.py
+  fail_on_warning: true
+
 ...
