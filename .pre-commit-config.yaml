@@ -1,6 +1,7 @@
 ---
 
 ci:
+  autoupdate_schedule: quarterly
   skip:
   - actionlint-docker
   - check-github-actions
