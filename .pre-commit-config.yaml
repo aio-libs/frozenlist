@@ -119,7 +119,7 @@ repos:
             |misc
           )(\.\d+)?(\.rst)?
           |README\.rst
-          |\.TEMPLATE\.j2
+          |\.TEMPLATE\.rst
         )
       $
     files: ^CHANGES/
