@@ -22,5 +22,5 @@ plugin to map the measurements back to the PYX-files:
 
     $ python -Im pip install -e .
 
-Alternatively, the `FROZENLIST_CYTHON_TRACING=1` environment variable
+Alternatively, the ``FROZENLIST_CYTHON_TRACING=1`` environment variable
 can be set to do the same as the :pep:`517` config setting.
