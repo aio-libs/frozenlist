@@ -138,12 +138,15 @@ repos:
     name: MyPy, for Python 3.12
     additional_dependencies:
     - lxml  # requirement of `--txt-report`
+    - tomli  # requirement of packaging/pep517_backend/
+    - types-setuptools  # requirement of packaging/pep517_backend/
     args:
     - --show-error-codes
     - --install-types
     - --non-interactive
     - --python-version=3.12
     - --txt-report=.tox/.tmp/.mypy/python-3.12
+    - packaging/
     - frozenlist/
     pass_filenames: false
   - id: mypy
@@ -151,12 +154,15 @@ repos:
     name: MyPy, for Python 3.10
     additional_dependencies:
     - lxml  # requirement of `--txt-report`
+    - tomli  # requirement of packaging/pep517_backend/
+    - types-setuptools  # requirement of packaging/pep517_backend/
     args:
     - --show-error-codes
     - --install-types
     - --non-interactive
     - --python-version=3.10
     - --txt-report=.tox/.tmp/.mypy/python-3.10
+    - packaging/
     - frozenlist/
     pass_filenames: false
   - id: mypy
@@ -164,12 +170,15 @@ repos:
     name: MyPy, for Python 3.8
     additional_dependencies:
     - lxml  # requirement of `--txt-report`
+    - tomli  # requirement of packaging/pep517_backend/
+    - types-setuptools  # requirement of packaging/pep517_backend/
     args:
     - --show-error-codes
     - --install-types
     - --non-interactive
     - --python-version=3.8
     - --txt-report=.tox/.tmp/.mypy/python-3.8
+    - packaging/
     - frozenlist/
     pass_filenames: false
 
