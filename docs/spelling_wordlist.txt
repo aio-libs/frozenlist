@@ -30,6 +30,7 @@ backports
 BaseEventLoop
 basename
 BasicAuth
+Bluesky
 BodyPartReader
 boolean
 botocore
@@ -41,6 +42,7 @@ BytesIO
 cchardet
 cChardet
 changelog
+changelogs
 Changelog
 charset
 charsetdetect
@@ -107,10 +109,12 @@ gethostbyname
 github
 Gitter
 google
+GPG
 gunicorn
 gunicorn’s
 gzipped
 hackish
+hardcoded
 hashable
 highlevel
 hostnames
@@ -177,6 +181,7 @@ nameservers
 namespace
 nginx
 Nginx
+nightlies
 Nikolay
 noop
 nowait
