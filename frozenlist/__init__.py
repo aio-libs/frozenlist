@@ -86,10 +86,10 @@ class FrozenList(MutableSequence):
 PyFrozenList = FrozenList
 
 
-try:
-    from ._frozenlist import FrozenList as CFrozenList  # type: ignore
-
-    if not NO_EXTENSIONS:  # pragma: no cover
+if not NO_EXTENSIONS:
+    try:
+        from ._frozenlist import FrozenList as CFrozenList  # type: ignore
+    except ImportError:  # pragma: no cover
+        pass
+    else:
         FrozenList = CFrozenList  # type: ignore
-except ImportError:  # pragma: no cover
-    pass
