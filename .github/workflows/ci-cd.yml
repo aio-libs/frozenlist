@@ -328,6 +328,7 @@ jobs:
     name: Test matrix status
     if: always()
     runs-on: ubuntu-latest
+    timeout-minutes: 1
     needs: [lint, test]
     steps:
     - name: Decide whether the needed jobs succeeded or failed
@@ -338,6 +339,7 @@ jobs:
   pre-deploy:
     name: Pre-Deploy
     runs-on: ubuntu-latest
+    timeout-minutes: 1
     needs: test-summary
     # Run only on pushing a tag
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
@@ -372,6 +374,7 @@ jobs:
     - build-wheels-for-tested-arches
     - pre-setup  # transitive, for accessing settings
     runs-on: ubuntu-latest
+    timeout-minutes: 7
 
     permissions:
       contents: write  # IMPORTANT: mandatory for making GitHub Releases
