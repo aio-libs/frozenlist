@@ -228,6 +228,10 @@ repos:
   - id: actionlint-docker
     args:
     - -ignore
+    - >-  # https://github.com/rhysd/actionlint/issues/384
+      ^type of expression at "float number value" must be number
+      but found type string$
+    - -ignore
     - 'SC2155:'
     - -ignore
     - 'SC2157:'
