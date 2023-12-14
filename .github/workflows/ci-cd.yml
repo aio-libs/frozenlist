@@ -292,6 +292,13 @@ jobs:
       uses: test-summary/action@v2.2
       with:
         paths: .test-results/pytest/test.xml
+    - name: Append coverage results to Job Summary
+      if: >-
+        !cancelled()
+      run: >-
+        python -Im coverage report --format=markdown
+        >> "${GITHUB_STEP_SUMMARY}"
+      shell: bash
     - name: Re-run the failing tests with maximum verbosity
       if: >-
         !cancelled()
