@@ -269,7 +269,6 @@ jobs:
       run: >-
         python -Im
         pytest
-        tests
         -vv
         --cov-report xml
     - name: Upload coverage
