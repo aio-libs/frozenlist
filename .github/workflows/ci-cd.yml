@@ -272,7 +272,20 @@ jobs:
         pytest
         -v
         --cov-report xml
-    - name: Upload coverage
+    - name: Re-run the failing tests with maximum verbosity
+      if: >-
+        !cancelled()
+        && failure()
+      env:
+        FROZENLIST_NO_EXTENSIONS: ${{ matrix.no-extensions }}
+      run: >-  # `exit 1` makes sure that the job remains red with flaky runs
+        python -Im
+        pytest --no-cov -vvvvv --lf -rA
+        && exit 1
+      shell: bash
+    - name: Send coverage data to Codecov
+      if: >-
+        !cancelled()
       uses: codecov/codecov-action@v3
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
