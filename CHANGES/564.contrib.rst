@@ -1,0 +1,3 @@
+Detailed :doc:`Contributing Guidelines <contributing/guidelines>` on
+authoring the changelog fragments have been published in the
+documentation -- by :user:`webknjaz`.
