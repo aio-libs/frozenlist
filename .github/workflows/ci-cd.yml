@@ -394,9 +394,9 @@ jobs:
         version_file: frozenlist/__init__.py
         github_token: ${{ secrets.GITHUB_TOKEN }}
         fix_issue_regex: >-
-          `#(\d+) <https://github.com/aio-libs/frozenlist/issues/\1>`
+          :issue:`(\d+)`
         fix_issue_repl: >-
-          (#\1)
+          #\1
 
     - name: >-
         Publish 🐍📦 to PyPI
