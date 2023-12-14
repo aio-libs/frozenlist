@@ -12,11 +12,19 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+import os
 import re
 from contextlib import suppress
 from pathlib import Path
 
 PROJECT_ROOT_DIR = Path(__file__).parents[1].resolve()
+IS_RELEASE_ON_RTD = (
+    os.getenv("READTHEDOCS", "False") == "True"
+    and os.environ["READTHEDOCS_VERSION_TYPE"] == "tag"
+)
+if IS_RELEASE_ON_RTD:
+    tags.add("is_release")
+
 
 _docs_path = Path(__file__).parent
 _version_path = _docs_path / ".." / "frozenlist" / "__init__.py"
