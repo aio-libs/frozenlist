@@ -23,9 +23,9 @@ endif
 
 lint: .install-deps
 ifndef CI
-	python -Im pre_commit run --all-files
+	python -Im pre_commit run --all-files --show-diff-on-failure
 else
-	python -Im pre_commit run mypy --all-files
+	python -Im pre_commit run --all-files
 endif
 
 .develop: .install-deps $(shell find frozenlist -type f) lint
