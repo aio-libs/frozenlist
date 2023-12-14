@@ -33,21 +33,21 @@ endif
 	@touch .develop
 
 test: .develop
-	@pytest -c pytest.ci.ini -q
+	@pytest -rxXs -q
 
 vtest: .develop
-	@pytest -c pytest.ci.ini -s -v
+	@pytest -rxXs -s -v
 
 cov cover coverage:
 	tox
 
 cov-dev: .develop
-	@pytest -c pytest.ci.ini --cov-report=html
+	@pytest -rxXs --cov-report=html
 	@echo "open file://`pwd`/htmlcov/index.html"
 
 cov-ci-run: .develop
 	@echo "Regular run"
-	@pytest -c pytest.ci.ini --cov-report=html
+	@pytest -rxXs --cov-report=html
 
 cov-dev-full: cov-ci-run
 	@echo "open file://`pwd`/htmlcov/index.html"
