@@ -4,7 +4,6 @@ ci:
   autoupdate_schedule: quarterly
   skip:
   - actionlint-docker
-  - check-github-actions
 
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
