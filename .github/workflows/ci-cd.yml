@@ -20,6 +20,20 @@ on:
   - cron: 0 6 * * *  # Daily 6AM UTC build
 
 
+env:
+  COLOR: >-  # Supposedly, pytest or coveragepy use this
+    yes
+  FORCE_COLOR: 1  # Request colored output from CLI tools supporting it
+  MYPY_FORCE_COLOR: 1  # MyPy's color enforcement
+  PIP_DISABLE_PIP_VERSION_CHECK: 1
+  PIP_NO_PYTHON_VERSION_WARNING: 1
+  PIP_NO_WARN_SCRIPT_LOCATION: 1
+  PRE_COMMIT_COLOR: always
+  PY_COLORS: 1  # Recognized by the `py` package, dependency of `pytest`
+  PYTHONIOENCODING: utf-8
+  PYTHONUTF8: 1
+
+
 jobs:
 
   pre-setup:
@@ -265,7 +279,6 @@ jobs:
       shell: bash
     - name: Run unittests
       env:
-        COLOR: 'yes'
         FROZENLIST_NO_EXTENSIONS: ${{ matrix.no-extensions }}
       run: >-
         python -Im
