@@ -96,6 +96,11 @@ Feel free to improve this package and send a pull request to GitHub_.
 
    contributing/guidelines
 
+.. toctree::
+   :caption: Maintenance
+
+   contributing/release_guide
+
 
 Indices and tables
 ==================
