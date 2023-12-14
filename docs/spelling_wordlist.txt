@@ -40,6 +40,7 @@ bugfix
 BytesIO
 cchardet
 cChardet
+changelog
 Changelog
 charset
 charsetdetect
@@ -220,6 +221,7 @@ refactor
 Refactor
 refactored
 refactoring
+reStructuredText
 regex
 regexps
 regexs

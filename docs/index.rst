@@ -91,6 +91,12 @@ Feel free to improve this package and send a pull request to GitHub_.
 
    changes
 
+.. toctree::
+   :caption: Contributing
+
+   contributing/guidelines
+
+
 Indices and tables
 ==================
 
