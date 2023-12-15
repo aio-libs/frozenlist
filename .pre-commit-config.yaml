@@ -177,9 +177,6 @@ repos:
     - --txt-report=.tox/.tmp/.mypy/python-3.12
     - --cobertura-xml-report=.tox/.tmp/.mypy/python-3.12
     - --html-report=.tox/.tmp/.mypy/python-3.12
-    - frozenlist/
-    - packaging/
-    - tests/
     pass_filenames: false
   - id: mypy
     alias: mypy-py310
@@ -197,9 +194,6 @@ repos:
     - --txt-report=.tox/.tmp/.mypy/python-3.10
     - --cobertura-xml-report=.tox/.tmp/.mypy/python-3.10
     - --html-report=.tox/.tmp/.mypy/python-3.10
-    - frozenlist/
-    - packaging/
-    - tests/
     pass_filenames: false
   - id: mypy
     alias: mypy-py38
@@ -217,9 +211,6 @@ repos:
     - --txt-report=.tox/.tmp/.mypy/python-3.8
     - --cobertura-xml-report=.tox/.tmp/.mypy/python-3.8
     - --html-report=.tox/.tmp/.mypy/python-3.8
-    - frozenlist/
-    - packaging/
-    - tests/
     pass_filenames: false
 
 - repo: https://github.com/rhysd/actionlint
