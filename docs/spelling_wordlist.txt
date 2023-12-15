@@ -79,6 +79,7 @@ deduplicate
 # de-facto:
 deprecations
 DER
+dev
 Dev
 dict
 Dict
