@@ -1,0 +1,6 @@
+An incorrect signature of the ``__class_getitem__`` class method
+has been fixed, adding a missing ``class_item`` argument under
+Python 3.8 and older.
+
+This change also improves the code coverage of this method that
+was previously missing -- by :user:`webknjaz`.

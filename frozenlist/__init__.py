@@ -3,7 +3,7 @@ import sys
 import types
 from collections.abc import MutableSequence
 from functools import total_ordering
-from typing import Type
+from typing import Any, Type
 
 __version__ = "1.4.2.dev0"
 
@@ -22,7 +22,10 @@ class FrozenList(MutableSequence):
     else:
 
         @classmethod
-        def __class_getitem__(cls: Type["FrozenList"]) -> Type["FrozenList"]:
+        def __class_getitem__(
+            cls: Type["FrozenList"],
+            cls_item: Any,
+        ) -> Type["FrozenList"]:
             return cls
 
     def __init__(self, items=None):
