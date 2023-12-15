@@ -48,7 +48,10 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        files: .tox/.tmp/.mypy/python-*/cobertura.xml
+        files: >-
+          .tox/.tmp/.mypy/python-3.12/cobertura.xml,
+          .tox/.tmp/.mypy/python-3.10/cobertura.xml,
+          .tox/.tmp/.mypy/python-3.8/cobertura.xml
         flags: >-
           CI-GHA,
           MyPy
