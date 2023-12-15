@@ -164,9 +164,6 @@ jobs:
           3.10
         - 3.9
         - 3.8
-        - pypy3.10
-        - pypy3.9
-        - pypy3.8
         no-extensions: ['', 'Y']
         os: [ubuntu, macos, windows]
         experimental: [false]
@@ -175,12 +172,19 @@ jobs:
           no-extensions: Y
         - os: windows
           no-extensions: Y
-        - pyver: pypy3.10
-          no-extensions: ''
-        - pyver: pypy3.9
-          no-extensions: ''
-        - pyver: pypy3.8
-          no-extensions: ''
+        include:
+        - pyver: pypy-3.10
+          no-extensions: Y
+          experimental: false
+          os: ubuntu
+        - pyver: pypy-3.9
+          no-extensions: Y
+          experimental: false
+          os: ubuntu
+        - pyver: pypy-3.8
+          no-extensions: Y
+          experimental: false
+          os: ubuntu
       fail-fast: false
     runs-on: ${{ matrix.os }}-latest
     timeout-minutes: 15
