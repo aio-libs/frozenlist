@@ -1,2 +1,0 @@
-Declared Python 3.12 and PyPy 3.8-3.10 supported officially
-in the distribution package metadata.
