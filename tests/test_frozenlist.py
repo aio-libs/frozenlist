@@ -88,7 +88,7 @@ class FrozenListMixin:
 
     def test_lt(self) -> None:
         _list = self.FrozenList([1])
-        assert _list <= [3]
+        assert _list < [3]
 
     def test_ge(self) -> None:
         _list = self.FrozenList([1])
