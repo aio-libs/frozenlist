@@ -1,4 +1,0 @@
-Coverage collection has been implemented for the Cython modules
--- by :user:`webknjaz`.
-
-It will also be reported to Codecov from any non-release CI jobs.
