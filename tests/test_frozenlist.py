@@ -13,6 +13,9 @@ class FrozenListMixin:
 
     SKIP_METHODS = {"__abstractmethods__", "__slots__"}
 
+    def test___class_getitem__(self) -> None:
+        assert self.FrozenList[str] is not None
+
     def test_subclass(self) -> None:
         assert issubclass(self.FrozenList, MutableSequence)
 
