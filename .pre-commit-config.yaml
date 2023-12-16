@@ -170,7 +170,6 @@ repos:
     - tomli  # requirement of packaging/pep517_backend/
     - types-setuptools  # requirement of packaging/pep517_backend/
     args:
-    - --show-error-codes
     - --install-types
     - --non-interactive
     - --python-version=3.12
@@ -187,7 +186,6 @@ repos:
     - tomli  # requirement of packaging/pep517_backend/
     - types-setuptools  # requirement of packaging/pep517_backend/
     args:
-    - --show-error-codes
     - --install-types
     - --non-interactive
     - --python-version=3.10
@@ -204,7 +202,6 @@ repos:
     - tomli  # requirement of packaging/pep517_backend/
     - types-setuptools  # requirement of packaging/pep517_backend/
     args:
-    - --show-error-codes
     - --install-types
     - --non-interactive
     - --python-version=3.8
