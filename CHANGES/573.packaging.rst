@@ -1,0 +1,2 @@
+A name of a temporary building directory now reflects
+that it's related to ``frozenslist``, not ``yarl``.

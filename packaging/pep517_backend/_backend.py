@@ -196,7 +196,7 @@ def patched_dist_get_long_description():
 
 @contextmanager
 def _in_temporary_directory(src_dir: Path) -> t.Iterator[None]:
-    with TemporaryDirectory(prefix='.tmp-yarl-pep517-') as tmp_dir:
+    with TemporaryDirectory(prefix='.tmp-frozenlist-pep517-') as tmp_dir:
         with chdir_cm(tmp_dir):
             tmp_src_dir = Path(tmp_dir) / 'src'
             copytree(src_dir, tmp_src_dir, symlinks=True)

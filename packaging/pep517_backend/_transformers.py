@@ -47,7 +47,7 @@ def sanitize_rst_roles(rst_source_text: str) -> str:
     """
     issue_substitution_pattern = (
         r"`#\g<issue_number> "
-        r"<https://github.com/aio-libs/yarl/issues/\g<issue_number>>`__"
+        r"<https://github.com/aio-libs/frozenlist/issues/\g<issue_number>>`__"
     )
 
     pr_role_regex = r"""(?x)
@@ -55,7 +55,7 @@ def sanitize_rst_roles(rst_source_text: str) -> str:
     """
     pr_substitution_pattern = (
         r"`PR #\g<pr_number> "
-        r"<https://github.com/aio-libs/yarl/pull/\g<pr_number>>`__"
+        r"<https://github.com/aio-libs/frozenlist/pull/\g<pr_number>>`__"
     )
 
     commit_role_regex = r"""(?x)
@@ -63,7 +63,7 @@ def sanitize_rst_roles(rst_source_text: str) -> str:
     """
     commit_substitution_pattern = (
         r"`\g<commit_sha> "
-        r"<https://github.com/aio-libs/yarl/commit/\g<commit_sha>>`__"
+        r"<https://github.com/aio-libs/frozenlist/commit/\g<commit_sha>>`__"
     )
 
     gh_role_regex = r"""(?x)
