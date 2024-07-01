@@ -7,7 +7,7 @@ ci:
 
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: 'v4.5.0'
+  rev: 'v4.6.0'
   hooks:
   - id: check-merge-conflict
 - repo: https://github.com/asottile/yesqa
@@ -21,13 +21,13 @@ repos:
   hooks:
   - id: isort
 - repo: https://github.com/psf/black
-  rev: '23.12.1'
+  rev: '24.4.2'
   hooks:
   - id: black
     language_version: python3  # Should be a command that runs python3.8+
 
 - repo: https://github.com/python-jsonschema/check-jsonschema.git
-  rev: 0.27.3
+  rev: 0.28.6
   hooks:
   - id: check-github-workflows
     files: ^\.github/workflows/[^/]+$
@@ -45,7 +45,7 @@ repos:
   - id: check-readthedocs
 
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: 'v4.5.0'
+  rev: 'v4.6.0'
   hooks:
   - id: end-of-file-fixer
     exclude: >-
@@ -78,30 +78,30 @@ repos:
   - id: detect-private-key
     exclude: ^examples/
 - repo: https://github.com/asottile/pyupgrade
-  rev: 'v3.15.0'
+  rev: 'v3.16.0'
   hooks:
   - id: pyupgrade
     args: ['--py36-plus']
 - repo: https://github.com/PyCQA/flake8
-  rev: '6.1.0'
+  rev: '7.1.0'
   hooks:
   - id: flake8
     exclude: "^docs/"
 
 - repo: https://github.com/codespell-project/codespell.git
-  rev: v2.2.6
+  rev: v2.3.0
   hooks:
   - id: codespell
 
 - repo: https://github.com/adrienverge/yamllint.git
-  rev: v1.33.0
+  rev: v1.35.1
   hooks:
   - id: yamllint
     args:
     - --strict
 
 - repo: https://github.com/MarcoGorelli/cython-lint.git
-  rev: v0.16.0
+  rev: v0.16.2
   hooks:
   - id: cython-lint
 
@@ -159,7 +159,7 @@ repos:
     types: [file, rst]
 
 - repo: https://github.com/pre-commit/mirrors-mypy.git
-  rev: v1.8.0
+  rev: v1.10.1
   hooks:
   - id: mypy
     alias: mypy-py312
@@ -211,7 +211,7 @@ repos:
     pass_filenames: false
 
 - repo: https://github.com/rhysd/actionlint
-  rev: v1.6.26
+  rev: v1.7.1
   hooks:
   - id: actionlint-docker
     args:
