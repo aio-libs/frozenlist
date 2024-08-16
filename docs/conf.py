@@ -71,7 +71,7 @@ with suppress(ImportError):
 
 
 intersphinx_mapping = {
-    "python": ("http://docs.python.org/3", None),
+    "python": ("https://docs.python.org/3", None),
     "aiohttp": ("https://docs.aiohttp.org/en/stable/", None),
 }
 
