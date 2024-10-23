@@ -14,6 +14,62 @@ Changelog
 
 .. towncrier release notes start
 
+1.5.0 (2024-10-22)
+==================
+
+Bug fixes
+---------
+
+- An incorrect signature of the ``__class_getitem__`` class method
+  has been fixed, adding a missing ``class_item`` argument under
+  Python 3.8 and older.
+
+  This change also improves the code coverage of this method that
+  was previously missing -- by :user:`webknjaz`.
+
+
+  *Related issues and pull requests on GitHub:*
+  :issue:`567`, :issue:`571`.
+
+
+Improved documentation
+----------------------
+
+- Rendered issue, PR, and commit links now lead to
+  ``frozenlist``'s repo instead of ``yarl``'s repo.
+
+
+  *Related issues and pull requests on GitHub:*
+  :issue:`573`.
+
+- On the :doc:`Contributing docs <contributing/guidelines>` page,
+  a link to the ``Towncrier philosophy`` has been fixed.
+
+
+  *Related issues and pull requests on GitHub:*
+  :issue:`574`.
+
+
+Packaging updates and notes for downstreams
+-------------------------------------------
+
+- A name of a temporary building directory now reflects
+  that it's related to ``frozenlist``, not ``yarl``.
+
+
+  *Related issues and pull requests on GitHub:*
+  :issue:`573`.
+
+- Declared Python 3.13 supported officially in the distribution package metadata.
+
+
+  *Related issues and pull requests on GitHub:*
+  :issue:`595`.
+
+
+----
+
+
 1.4.1 (2023-12-15)
 ==================
 

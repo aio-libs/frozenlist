@@ -1,2 +1,0 @@
-Rendered issue, PR, and commit links now lead to
-``frozenslist``'s repo instead of ``yarl``'s repo.
