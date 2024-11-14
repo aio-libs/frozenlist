@@ -136,7 +136,7 @@ repos:
       ^
         CHANGES/(
           \.gitignore
-          |\d+\.(
+          |(\d+|[0-9a-f]{8}|[0-9a-f]{7}|[0-9a-f]{40})\.(
             bugfix
             |feature
             |deprecation
@@ -151,12 +151,18 @@ repos:
         )
       $
     files: ^CHANGES/
+    types: []
+    types_or:
+    - file
+    - symlink
   - id: changelogs-user-role
     name: Changelog files should use a non-broken :user:`name` role
     language: pygrep
     entry: :user:([^`]+`?|`[^`]+[\s,])
     pass_filenames: true
-    types: [file, rst]
+    types:
+    - file
+    - rst
 
 - repo: https://github.com/pre-commit/mirrors-mypy.git
   rev: v1.11.2
