@@ -26,8 +26,7 @@ coverage:
         target: 100%
       lib:
         paths:
-        - frozenlist/**/*.py
-        - frozenlist/**/*.pyx
+        - frozenlist/
         target: 100%
       packaging:
         paths:
