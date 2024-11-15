@@ -23,6 +23,6 @@ parallel = true
 plugins = Cython.Coverage
 relative_files = true
 source =
-  tests
+  .
 source_pkgs =
   frozenlist
