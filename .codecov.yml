@@ -25,6 +25,8 @@ coverage:
       default:
         target: 100%
       lib:
+        flags:
+        - pytest
         paths:
         - frozenlist/
         target: 100%
@@ -33,6 +35,8 @@ coverage:
         - packaging/
         target: 75.24%
       tests:
+        flags:
+        - pytest
         paths:
         - tests/
         target: 100%
