@@ -3,11 +3,11 @@ show_contexts = true
 skip_covered = false
 
 [paths]
-source =
-  frozenlist
-  */lib/pypy*/site-packages/frozenlist
-  */lib/python*/site-packages/frozenlist
-  */Lib/site-packages/frozenlist
+_site-packages-to-src-mapping =
+  .
+  */lib/pypy*/site-packages
+  */lib/python*/site-packages
+  *\Lib\site-packages
 
 [report]
 skip_covered = true
