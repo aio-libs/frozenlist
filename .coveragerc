@@ -10,6 +10,8 @@ _site-packages-to-src-mapping =
   *\Lib\site-packages
 
 [report]
+exclude_also =
+  ^\s*@pytest\.mark\.xfail
 skip_covered = true
 skip_empty = true
 show_missing = true
