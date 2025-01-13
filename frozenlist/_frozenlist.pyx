@@ -1,3 +1,5 @@
+# cython: freethreading_compatible=True
+
 import sys
 import types
 from collections.abc import MutableSequence
