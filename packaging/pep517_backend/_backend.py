@@ -11,7 +11,7 @@ from shutil import copytree
 from sys import implementation as _system_implementation
 from sys import stderr as _standard_error_stream
 from tempfile import TemporaryDirectory
-from typing import Any, Dict, Iterator, List, Union
+from typing import Dict, Iterator, List, Union
 from warnings import warn as _warn_that
 
 from setuptools.build_meta import build_sdist as _setuptools_build_sdist
