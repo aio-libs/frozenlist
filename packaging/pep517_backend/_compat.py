@@ -1,13 +1,16 @@
 """Cross-python stdlib shims."""
 
 import os
+import sys
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Iterator
 
-try:
+if sys.version_info >= (3, 11):
     from contextlib import chdir as chdir_cm
-except ImportError:
+    from tomllib import loads as load_toml_from_string
+else:
+    from tomli import loads as load_toml_from_string
 
     @contextmanager  # type: ignore[no-redef]
     def chdir_cm(path: os.PathLike[str]) -> Iterator[None]:
@@ -18,12 +21,6 @@ except ImportError:
             yield
         finally:
             os.chdir(original_wd)
-
-
-try:
-    from tomllib import loads as load_toml_from_string
-except ImportError:
-    from tomli import loads as load_toml_from_string
 
 
 __all__ = ("chdir_cm", "load_toml_from_string")  # noqa: WPS410
