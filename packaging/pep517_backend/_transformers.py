@@ -2,10 +2,10 @@
 
 from itertools import chain
 from re import sub as _substitute_with_regexp
-from typing import Iterable, Iterator, Mapping, Union
+from typing import Iterable, Iterator, Mapping, Tuple, Union
 
 
-def _emit_opt_pairs(opt_pair: tuple[str, Union[str, dict[str, str]]]) -> Iterator[str]:
+def _emit_opt_pairs(opt_pair: Tuple[str, Union[str, dict[str, str]]]) -> Iterator[str]:
     flag, flag_value = opt_pair
     flag_opt = f"--{flag!s}"
     if isinstance(flag_value, dict):
