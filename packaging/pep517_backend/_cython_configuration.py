@@ -10,11 +10,8 @@ from typing import Iterator, TypedDict
 
 from expandvars import expandvars
 
-from ._compat import load_toml_from_string  # noqa: WPS436
-from ._transformers import (  # noqa: WPS436
-    get_cli_kwargs_from_config,
-    get_enabled_cli_flags_from_config,
-)
+from ._compat import load_toml_from_string
+from ._transformers import get_cli_kwargs_from_config, get_enabled_cli_flags_from_config
 
 
 class Config(TypedDict):
