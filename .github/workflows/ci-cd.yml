@@ -225,8 +225,6 @@ jobs:
       with:
         python-version: ${{ matrix.pyver }}
         allow-prereleases: true
-        cache: pip
-        cache-dependency-path: requirements/*.txt
     - name: Install dependencies
       uses: py-actions/py-dependency-install@v4
       with:
