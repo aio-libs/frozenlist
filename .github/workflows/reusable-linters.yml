@@ -1,202 +1,90 @@
 ---
 
-ci:
-  autoupdate_schedule: quarterly
-  skip:
-  - actionlint-docker
+name: Linters
 
-repos:
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: 'v5.0.0'
-  hooks:
-  - id: check-merge-conflict
-- repo: https://github.com/asottile/yesqa
-  rev: v1.5.0
-  hooks:
-  - id: yesqa
-    additional_dependencies:
-    - wemake-python-styleguide
-- repo: https://github.com/PyCQA/isort
-  rev: '5.13.2'
-  hooks:
-  - id: isort
-- repo: https://github.com/psf/black
-  rev: '24.8.0'
-  hooks:
-  - id: black
-    language_version: python3  # Should be a command that runs python3.8+
+on:
+  workflow_call:
+    secrets:
+      codecov-token:
+        description: Mandatory token for uploading to Codecov
+        required: true
 
-- repo: https://github.com/python-jsonschema/check-jsonschema.git
-  rev: 0.29.3
-  hooks:
-  - id: check-github-workflows
-    files: ^\.github/workflows/[^/]+$
-    types:
-    - yaml
-  - id: check-jsonschema
-    alias: check-github-workflows-timeout
-    name: Check GitHub Workflows set timeout-minutes
-    args:
-    - --builtin-schema
-    - github-workflows-require-timeout
-    files: ^\.github/workflows/[^/]+$
-    types:
-    - yaml
-  - id: check-readthedocs
+env:
+  COLOR: >-  # Supposedly, pytest or coveragepy use this
+    yes
+  FORCE_COLOR: 1  # Request colored output from CLI tools supporting it
+  MYPY_FORCE_COLOR: 1  # MyPy's color enforcement
+  PIP_DISABLE_PIP_VERSION_CHECK: 1
+  PIP_NO_PYTHON_VERSION_WARNING: 1
+  PIP_NO_WARN_SCRIPT_LOCATION: 1
+  PRE_COMMIT_COLOR: always
+  PY_COLORS: 1  # Recognized by the `py` package, dependency of `pytest`
+  PYTHONIOENCODING: utf-8
+  PYTHONUTF8: 1
+  PYTHON_LATEST: 3.x
 
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: 'v5.0.0'
-  hooks:
-  - id: end-of-file-fixer
-    exclude: >-
-      ^docs/[^/]*\.svg$
-  - id: requirements-txt-fixer
-    exclude: >-
-      ^requirements/constraints[.]txt$
-  - id: trailing-whitespace
-  - id: file-contents-sorter
-    args: ['--ignore-case']
-    files: |
-      CONTRIBUTORS.txt|
-      docs/spelling_wordlist.txt|
-      .gitignore|
-      .gitattributes
-  - id: check-case-conflict
-  - id: check-json
-  - id: check-xml
-  - id: check-executables-have-shebangs
-  - id: check-toml
-  - id: check-yaml
-  - id: debug-statements
-  - id: check-added-large-files
-  - id: check-symlinks
-  - id: fix-byte-order-marker
-  - id: fix-encoding-pragma
-    args: ['--remove']
-  - id: detect-aws-credentials
-    args: ['--allow-missing-credentials']
-  - id: detect-private-key
-    exclude: ^examples/
-- repo: https://github.com/asottile/pyupgrade
-  rev: 'v3.17.0'
-  hooks:
-  - id: pyupgrade
-    args: ['--py36-plus']
-- repo: https://github.com/PyCQA/flake8
-  rev: '7.1.1'
-  hooks:
-  - id: flake8
-    exclude: "^docs/"
+jobs:
 
-- repo: https://github.com/codespell-project/codespell.git
-  rev: v2.3.0
-  hooks:
-  - id: codespell
-
-- repo: https://github.com/adrienverge/yamllint.git
-  rev: v1.35.1
-  hooks:
-  - id: yamllint
-    args:
-    - --strict
-
-- repo: https://github.com/MarcoGorelli/cython-lint.git
-  rev: v0.16.2
-  hooks:
-  - id: cython-lint
-
-- repo: https://github.com/Lucas-C/pre-commit-hooks-markup
-  rev: v1.0.1
-  hooks:
-  - id: rst-linter
-    files: >-
-      ^[^/]+[.]rst$
-    exclude: >-
-      ^CHANGES\.rst$
-
-- repo: local
-  hooks:
-  - id: changelogs-rst
-    name: changelog filenames
-    language: fail
-    entry: >-
-      Changelog files must be named
-      ####.(
-      bugfix
-      | feature
-      | deprecation
-      | breaking
-      | doc
-      | packaging
-      | contrib
-      | misc
-      )(.#)?(.rst)?
-    exclude: >-
-      (?x)
-      ^
-        CHANGES/(
-          \.gitignore
-          |(\d+|[0-9a-f]{8}|[0-9a-f]{7}|[0-9a-f]{40})\.(
-            bugfix
-            |feature
-            |deprecation
-            |breaking
-            |doc
-            |packaging
-            |contrib
-            |misc
-          )(\.\d+)?(\.rst)?
-          |README\.rst
-          |\.TEMPLATE\.rst
-        )
-      $
-    files: ^CHANGES/
-    types: []
-    types_or:
-    - file
-    - symlink
-  - id: changelogs-user-role
-    name: Changelog files should use a non-broken :user:`name` role
-    language: pygrep
-    entry: :user:([^`]+`?|`[^`]+[\s,])
-    pass_filenames: true
-    types:
-    - file
-    - rst
-
-  - id: mypy
-    alias: mypy-py311
-    name: MyPy, for Python 3.11
-    additional_dependencies:
-    - lxml  # dep of `--txt-report`, `--cobertura-xml-report` & `--html-report`
-    - pytest
-    - tomli  # requirement of packaging/pep517_backend/
-    - types-setuptools  # requirement of packaging/pep517_backend/
-    args:
-    - --install-types
-    - --non-interactive
-    - --python-version=3.11
-    - --txt-report=.tox/.tmp/.mypy/python-3.11
-    - --cobertura-xml-report=.tox/.tmp/.mypy/python-3.11
-    - --html-report=.tox/.tmp/.mypy/python-3.11
-    pass_filenames: false
-
-- repo: https://github.com/rhysd/actionlint
-  rev: v1.7.3
-  hooks:
-  - id: actionlint-docker
-    args:
-    - -ignore
-    - >-  # https://github.com/rhysd/actionlint/issues/384
-      ^type of expression at "float number value" must be number
-      but found type string$
-    - -ignore
-    - 'SC2155:'
-    - -ignore
-    - 'SC2157:'
-    - -ignore
-    - 'SC2086:'
-    - -ignore
-    - 'SC1004:'
+  lint:
+    name: Linter
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Setup Python ${{ env.PYTHON_LATEST }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_LATEST }}
+        cache: pip
+        cache-dependency-path: requirements/*.txt
+    - name: Cache pre-commit.com virtualenvs
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pre-commit
+        key: >-
+          ${{
+            runner.os
+          }}-pre-commit-${{
+            hashFiles('.pre-commit-config.yaml')
+          }}
+    - name: Install dependencies
+      uses: py-actions/py-dependency-install@v4
+      with:
+        path: requirements/ci.txt
+    - name: Self-install
+      run: |
+        pip install . --config-settings=pure-python=true
+    - name: Run linters
+      run: |
+        make lint
+    - name: Send coverage data to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.codecov-token }}
+        files: >-
+          .tox/.tmp/.mypy/python-3.11/cobertura.xml
+        flags: >-
+          CI-GHA,
+          MyPy
+        fail_ci_if_error: true
+    - name: Install spell checker
+      run: |
+        sudo apt install libenchant-2-dev
+        pip install -r requirements/doc.txt
+    - name: Run docs spelling
+      run: |
+        towncrier build --yes --version 99.99.99
+        make doc-spelling
+    - name: Prepare twine checker
+      run: |
+        pip install -U build twine
+        python -m build --config-setting=pure-python=true
+    - name: Run twine checker
+      run: |
+        twine check --strict dist/*
+    - name: Make sure that CONTRIBUTORS.txt remains sorted
+      run: |
+        LC_ALL=C sort -c CONTRIBUTORS.txt
 
 ...
