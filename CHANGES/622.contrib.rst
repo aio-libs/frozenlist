@@ -1,0 +1,2 @@
+GitHub Actions CI/CD is now configured to manage caching pip-managed
+dependencies using in-tree composite actions -- by :user:`webknjaz`.

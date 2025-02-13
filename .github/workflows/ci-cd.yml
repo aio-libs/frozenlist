@@ -79,9 +79,16 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ env.PYTHON_LATEST }}
-        cache: pip
-        cache-dependency-path:
-          requirements/*.txt
+    - name: >-
+        Calculate dependency files' combined hash value
+        for use in the cache key
+      id: calc-cache-key-files
+      uses: ./.github/actions/cache-keys
+    - name: Set up pip cache
+      uses: ./.github/actions/cache-pip-deps
+      with:
+        cache-key-for-dep-files: >-
+          ${{ steps.calc-cache-key-files.outputs.cache-key-for-dep-files }}
     - name: Install core libraries for build
       run: python -Im pip install build
     - name: Build sdists and pure-python wheel
@@ -220,8 +227,16 @@ jobs:
       with:
         python-version: ${{ matrix.pyver }}
         allow-prereleases: true
-        cache: pip
-        cache-dependency-path: requirements/*.txt
+    - name: >-
+        Calculate dependency files' combined hash value
+        for use in the cache key
+      id: calc-cache-key-files
+      uses: ./.github/actions/cache-keys
+    - name: Set up pip cache
+      uses: ./.github/actions/cache-pip-deps
+      with:
+        cache-key-for-dep-files: >-
+          ${{ steps.calc-cache-key-files.outputs.cache-key-for-dep-files }}
     - name: Install dependencies
       uses: py-actions/py-dependency-install@v4
       with:
