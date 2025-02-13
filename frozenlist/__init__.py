@@ -16,17 +16,7 @@ NO_EXTENSIONS = bool(os.environ.get("FROZENLIST_NO_EXTENSIONS"))  # type: bool
 @total_ordering
 class FrozenList(MutableSequence):
     __slots__ = ("_frozen", "_items")
-
-    if sys.version_info >= (3, 9):
-        __class_getitem__ = classmethod(types.GenericAlias)
-    else:
-
-        @classmethod
-        def __class_getitem__(
-            cls: Type["FrozenList"],
-            cls_item: Any,
-        ) -> Type["FrozenList"]:
-            return cls
+    __class_getitem__ = classmethod(types.GenericAlias)
 
     def __init__(self, items=None):
         self._frozen = False

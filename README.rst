@@ -79,8 +79,6 @@ Installation
 
    $ pip install frozenlist
 
-The library requires Python 3.8 or newer.
-
 
 Documentation
 -------------
@@ -93,11 +91,6 @@ Communication channels
 We have a *Matrix Space* `#aio-libs-space:matrix.org
 <https://matrix.to/#/%23aio-libs-space:matrix.org>`_ which is
 also accessible via Gitter.
-
-Requirements
-------------
-
-- Python >= 3.8
 
 License
 -------

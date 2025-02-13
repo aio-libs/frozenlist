@@ -24,7 +24,7 @@ repos:
   rev: '24.8.0'
   hooks:
   - id: black
-    language_version: python3  # Should be a command that runs python3.8+
+    language_version: python3  # Should be a command that runs python3
 
 - repo: https://github.com/python-jsonschema/check-jsonschema.git
   rev: 0.29.3
