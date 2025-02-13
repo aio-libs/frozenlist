@@ -9,7 +9,7 @@ def _emit_opt_pairs(opt_pair: Tuple[str, Union[str, Dict[str, str]]]) -> Iterato
     flag, flag_value = opt_pair
     flag_opt = f"--{flag!s}"
     if isinstance(flag_value, dict):
-        sub_pairs: Iterable[tuple[str, ...]] = flag_value.items()
+        sub_pairs: Iterable[Tuple[str, ...]] = flag_value.items()
     else:
         sub_pairs = ((flag_value,),)
 
