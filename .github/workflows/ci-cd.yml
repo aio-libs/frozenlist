@@ -86,7 +86,7 @@ jobs:
       run: python -Im pip install build
     - name: Build sdists and pure-python wheel
       env:
-        PIP_CONSTRAINT: requirements/ci.txt
+        PIP_CONSTRAINT: ci.txt
       run: python -Im build --config-setting=pure-python=true
     - name: Determine actual created filenames
       id: dist-filenames-detection
@@ -221,11 +221,11 @@ jobs:
         python-version: ${{ matrix.pyver }}
         allow-prereleases: true
         cache: pip
-        cache-dependency-path: requirements/*.txt
+        cache-dependency-path: ci.txt
     - name: Install dependencies
       uses: py-actions/py-dependency-install@v4
       with:
-        path: requirements/ci.txt
+        path: ci.txt
     - name: Determine pre-compiled compatible wheel
       env:
         # NOTE: When `pip` is forced to colorize output piped into `jq`,

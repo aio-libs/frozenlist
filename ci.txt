@@ -1,4 +1,4 @@
--r towncrier.txt
+-r requirements/towncrier.txt
 build==1.0.3
 coverage==7.6.1
 cython==3.0.6
