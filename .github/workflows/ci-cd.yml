@@ -200,6 +200,15 @@ jobs:
     timeout-minutes: 15
     continue-on-error: ${{ matrix.experimental }}
     steps:
+    - name: Setup Python ${{ matrix.pyver }}
+      id: python-install
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.pyver }}
+        allow-prereleases: true
+        cache: pip
+        cache-dependency-path: requirements/*.txt
+
     - name: Retrieve the project source from an sdist inside the GHA artifact
       uses: re-actors/checkout-python-sdist@release/v2
       with:
@@ -214,14 +223,6 @@ jobs:
         pattern: ${{ needs.pre-setup.outputs.dists-artifact-name }}*
         merge-multiple: true
 
-    - name: Setup Python ${{ matrix.pyver }}
-      id: python-install
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.pyver }}
-        allow-prereleases: true
-        cache: pip
-        cache-dependency-path: requirements/*.txt
     - name: Install dependencies
       uses: py-actions/py-dependency-install@v4
       with:
