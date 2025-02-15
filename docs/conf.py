@@ -200,8 +200,8 @@ html_theme_options = {
             ),
             "target": (
                 f"https://codecov.io/github/{github_repo_slug}"
-                "?flags[]=pytest",
-            )
+                "?flags[]=pytest"
+            ),
             "height": "20",
             "alt": "Code coverage status",
         },
