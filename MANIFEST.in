@@ -5,6 +5,7 @@ include LICENSE
 include CHANGES.rst
 include README.rst
 include CONTRIBUTORS.txt
+graft .github/actions
 graft frozenlist
 graft packaging
 graft docs

@@ -233,5 +233,7 @@ repos:
     - 'SC2086:'
     - -ignore
     - 'SC1004:'
+    exclude: >-
+      ^[.]github/actions/.*$
 
 ...
