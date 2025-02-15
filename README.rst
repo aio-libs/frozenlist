@@ -5,8 +5,8 @@ frozenlist
    :target: https://github.com/aio-libs/frozenlist/actions
    :alt: GitHub status for master branch
 
-.. image:: https://codecov.io/gh/aio-libs/frozenlist/branch/master/graph/badge.svg
-   :target: https://codecov.io/gh/aio-libs/frozenlist
+.. image:: https://codecov.io/gh/aio-libs/frozenlist/branch/master/graph/badge.svg?flag=pytest
+   :target: https://codecov.io/gh/aio-libs/frozenlist?flags[]=pytest
    :alt: codecov.io status for master branch
 
 .. image:: https://img.shields.io/pypi/v/frozenlist.svg?logo=Python&logoColor=white
