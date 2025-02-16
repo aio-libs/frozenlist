@@ -198,10 +198,7 @@ html_theme_options = {
                 f"https://codecov.io/github/{github_repo_slug}/coverage.svg"
                 "?branch=master&flag=pytest"
             ),
-            "target": (
-                f"https://codecov.io/github/{github_repo_slug}"
-                "?flags[]=pytest"
-            ),
+            "target": f"https://codecov.io/github/{github_repo_slug}?flags[]=pytest",
             "height": "20",
             "alt": "Code coverage status",
         },
