@@ -376,7 +376,8 @@ def get_requires_for_build_wheel(
         c_ext_build_deps = []
     elif sysconfig.get_config_var('Py_GIL_DISABLED'):
         # TODO: Remove this when Cython 3.1 final has been released
-        # Designed to fail if build isolation is used, since we currently need Cython nightly
+        # Designed to fail if build isolation is used, since we currently
+        # need Cython nightly
         c_ext_build_deps = ['Cython ~= 3.1.0a2']
     else:
         c_ext_build_deps = ['Cython ~= 3.0.12']

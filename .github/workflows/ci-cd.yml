@@ -250,7 +250,10 @@ jobs:
         path: requirements/ci-freethreading.txt
     - name: Install Cython nightly (free-threading)
       if: matrix.pyver == '3.13t'
-      run: python -m pip install -i https://pypi.anaconda.org/scientific-python-nightly-wheels/simple cython
+      run: |
+        python -m pip install \
+          -i https://pypi.anaconda.org/scientific-python-nightly-wheels/simple
+          cython
     - name: Determine pre-compiled compatible wheel
       env:
         # NOTE: When `pip` is forced to colorize output piped into `jq`,
