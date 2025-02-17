@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import os
+import sysconfig
 import typing as t
 from contextlib import contextmanager, nullcontext, suppress
 from functools import partial
@@ -42,12 +43,14 @@ with suppress(ImportError):
     from Cython.Build.Cythonize import main as _cythonize_cli_cmd
 
 from ._compat import chdir_cm
-from ._cython_configuration import get_local_cython_config as _get_local_cython_config
+from ._cython_configuration import (  # noqa: WPS436
+    get_local_cython_config as _get_local_cython_config,
+)
 from ._cython_configuration import (
     make_cythonize_cli_args_from_config as _make_cythonize_cli_args_from_config,
 )
 from ._cython_configuration import patched_env as _patched_cython_env
-from ._transformers import sanitize_rst_roles
+from ._transformers import sanitize_rst_roles  # noqa: WPS436
 
 __all__ = (  # noqa: WPS410
     'build_sdist',
@@ -371,11 +374,14 @@ def get_requires_for_build_wheel(
             stacklevel=999,
         )
 
-    c_ext_build_deps = [] if is_pure_python_build else [
-        'Cython == 3.1.0a1; python_version >= "3.13"',
-        'Cython ~= 3.0.0; python_version == "3.12"',
-        'Cython; python_version < "3.12"',
-    ]
+    if is_pure_python_build:
+        c_ext_build_deps = []
+    elif sysconfig.get_config_var('Py_GIL_DISABLED'):
+        # TODO: Remove this when Cython 3.1 final has been released
+        # Designed to fail if build isolation is used, since we currently need Cython nightly
+        c_ext_build_deps = ['Cython ~= 3.1.0a2']
+    else:
+        c_ext_build_deps = ['Cython ~= 3.0.12']
 
     return _setuptools_get_requires_for_build_wheel(
         config_settings=config_settings,

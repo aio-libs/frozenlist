@@ -1,0 +1,2 @@
+# Cython nightly is installed manually 
+-r ci-pure.txt

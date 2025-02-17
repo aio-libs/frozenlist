@@ -10,6 +10,7 @@ graft packaging
 graft docs
 graft requirements
 graft tests
+graft scripts
 global-exclude *.pyc
 global-exclude *.pyd
 global-exclude *.so

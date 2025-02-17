@@ -93,3 +93,10 @@ pure-python = "false"
 
 [tool.cibuildwheel.windows]
 before-test = []  # Windows cmd has different syntax and pip chooses wheels
+
+# TODO: Remove this when there's a Cython 3.1 final release
+# Remove PIP_CONSTRAINT from the environment
+[[tool.cibuildwheel.overrides]]
+select = "cp313t-*"
+build-frontend = "build; args: --no-isolation"
+before-build = "bash {package}/scripts/cibw_before_build.sh"

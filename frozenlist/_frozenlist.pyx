@@ -1,5 +1,7 @@
 # cython: freethreading_compatible=True
 
+cimport cython
+
 import sys
 import types
 from collections.abc import MutableSequence
@@ -32,16 +34,19 @@ cdef class FrozenList:
     cdef inline object _fast_len(self):
         return len(self._items)
 
+    @cython.critical_section
     def freeze(self):
         self.frozen = True
 
     def __getitem__(self, index):
         return self._items[index]
 
+    @cython.critical_section
     def __setitem__(self, index, value):
         self._check_frozen()
         self._items[index] = value
 
+    @cython.critical_section
     def __delitem__(self, index):
         self._check_frozen()
         del self._items[index]
@@ -69,6 +74,7 @@ cdef class FrozenList:
         if op == 5:  # =>
             return list(self) >= other
 
+    @cython.critical_section
     def insert(self, pos, item):
         self._check_frozen()
         self._items.insert(pos, item)
@@ -76,6 +82,7 @@ cdef class FrozenList:
     def __contains__(self, item):
         return item in self._items
 
+    @cython.critical_section
     def __iadd__(self, items):
         self._check_frozen()
         self._items += list(items)
@@ -84,26 +91,32 @@ cdef class FrozenList:
     def index(self, item):
         return self._items.index(item)
 
+    @cython.critical_section
     def remove(self, item):
         self._check_frozen()
         self._items.remove(item)
 
+    @cython.critical_section
     def clear(self):
         self._check_frozen()
         self._items.clear()
 
+    @cython.critical_section
     def extend(self, items):
         self._check_frozen()
         self._items += list(items)
 
+    @cython.critical_section
     def reverse(self):
         self._check_frozen()
         self._items.reverse()
 
+    @cython.critical_section
     def pop(self, index=-1):
         self._check_frozen()
         return self._items.pop(index)
 
+    @cython.critical_section
     def append(self, item):
         self._check_frozen()
         return self._items.append(item)
@@ -111,10 +124,12 @@ cdef class FrozenList:
     def count(self, item):
         return self._items.count(item)
 
+    @cython.critical_section
     def __repr__(self):
         return '<FrozenList(frozen={}, {!r})>'.format(self.frozen,
                                                       self._items)
 
+    @cython.critical_section
     def __hash__(self):
         if self.frozen:
             return hash(tuple(self._items))
