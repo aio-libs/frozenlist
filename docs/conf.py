@@ -196,9 +196,9 @@ html_theme_options = {
         {
             "image": (
                 f"https://codecov.io/github/{github_repo_slug}/coverage.svg"
-                "?branch=master"
+                "?branch=master&flag=pytest"
             ),
-            "target": f"https://codecov.io/github/{github_repo_slug}",
+            "target": f"https://codecov.io/github/{github_repo_slug}?flags[]=pytest",
             "height": "20",
             "alt": "Code coverage status",
         },
@@ -398,4 +398,3 @@ nitpick_ignore = []
 towncrier_draft_autoversion_mode = "draft"  # or: 'sphinx-version', 'sphinx-release'
 towncrier_draft_include_empty = True
 towncrier_draft_working_directory = PROJECT_ROOT_DIR
-towncrier_draft_config_path = "pyproject.toml"  # relative to cwd

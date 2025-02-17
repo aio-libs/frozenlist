@@ -2,19 +2,12 @@
 
 cimport cython
 
-import sys
 import types
 from collections.abc import MutableSequence
 
 
 cdef class FrozenList:
-
-    if sys.version_info >= (3, 9):
-        __class_getitem__ = classmethod(types.GenericAlias)
-    else:
-        @classmethod
-        def __class_getitem__(cls, cls_item):
-            return cls
+    __class_getitem__ = classmethod(types.GenericAlias)
 
     cdef readonly bint frozen
     cdef list _items
