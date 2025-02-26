@@ -79,9 +79,16 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ env.PYTHON_LATEST }}
-        cache: pip
-        cache-dependency-path:
-          requirements/*.txt
+    - name: >-
+        Calculate dependency files' combined hash value
+        for use in the cache key
+      id: calc-cache-key-files
+      uses: ./.github/actions/cache-keys
+    - name: Set up pip cache
+      uses: re-actors/cache-python-deps@release/v1
+      with:
+        cache-key-for-dependency-files: >-
+          ${{ steps.calc-cache-key-files.outputs.cache-key-for-dep-files }}
     - name: Install core libraries for build
       run: python -Im pip install build
     - name: Build sdists and pure-python wheel
@@ -175,7 +182,6 @@ jobs:
         - >-
           3.10
         - 3.9
-        - 3.8
         no-extensions: ['', 'Y']
         os:
         - ubuntu-latest
@@ -193,10 +199,6 @@ jobs:
           experimental: false
           os: ubuntu-latest
         - pyver: pypy-3.9
-          no-extensions: Y
-          experimental: false
-          os: ubuntu-latest
-        - pyver: pypy-3.8
           no-extensions: Y
           experimental: false
           os: ubuntu-latest
@@ -225,8 +227,16 @@ jobs:
       with:
         python-version: ${{ matrix.pyver }}
         allow-prereleases: true
-        cache: pip
-        cache-dependency-path: requirements/*.txt
+    - name: >-
+        Calculate dependency files' combined hash value
+        for use in the cache key
+      id: calc-cache-key-files
+      uses: ./.github/actions/cache-keys
+    - name: Set up pip cache
+      uses: re-actors/cache-python-deps@release/v1
+      with:
+        cache-key-for-dependency-files: >-
+          ${{ steps.calc-cache-key-files.outputs.cache-key-for-dep-files }}
     - name: Install dependencies
       uses: py-actions/py-dependency-install@v4
       with:
@@ -334,7 +344,7 @@ jobs:
     - name: Send coverage data to Codecov
       if: >-
         !cancelled()
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: ./coverage.xml
@@ -456,7 +466,7 @@ jobs:
       # Confusingly, this action also supports updating releases, not
       # just creating them. This is what we want here, since we've manually
       # created the release above.
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         # dist/ contains the built packages, which smoketest-artifacts/
         # contains the signatures and certificates.
