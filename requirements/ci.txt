@@ -1,2 +1,2 @@
--r ci-pure.txt
 cython==3.0.6
+-r ci-pure.txt
