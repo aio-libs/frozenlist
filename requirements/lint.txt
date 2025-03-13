@@ -1,4 +1,4 @@
-build==1.0.3
+build
 pre-commit==3.5.0
-twine==4.0.2
+twine
 types-setuptools==75.8.0.20250210
