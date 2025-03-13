@@ -6,7 +6,7 @@ SRC = frozenlist tests setup.py
 all: test
 
 .install-cython:
-	pip install -r requirements/ci.txt
+	pip install -r requirements/cython.txt
 	touch .install-cython
 
 frozenlist/%.c: frozenlist/%.pyx
@@ -15,7 +15,7 @@ frozenlist/%.c: frozenlist/%.pyx
 cythonize: .install-cython $(PYXS:.pyx=.c)
 
 .install-deps: $(shell find requirements -type f)
-	pip install -r requirements/ci.txt
+	pip install -r requirements/lint.txt -r requirements/test.txt
 ifndef CI
 	pre-commit install
 endif

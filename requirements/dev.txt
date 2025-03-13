@@ -1,2 +1,4 @@
 -e . --config-settings=pure-python=false
--r ci.txt
+-r test.txt
+-r lint.txt
+tox==4.11.4

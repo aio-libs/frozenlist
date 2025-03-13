@@ -59,7 +59,7 @@ jobs:
     - name: Install dependencies
       uses: py-actions/py-dependency-install@v4
       with:
-        path: requirements/ci.txt
+        path: requirements/lint.txt
     - name: Self-install
       run: |
         pip install . --config-settings=pure-python=true
@@ -86,7 +86,6 @@ jobs:
         make doc-spelling
     - name: Prepare twine checker
       run: |
-        pip install -U build twine
         python -m build --config-setting=pure-python=true
     - name: Run twine checker
       run: |
