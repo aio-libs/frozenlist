@@ -63,6 +63,7 @@ linetrace = "True"  # Implies `profile=True`
 #error_on_uninitialized = "True"
 
 [tool.cibuildwheel]
+enable = ["cpython-freethreading"]
 build-frontend = "build"
 before-test = [
   # NOTE: Attempt to have pip pre-compile PyYAML wheel with our build
