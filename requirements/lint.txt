@@ -1,0 +1,4 @@
+build
+pre-commit==3.5.0
+twine
+types-setuptools==75.8.0.20250210

@@ -1,0 +1,2 @@
+Organized dependencies into test and lint dependencies so that no
+unnecessary ones are installed during CI runs -- by :user:`lysnikolaou`.

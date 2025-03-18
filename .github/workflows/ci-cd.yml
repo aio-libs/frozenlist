@@ -92,8 +92,6 @@ jobs:
     - name: Install core libraries for build
       run: python -Im pip install build
     - name: Build sdists and pure-python wheel
-      env:
-        PIP_CONSTRAINT: requirements/ci.txt
       run: python -Im build --config-setting=pure-python=true
     - name: Determine actual created filenames
       id: dist-filenames-detection
@@ -241,7 +239,7 @@ jobs:
     - name: Install dependencies
       uses: py-actions/py-dependency-install@v4
       with:
-        path: requirements/ci${{
+        path: requirements/test${{
           matrix.pyver == '3.13t' && '-freethreading' || '' }}.txt
     - name: Determine pre-compiled compatible wheel
       env:
