@@ -1,0 +1,1 @@
+Use SPDX license identifier for project metadata.
