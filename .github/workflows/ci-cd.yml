@@ -174,6 +174,7 @@ jobs:
     strategy:
       matrix:
         pyver:
+        - 3.13t
         - 3.13
         - 3.12
         - 3.11
@@ -238,7 +239,8 @@ jobs:
     - name: Install dependencies
       uses: py-actions/py-dependency-install@v4
       with:
-        path: requirements/test.txt
+        path: requirements/test${{
+          matrix.pyver == '3.13t' && '-freethreading' || '' }}.txt
     - name: Determine pre-compiled compatible wheel
       env:
         # NOTE: When `pip` is forced to colorize output piped into `jq`,
