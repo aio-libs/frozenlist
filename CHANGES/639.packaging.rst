@@ -1,1 +1,1 @@
-Use SPDX license identifier for project metadata.
+The packaging metadata switched to including an SPDX license identifier introduced in :pep:`639` -- by :user:`cdce8p`.
