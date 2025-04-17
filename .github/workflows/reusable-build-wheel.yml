@@ -24,6 +24,11 @@ on:
         default: ''
         required: false
         type: string
+      tag:
+        description: Build platform tag wheels
+        default: ''
+        required: false
+        type: string
       source-tarball-name:
         description: Sdist filename wildcard
         required: true
@@ -42,10 +47,25 @@ env:
 jobs:
 
   build-wheel:
-    name: Build wheels on ${{ inputs.os }} ${{ inputs.qemu }}
+    name: >-
+      Build ${{ inputs.tag }} wheels on ${{ inputs.os }} ${{ inputs.qemu }}
     runs-on: ${{ inputs.os }}-latest
     timeout-minutes: ${{ inputs.qemu && 25 || 11 }}
     steps:
+    - name: Compute GHA artifact name ending
+      id: gha-artifact-name
+      run: |
+        from hashlib import sha512
+        from os import environ
+        from pathlib import Path
+        FILE_APPEND_MODE = 'a'
+        inputs_json_str = """${{ toJSON(inputs) }}"""
+        hash = sha512(inputs_json_str.encode()).hexdigest()
+        with Path(environ['GITHUB_OUTPUT']).open(
+                mode=FILE_APPEND_MODE,
+        ) as outputs_file:
+            print(f'hash={hash}', file=outputs_file)
+      shell: python
     - name: Retrieve the project source from an sdist inside the GHA artifact
       uses: re-actors/checkout-python-sdist@release/v2
       with:
@@ -86,6 +106,8 @@ jobs:
         name: ${{ inputs.dists-artifact-name }}-
           ${{ inputs.os }}-
           ${{ inputs.qemu }}-
+          ${{ inputs.tag }}-
+          ${{ steps.gha-artifact-name.outputs.hash }}
         path: ./wheelhouse/*.whl
 
 ...
