@@ -12,6 +12,7 @@ app
 apps
 app’s
 arg
+armv
 Arsenic
 async
 asyncio
