@@ -14,6 +14,82 @@ Changelog
 
 .. towncrier release notes start
 
+v1.6.0
+======
+
+*(2025-04-17)*
+
+
+Bug fixes
+---------
+
+- Stopped implicitly allowing the use of Cython pre-release versions when
+  building the distribution package -- by :user:`ajsanchezsanz` and
+  :user:`markgreene74`.
+
+  *Related commits on GitHub:*
+  :commit:`41591f2`.
+
+
+Features
+--------
+
+- Implemented support for the free-threaded build of CPython 3.13 -- by :user:`lysnikolaou`.
+
+  *Related issues and pull requests on GitHub:*
+  :issue:`618`.
+
+- Started building armv7l wheels -- by :user:`bdraco`.
+
+  *Related issues and pull requests on GitHub:*
+  :issue:`642`.
+
+
+Packaging updates and notes for downstreams
+-------------------------------------------
+
+- Stopped implicitly allowing the use of Cython pre-release versions when
+  building the distribution package -- by :user:`ajsanchezsanz` and
+  :user:`markgreene74`.
+
+  *Related commits on GitHub:*
+  :commit:`41591f2`.
+
+- Started building wheels for the free-threaded build of CPython 3.13 -- by :user:`lysnikolaou`.
+
+  *Related issues and pull requests on GitHub:*
+  :issue:`618`.
+
+- The packaging metadata switched to including an SPDX license identifier introduced in :pep:`639` -- by :user:`cdce8p`.
+
+  *Related issues and pull requests on GitHub:*
+  :issue:`639`.
+
+
+Contributor-facing changes
+--------------------------
+
+- GitHub Actions CI/CD is now configured to manage caching pip-ecosystem
+  dependencies using `re-actors/cache-python-deps`_ -- an action by
+  :user:`webknjaz` that takes into account ABI stability and the exact
+  version of Python runtime.
+
+  .. _`re-actors/cache-python-deps`:
+     https://github.com/marketplace/actions/cache-python-deps
+
+  *Related issues and pull requests on GitHub:*
+  :issue:`633`.
+
+- Organized dependencies into test and lint dependencies so that no
+  unnecessary ones are installed during CI runs -- by :user:`lysnikolaou`.
+
+  *Related issues and pull requests on GitHub:*
+  :issue:`636`.
+
+
+----
+
+
 1.5.0 (2024-10-22)
 ==================
 
