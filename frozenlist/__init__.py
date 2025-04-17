@@ -3,7 +3,7 @@ import types
 from collections.abc import MutableSequence
 from functools import total_ordering
 
-__version__ = "1.6.0"
+__version__ = "1.6.1.dev0"
 
 __all__ = ("FrozenList", "PyFrozenList")  # type: Tuple[str, ...]
 
