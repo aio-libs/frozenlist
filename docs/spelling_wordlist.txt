@@ -31,6 +31,8 @@ backports
 BaseEventLoop
 basename
 BasicAuth
+bdist
+bdists
 Bluesky
 BodyPartReader
 boolean
@@ -252,6 +254,7 @@ sa
 Satisfiable
 schemas
 sdist
+sdists
 sendfile
 serializable
 shourtcuts

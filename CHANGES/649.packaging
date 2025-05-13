@@ -1,0 +1,1 @@
+Exclude ``_frozenlist.cpp`` from bdists/wheels -- by :user:`musicinmybrain`.
