@@ -14,6 +14,38 @@ Changelog
 
 .. towncrier release notes start
 
+v1.6.1
+======
+
+*(2025-06-02)*
+
+
+Bug fixes
+---------
+
+- Correctly use ``cimport`` for including ``PyBool_FromLong`` -- by :user:`lysnikolaou`.
+
+  *Related issues and pull requests on GitHub:*
+  :issue:`653`.
+
+
+Packaging updates and notes for downstreams
+-------------------------------------------
+
+- Exclude ``_frozenlist.cpp`` from bdists/wheels -- by :user:`musicinmybrain`.
+
+  *Related issues and pull requests on GitHub:*
+  :issue:`649`.
+
+- Updated to use Cython 3.1 universally across the build path -- by :user:`lysnikolaou`.
+
+  *Related issues and pull requests on GitHub:*
+  :issue:`654`.
+
+
+----
+
+
 v1.6.0
 ======
 
