@@ -1,7 +1,7 @@
 # cython: freethreading_compatible = True
 # distutils: language = c++
 
-from cpython.bool import PyBool_FromLong
+from cpython.bool cimport PyBool_FromLong
 from libcpp.atomic cimport atomic
 
 import types
