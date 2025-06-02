@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import os
-import sysconfig
 from contextlib import contextmanager, nullcontext, suppress
 from functools import partial
 from pathlib import Path
