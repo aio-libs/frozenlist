@@ -1,1 +1,1 @@
-Correctly use ``cimport`` for including ``PyBool_FromLong``.
+Correctly use ``cimport`` for including ``PyBool_FromLong`` -- by :user:`lysnikolaou`.
