@@ -14,6 +14,18 @@ Changelog
 
 .. towncrier release notes start
 
+v1.6.2
+======
+
+*(2025-06-03)*
+
+
+No significant changes.
+
+
+----
+
+
 v1.6.1
 ======
 
