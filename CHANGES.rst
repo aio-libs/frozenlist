@@ -23,7 +23,7 @@ v1.7.0
 Features
 --------
 
-- Add deepcopy support to FrozenList -- by :user:`bdraco`.
+- Added deepcopy support to FrozenList -- by :user:`bdraco`.
 
   *Related issues and pull requests on GitHub:*
   :issue:`659`.
