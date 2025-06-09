@@ -25,7 +25,7 @@ def _configure_cython_line_tracing(config_kwargs: dict[str, str | dict[str, str]
     """Configure Cython line tracing directives if requested."""
     # If line tracing is requested, add it to the directives
     if cython_line_tracing_requested:
-        directives = config_kwargs.setdefault('directives', {})
+        directives = config_kwargs.setdefault('directive', {})
         assert isinstance(directives, dict)  # Type narrowing for mypy
         directives['linetrace'] = 'True'
         directives['profile'] = 'True'
