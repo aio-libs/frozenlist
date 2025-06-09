@@ -84,7 +84,7 @@ skip = "pp*"
 COLOR = "yes"
 FORCE_COLOR = "1"
 MYPY_FORCE_COLOR = "1"
-# PIP_CONSTRAINT = "requirements/cython.txt"
+PIP_CONSTRAINT = "requirements/cython.txt"
 PRE_COMMIT_COLOR = "always"
 PY_COLORS = "1"
 
