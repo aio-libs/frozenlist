@@ -79,6 +79,7 @@ cythonized
 Cythonize
 de
 deduplicate
+deepcopy
 # de-facto:
 deprecations
 DER
