@@ -1,1 +1,0 @@
-Enabled ``PIP_CONSTRAINT`` environment variable in the build configuration to ensure the pinned Cython version from ``requirements/cython.txt`` is used during wheel builds.
