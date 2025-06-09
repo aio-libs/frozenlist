@@ -1,1 +1,0 @@
-Add deepcopy support to FrozenList -- by :user:`bdraco`.

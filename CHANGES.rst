@@ -14,6 +14,43 @@ Changelog
 
 .. towncrier release notes start
 
+v1.7.0
+======
+
+*(2025-06-09)*
+
+
+Features
+--------
+
+- Added deepcopy support to FrozenList -- by :user:`bdraco`.
+
+  *Related issues and pull requests on GitHub:*
+  :issue:`659`.
+
+
+Packaging updates and notes for downstreams
+-------------------------------------------
+
+- Fixed an issue where ``frozenlist`` binary wheels would be built with debugging symbols and line tracing enabled, which significantly impacted performance. Line tracing is now disabled by default and can only be enabled explicitly -- by :user:`bdraco`.
+
+  This change ensures that production builds are optimized for performance. Developers who need line tracing for debugging purposes can still enable it by:
+
+  1. Setting the ``FROZENLIST_CYTHON_TRACING`` environment variable
+  2. Using the ``--config-setting=with-cython-tracing=true`` option with pip
+
+  *Related issues and pull requests on GitHub:*
+  :issue:`660`.
+
+- Enabled ``PIP_CONSTRAINT`` environment variable in the build configuration to ensure the pinned Cython version from ``requirements/cython.txt`` is used during wheel builds.
+
+  *Related issues and pull requests on GitHub:*
+  :issue:`661`.
+
+
+----
+
+
 v1.6.2
 ======
 
