@@ -16,9 +16,7 @@ def _emit_opt_pairs(opt_pair: Tuple[str, Union[str, Dict[str, str]]]) -> Iterato
     yield from ("=".join(map(str, (flag_opt,) + pair)) for pair in sub_pairs)
 
 
-def get_cli_kwargs_from_config(
-    kwargs_map: Mapping[str, Union[str, Dict[str, str]]],
-) -> List[str]:
+def get_cli_kwargs_from_config(kwargs_map: Mapping[str, str]) -> List[str]:
     """Make a list of options with values from config."""
     return list(chain.from_iterable(map(_emit_opt_pairs, kwargs_map.items())))
 
