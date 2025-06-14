@@ -151,4 +151,3 @@ cdef class FrozenList:
 
 
 MutableSequence.register(FrozenList)
-
