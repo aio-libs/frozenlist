@@ -2,7 +2,10 @@
 # distutils: language = c++
 
 from cpython.bool cimport PyBool_FromLong
+from cpython.exc cimport PyErr_SetString
+from cpython.sequence cimport PySequence_Contains
 from libcpp.atomic cimport atomic
+
 
 import copy
 import types
@@ -27,9 +30,11 @@ cdef class FrozenList:
     def frozen(self):
         return PyBool_FromLong(self._frozen.load())
 
-    cdef object _check_frozen(self):
+    cdef int _check_frozen(self) except -1:
         if self._frozen.load():
-            raise RuntimeError("Cannot modify frozen list.")
+            PyErr_SetString(RuntimeError, "Cannot modify frozen list.")
+            return -1
+        return 0
 
     cdef inline object _fast_len(self):
         return len(self._items)
@@ -128,7 +133,7 @@ cdef class FrozenList:
         obj_id = id(self)
 
         # Return existing copy if already processed (circular reference)
-        if obj_id in memo:
+        if PySequence_Contains(memo, obj_id):
             return memo[obj_id]
 
         # Create new instance and register immediately
@@ -146,3 +151,4 @@ cdef class FrozenList:
 
 
 MutableSequence.register(FrozenList)
+
