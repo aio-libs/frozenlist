@@ -1,0 +1,1 @@
+Added faster exception check for frozenlist and faster sequence check -- by ``@Vizonex``.
