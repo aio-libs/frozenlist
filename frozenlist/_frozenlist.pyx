@@ -2,8 +2,11 @@
 # distutils: language = c++
 
 from cpython.bool cimport PyBool_FromLong
-from cpython.exc cimport PyErr_SetString
-from cpython.sequence cimport PySequence_Contains
+from cpython.exc cimport PyErr_SetObject
+from cpython.list cimport PyList_GET_SIZE, PyList_Append, PyList_New, PyList_Sort
+from cpython.long cimport PyLong_FromSsize_t
+from cpython.sequence cimport PySequence_Contains, PySequence_List, PySequence_Count
+from cpython.object cimport PyObject_GetIter, PyObject
 from libcpp.atomic cimport atomic
 
 
@@ -11,19 +14,18 @@ import copy
 import types
 from collections.abc import MutableSequence
 
-
 cdef class FrozenList:
     __class_getitem__ = classmethod(types.GenericAlias)
 
     cdef atomic[bint] _frozen
     cdef list _items
 
-    def __init__(self, items=None):
+    def __init__(self, object items=None):
         self._frozen.store(False)
         if items is not None:
-            items = list(items)
+            items = PySequence_List(items)
         else:
-            items = []
+            items = PyList_New(0)
         self._items = items
 
     @property
@@ -32,18 +34,18 @@ cdef class FrozenList:
 
     cdef int _check_frozen(self) except -1:
         if self._frozen.load():
-            PyErr_SetString(RuntimeError, "Cannot modify frozen list.")
+            PyErr_SetObject(RuntimeError, "Cannot modify frozen list.")
             return -1
         return 0
 
-    cdef inline object _fast_len(self):
-        return len(self._items)
+    cdef inline Py_ssize_t _fast_len(self):
+        return PyList_GET_SIZE(self._items)
 
     def freeze(self):
         self._frozen.store(True)
 
     def __getitem__(self, index):
-        return self._items[index]
+        return self._items.__getitem__(index)
 
     def __setitem__(self, index, value):
         self._check_frozen()
@@ -54,10 +56,10 @@ cdef class FrozenList:
         del self._items[index]
 
     def __len__(self):
-        return self._fast_len()
+        return PyLong_FromSsize_t(self._fast_len())
 
     def __iter__(self):
-        return self._items.__iter__()
+        return PyObject_GetIter(self._items)
 
     def __reversed__(self):
         return self._items.__reversed__()
@@ -81,12 +83,16 @@ cdef class FrozenList:
         self._items.insert(pos, item)
 
     def __contains__(self, item):
-        return item in self._items
+        return PySequence_Contains(self._items, item)
 
     def __iadd__(self, items):
         self._check_frozen()
-        self._items += list(items)
+        self._items.extend(items)
         return self
+
+    def sort(self, object key = None, bint reverse = False):
+        self._check_frozen()
+        self._items.sort(key, reverse)
 
     def index(self, item):
         return self._items.index(item)
@@ -101,7 +107,7 @@ cdef class FrozenList:
 
     def extend(self, items):
         self._check_frozen()
-        self._items += list(items)
+        self._items.extend(items)
 
     def reverse(self):
         self._check_frozen()
@@ -113,10 +119,10 @@ cdef class FrozenList:
 
     def append(self, item):
         self._check_frozen()
-        return self._items.append(item)
+        PyList_Append(self._items, item)
 
     def count(self, item):
-        return self._items.count(item)
+        return PySequence_Count(self._items, item)
 
     def __repr__(self):
         return '<FrozenList(frozen={}, {!r})>'.format(self._frozen.load(),
@@ -151,3 +157,4 @@ cdef class FrozenList:
 
 
 MutableSequence.register(FrozenList)
+
