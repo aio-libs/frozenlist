@@ -3,16 +3,16 @@
 
 from cpython.bool cimport PyBool_FromLong
 from cpython.exc cimport PyErr_SetObject
-from cpython.list cimport PyList_GET_SIZE, PyList_Append, PyList_New, PyList_Sort
+from cpython.list cimport PyList_Append, PyList_GET_SIZE, PyList_New, PyList_Sort
 from cpython.long cimport PyLong_FromSsize_t
-from cpython.sequence cimport PySequence_Contains, PySequence_List, PySequence_Count
-from cpython.object cimport PyObject_GetIter, PyObject
+from cpython.object cimport PyObject, PyObject_GetIter
+from cpython.sequence cimport PySequence_Contains, PySequence_Count, PySequence_List
 from libcpp.atomic cimport atomic
-
 
 import copy
 import types
 from collections.abc import MutableSequence
+
 
 cdef class FrozenList:
     __class_getitem__ = classmethod(types.GenericAlias)
@@ -157,4 +157,3 @@ cdef class FrozenList:
 
 
 MutableSequence.register(FrozenList)
-
