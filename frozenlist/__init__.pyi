@@ -16,12 +16,9 @@ _T = TypeVar("_T")
 _T_contra = TypeVar("_T_contra", contravariant=True)
 _Arg = Union[List[_T], Iterable[_T]]
 
-
 class _SupportsRichComparison(Protocol[_T_contra]):
     def __gt__(self, other: _T_contra, /) -> bool: ...
     def __lt__(self, other: _T_contra, /) -> bool: ...
-
-
 
 class FrozenList(MutableSequence[_T], Generic[_T]):
     def __init__(self, items: Optional[_Arg[_T]] = None) -> None: ...
@@ -55,8 +52,9 @@ class FrozenList(MutableSequence[_T], Generic[_T]):
     @overload
     def sort(self, *, key: None = None, reverse: bool = False) -> None: ...
     @overload
-    def sort(self, *, key: Callable[[_T], _SupportsRichComparison], reverse: bool = False) -> None: ...
-
+    def sort(
+        self, *, key: Callable[[_T], _SupportsRichComparison], reverse: bool = False
+    ) -> None: ...
 
 # types for C accelerators are the same
 CFrozenList = PyFrozenList = FrozenList
