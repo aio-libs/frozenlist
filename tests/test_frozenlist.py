@@ -198,7 +198,7 @@ class FrozenListMixin:
             _list.reverse()
         assert _list == [1, 2]
 
-    def test_sort(self):
+    def test_sort(self) -> None:
         _list = self.FrozenList([3, 1, 4, 2])
         _list.sort()
         assert _list == [1, 2, 3, 4]
