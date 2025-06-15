@@ -30,6 +30,10 @@ class FrozenList(MutableSequence):
 
     def freeze(self):
         self._frozen = True
+    
+    def sort(self, key:object = None, reverse:bool = False):
+        self._check_frozen()
+        self._items.sort(key=key, reverse=reverse)
 
     def __getitem__(self, index):
         return self._items[index]
