@@ -47,9 +47,7 @@ class FrozenList(MutableSequence[_T], Generic[_T]):
     @overload
     def sort(self, *, key: None = None, reverse: bool = False) -> None: ...
     @overload
-    def sort(
-        self, *, key: Callable[[_T], ...], reverse: bool = False
-    ) -> None: ...
+    def sort(self, *, key: Callable[[_T], ...], reverse: bool = False) -> None: ...
 
 # types for C accelerators are the same
 CFrozenList = PyFrozenList = FrozenList
