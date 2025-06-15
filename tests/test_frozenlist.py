@@ -198,6 +198,15 @@ class FrozenListMixin:
             _list.reverse()
         assert _list == [1, 2]
 
+    def test_sort(self):
+        _list = self.FrozenList([3,1,4,2])
+        _list.sort()
+        assert _list == [1, 2, 3, 4]
+        _list.freeze()
+        # ensure we can't sort when frozen
+        with pytest.raises(RuntimeError):
+            _list.sort()
+    
     def test_pop(self) -> None:
         _list = self.FrozenList([1, 2])
         assert _list.pop(0) == 1
@@ -379,3 +388,4 @@ class TestFrozenList(FrozenListMixin):
 
 class TestFrozenListPy(FrozenListMixin):
     FrozenList = PyFrozenList  # type: ignore[assignment]  # FIXME
+
