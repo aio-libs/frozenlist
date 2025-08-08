@@ -146,7 +146,7 @@ jobs:
         exclude:
         - runner-vm-os: windows-latest
           tag: 'musllinux'
-        - os: windows-11-arm
+        - runner-vm-os: windows-11-arm
           tag: 'musllinux'
         - runner-vm-os: macos-latest
           tag: 'musllinux'
