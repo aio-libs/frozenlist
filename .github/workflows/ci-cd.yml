@@ -137,12 +137,15 @@ jobs:
         runner-vm-os:
         - ubuntu-latest
         - windows-latest
+        - windows-11-arm
         - macos-latest
         tag:
         - ''
         - 'musllinux'
         exclude:
         - runner-vm-os: windows-latest
+          tag: 'musllinux'
+        - os: windows-11-arm
           tag: 'musllinux'
         - runner-vm-os: macos-latest
           tag: 'musllinux'
@@ -184,8 +187,7 @@ jobs:
           && '*_i686
           *-macosx_universal2
           *-musllinux_*
-          *-win32
-          *_arm64'
+          *-win32'
           || (matrix.tag == 'musllinux') && '*-manylinux_*'
         || '*-musllinux_*'
         }}
@@ -213,12 +215,19 @@ jobs:
         - ubuntu-latest
         - macos-latest
         - windows-latest
+        - windows-11-arm
         experimental: [false]
         exclude:
         - os: macos-latest
           no-extensions: Y
         - os: windows-latest
           no-extensions: Y
+        - os: windows-11-arm
+          no-extensions: Y
+        - os: windows-11-arm
+          pyver: 3.10  # not supported by setup-python action
+        - os: windows-11-arm
+          pyver: 3.9  # not supported by setup-python action
         include:
         - pyver: pypy-3.10
           no-extensions: Y
