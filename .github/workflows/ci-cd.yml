@@ -23,7 +23,7 @@ on:
 
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
-  # cancel-in-progress: true
+  cancel-in-progress: true
 
 
 env:
@@ -139,7 +139,7 @@ jobs:
         - ubuntu-latest
         - windows-latest
         - windows-11-arm
-        - macos-latest
+        # - macos-latest
         tag:
         - ''
         - 'musllinux'
