@@ -6,3 +6,4 @@ Marcin Konowalczyk
 Martijn Pieters
 Pau Freixes
 Paul Colomiets
+Vizonex
