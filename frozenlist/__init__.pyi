@@ -1,10 +1,12 @@
 from typing import (
+    Callable,
     Generic,
     Iterable,
     Iterator,
     List,
     MutableSequence,
     Optional,
+    Protocol,
     TypeVar,
     Union,
     overload,
@@ -42,6 +44,7 @@ class FrozenList(MutableSequence[_T], Generic[_T]):
     def insert(self, pos: int, item: _T) -> None: ...
     def __repr__(self) -> str: ...
     def __hash__(self) -> int: ...
+    def sort(self, *, key: object = None, reverse: bool = False) -> None: ...
 
 # types for C accelerators are the same
 CFrozenList = PyFrozenList = FrozenList
