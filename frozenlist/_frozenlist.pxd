@@ -3,6 +3,7 @@
 
 from libcpp.atomic cimport atomic
 
+
 cdef class FrozenList:
     cdef atomic[bint] _frozen
     cdef list _items
