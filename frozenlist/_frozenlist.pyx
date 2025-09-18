@@ -2,7 +2,6 @@
 # distutils: language = c++
 
 from cpython.bool cimport PyBool_FromLong
-from libcpp.atomic cimport atomic
 
 import copy
 import types
@@ -11,9 +10,6 @@ from collections.abc import MutableSequence
 
 cdef class FrozenList:
     __class_getitem__ = classmethod(types.GenericAlias)
-
-    cdef atomic[bint] _frozen
-    cdef list _items
 
     def __init__(self, items=None):
         self._frozen.store(False)
