@@ -1,2 +1,2 @@
 Builds and tests have been added to
-``ci-cd.yml`` for arm64 Windows wheels.
+``ci-cd.yml`` for arm64 Windows wheels -- by :user:`finnagin`.
