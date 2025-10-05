@@ -1,0 +1,4 @@
+Removed ``--config-settings=pure-python=false`` from :file:`requirements/dev.txt`.
+Developers on CPython still get accelerated builds by default. To explicitly build
+a pure Python wheel, use ``pip install -e . --config-settings=pure-python=true``
+-- by :user:`bdraco`.
