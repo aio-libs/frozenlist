@@ -3,8 +3,12 @@ requires = [
   # NOTE: The following build dependencies are necessary for initial
   # NOTE: provisioning of the in-tree build backend located under
   # NOTE: `packaging/pep517_backend/`.
+  # setuptools >= 67.0 required for Python 3.12+ support
+  # Next step should be >= 77.0 for PEP 639 support
+  # Don't bump too early to give distributors time to update
+  # their setuptools version.
   "expandvars",
-  "setuptools >= 77",  # Minimum required for PEP 639 license expressions
+  "setuptools >= 67.0",
   "tomli; python_version < '3.11'",
 ]
 backend-path = ["packaging"]  # requires `pip >= 20` or `pep517 >= 0.6.0`
@@ -12,8 +16,7 @@ build-backend = "pep517_backend.hooks"  # wraps `setuptools.build_meta`
 
 [project]
 name = "frozenlist"
-license = "Apache-2.0"
-license-files = ["LICENSE"]
+license = {text = "Apache-2.0"}
 description = "A list-like structure which implements collections.abc.MutableSequence"
 maintainers = [{ name = "aiohttp team", email = "team@aiohttp.org" }]
 requires-python = ">=3.9"
@@ -51,6 +54,9 @@ dynamic = ["version", "readme"]
 "Docs: RTD" = "https://frozenlist.aio-libs.org"
 "GitHub: issues" = "https://github.com/aio-libs/frozenlist/issues"
 "GitHub: repo" = "https://github.com/aio-libs/frozenlist"
+
+[tool.setuptools]
+license-files = ["LICENSE"]
 
 [tool.setuptools.dynamic]
 version = { attr = "frozenlist.__version__" }

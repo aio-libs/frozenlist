@@ -1,1 +1,2 @@
-Moved static project metadata to ``pyproject.toml``. -- by :user:`cdce8p`.
+Moved core packaging metadata from :file:`setup.cfg` to :file:`pyproject.toml` per :pep:`621`
+-- by :user:`cdce8p`.
