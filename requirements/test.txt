@@ -1,4 +1,4 @@
 -r cython.txt
-coverage==7.6.1
+coverage==7.11.0
 pytest==8.4.2
 pytest-cov==4.1.0
