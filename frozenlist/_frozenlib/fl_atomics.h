@@ -16,7 +16,7 @@ and combined with only required or needed functions */
 #  endif
 #endif
 
-static inline uint8_t atomic_load_uint8(const uint8_t *obj);
+static inline void atomic_store_uint8(uint8_t* obj, uint8_t value);
 static inline int atomic_compare_exchange_uint8(uint8_t *obj, uint8_t *expected, uint8_t desired);
 
 /* Last one is used by newer python lists that are Free-Threaded 3.14+ */
@@ -32,6 +32,10 @@ static inline int atomic_compare_exchange_uint8(uint8_t *obj, uint8_t *expected,
     atomic_compare_exchange_uint8(uint8_t *obj, uint8_t *expected, uint8_t desired)
     { return __atomic_compare_exchange_n(obj, expected, desired, 0,
                                          __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST); }
+    
+    static inline void
+    atomic_store_uint8(uint8_t *obj, uint8_t value)
+    { __atomic_store_n(obj, value, __ATOMIC_SEQ_CST); }
 
 #elif __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_ATOMICS__)
     /* STANDARD LIBRARY */
@@ -53,10 +57,15 @@ static inline int atomic_compare_exchange_uint8(uint8_t *obj, uint8_t *expected,
                                               expected, desired);
     }
     static inline uint8_t
-    _Py_atomic_load_uint8(const uint8_t *obj)
+    atomic_load_uint8(const uint8_t *obj)
     {
         _FL_USING_STD;
         return atomic_load((const _Atomic(uint8_t)*)obj);
+    }
+    static inline void 
+    atomic_store_uint8(uint8_t *obj, uint8_t value){
+        _FL_USING_STD;
+        atomic_store((_Atomic(uint8_t)*)obj, value);
     }
     
 
@@ -87,6 +96,9 @@ static inline int atomic_compare_exchange_uint8(uint8_t *obj, uint8_t *expected,
     #else
     #  error "no implementation of atomic_load_uint8"
     #endif
+    }
+    static inline void atomic_store_uint8(uint8_t *obj, const uint8_t value){
+        return (void)_InterlockedExchange8((volatile char *)obj, (char)value);
     }
 
 
