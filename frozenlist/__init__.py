@@ -28,7 +28,7 @@ class FrozenList(MutableSequence):
     def frozen(self):
         """A read-only property, ``True`` if the list is *frozen* (modifications are forbidden)."""
         return self._frozen
-  
+
     def freeze(self):
         """Freeze the list. There is no way to *thaw* it back."""
         self._frozen = True
@@ -41,13 +41,13 @@ class FrozenList(MutableSequence):
             raise RuntimeError("Cannot modify frozen list.")
         self._items.__imul__(value)
         return self
-    
+
     # def __rmul__(self, value):
     #     return self.__class__(self._items.__rmul__(value))
 
     # def __add__(self, value):
     #     return self.__class__(self._items.__add__(value))
-    
+
     def __contains__(self, value):
         return self._items.__contains__(value)
 

@@ -10,7 +10,7 @@
 /* Inspired by multidict but 1/3 the size of it's Code */
 
 /* To make up for possible performance regressions Proxying off
-of most of PyList's Type Calls would be enough to retain the same 
+of most of PyList's Type Calls would be enough to retain the same
 performance as a normal Python List */
 
 /* Type Slots for FrozenList */
@@ -36,9 +36,9 @@ static PyObject* frozenlist_tp_richcmp(FrozenListObject* self, PyObject* other, 
 
 /* __repr__ */
 static PyObject* frozenlist_tp_repr(FrozenListObject* self){
-    return PyUnicode_FromFormat("<FrozenList(frozen=%s, %R)>", 
+    return PyUnicode_FromFormat("<FrozenList(frozen=%s, %R)>",
         ((atomic_load_uint8(&(self->_frozen))) ? "True" : "False"),
-        self->_items 
+        self->_items
     );
 }
 
@@ -117,7 +117,7 @@ static PyObject* frozenlist_sq_inplace_repeat(FrozenListObject* self, PyObject* 
     if (fl_check_frozen(self) < 0){
         return NULL;
     }
-    
+
     PyObject* items = PySequence_InPlaceRepeat(self->_items, values);
     if (items == NULL){
         return NULL;
@@ -246,7 +246,7 @@ frozenlist__reversed__(FrozenListObject* self, PyObject* Py_UNUSED(unused))
 }
 
 /* insert */
-static PyObject* 
+static PyObject*
 frozenlist_insert(FrozenListObject* self, PyObject *const *args, Py_ssize_t nargs){
     if (PyArg_CheckPositional("insert", nargs, 2, 2) < 0){
         return NULL;
@@ -274,8 +274,8 @@ Py_ssize_t frozenlist_index_helper(PyObject* list, PyObject* value){
 
 
 static PyObject* frozenlist_index(
-    FrozenListObject* self, 
-    PyObject *const* args, 
+    FrozenListObject* self,
+    PyObject *const* args,
     Py_ssize_t nargs
 ){
     if (PyArg_CheckPositional("index", nargs, 1, 3) < 0){
@@ -387,13 +387,13 @@ static PyObject* frozenlist_extend(FrozenListObject* self, PyObject* items){
 static PyObject* frozenlist_reverse(FrozenListObject* self, PyObject* Py_UNUSED(unused)){
     if (fl_check_frozen(self) < 0)
         return NULL;
-    if (PyList_Reverse(self->_items) < 0) 
+    if (PyList_Reverse(self->_items) < 0)
         return NULL;
     Py_RETURN_NONE;
 }
 
 static PyObject* frozenlist_pop(FrozenListObject* self,  PyObject *const* args, Py_ssize_t nargs){
-    /* prioritize this check first... */ 
+    /* prioritize this check first... */
     if (fl_check_frozen(self) < 0){
         return NULL;
     }
@@ -401,7 +401,7 @@ static PyObject* frozenlist_pop(FrozenListObject* self,  PyObject *const* args, 
     if (PyArg_CheckPositional("pop", nargs, 0, 1) < 0){
         return -1;
     }
-    
+
     /* get -1 by default otherwise get the index chosen.. */
     Py_ssize_t i = (nargs > 0) ? PyLong_AsSsize_t(args[0]) : -1;
     PyObject* item = frozenlist_sq_item(self, i);

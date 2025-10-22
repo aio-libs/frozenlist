@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-/* Exposed public version of _PyArg_CheckPositional 
+/* Exposed public version of _PyArg_CheckPositional
 to preverse compatability for normal python list exceptions */
 int
 PyArg_CheckPositional(const char *name, Py_ssize_t nargs,

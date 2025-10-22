@@ -1,7 +1,7 @@
 #ifndef __FL_ATOMICS_H__
 #define __FL_ATOMICS_H__
 
-/* from pyatomic_std.h & pyatomic_msvc.h, pyatomic_gcc.h for backwards & public compatability 
+/* from pyatomic_std.h & pyatomic_msvc.h, pyatomic_gcc.h for backwards & public compatability
 and combined with only required or needed functions */
 
 #include <stdint.h>
@@ -32,7 +32,7 @@ static inline int atomic_compare_exchange_uint8(uint8_t *obj, uint8_t *expected,
     atomic_compare_exchange_uint8(uint8_t *obj, uint8_t *expected, uint8_t desired)
     { return __atomic_compare_exchange_n(obj, expected, desired, 0,
                                          __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST); }
-    
+
     static inline void
     atomic_store_uint8(uint8_t *obj, uint8_t value)
     { __atomic_store_n(obj, value, __ATOMIC_SEQ_CST); }
@@ -62,12 +62,12 @@ static inline int atomic_compare_exchange_uint8(uint8_t *obj, uint8_t *expected,
         _FL_USING_STD;
         return atomic_load((const _Atomic(uint8_t)*)obj);
     }
-    static inline void 
+    static inline void
     atomic_store_uint8(uint8_t *obj, uint8_t value){
         _FL_USING_STD;
         atomic_store((_Atomic(uint8_t)*)obj, value);
     }
-    
+
 
 #elif defined(_MSC_VER)
     /* WINDOWS */

@@ -13,10 +13,10 @@ extern "C" {
 #include <Python.h>
 
 
-/* TODO: take in PyList's attributes instead of using the PyList when an approch for 
+/* TODO: take in PyList's attributes instead of using the PyList when an approch for
 Dealing with Py_GIL_DISABLED can be fully agreed on */
 
-/* Can't let _frozenlistobject subclass PyList because in the CPython API 
+/* Can't let _frozenlistobject subclass PyList because in the CPython API
 PyList would overpower freezing of the object */
 #if PY_VERSION_HEX >= 0x030c00f0
 #define MANAGED_WEAKREFS
@@ -28,7 +28,7 @@ typedef struct _frozenlistobject {
     PyObject *weaklist;
 #endif
     PyObject* _items;
-    uint8_t _frozen; /* C-Atomic variable */    
+    uint8_t _frozen; /* C-Atomic variable */
 } FrozenListObject;
 
 /* Macros */
@@ -43,16 +43,16 @@ typedef struct _frozenlistobject {
 
 #define FrozenList_CHECK_FROZEN(op) atomic_load_uint8((op->_frozen))
 
-/* Kept around to make mergeing to a CPython Module a bit easier 
+/* Kept around to make mergeing to a CPython Module a bit easier
 There will not be a C-API Capsule however as there's a possibility
-it breaks ABI Changes. https://github.com/aio-libs/frozenlist/pull/685 
-Maybe this idea will be changed in the future but for now IDK Everything is 
+it breaks ABI Changes. https://github.com/aio-libs/frozenlist/pull/685
+Maybe this idea will be changed in the future but for now IDK Everything is
 Questionable at the moment :/ - Vizonex
 */
 
 /* NOTE: Refs are handled in the main C Module */
 
-static inline int 
+static inline int
 fl_check_frozen(FrozenListObject* self){
     if (atomic_load_uint8(&(self->_frozen))){
         PyErr_SetString(PyExc_RuntimeError, "Cannot modify frozen list.");
@@ -63,7 +63,7 @@ fl_check_frozen(FrozenListObject* self){
 
 
 
-// static inline PyObject* 
+// static inline PyObject*
 // fl_get_item(FrozenListObject* self, Py_ssize_t i){
 //     if (!FrozenList_IS_VALID_INDEX(self, i)){
 //         PyErr_SetString(PyExc_IndexError, "list index out of range");
@@ -72,7 +72,7 @@ fl_check_frozen(FrozenListObject* self){
 //     return Py_NewRef(FrozenList_GET_ITEM(self, i));
 // }
 
-// static inline int 
+// static inline int
 // fl_set_item(FrozenListObject* self,  Py_ssize_t i, PyObject* v){
 //     if (fl_check_frozen(self) < 0){
 //         return -1;
