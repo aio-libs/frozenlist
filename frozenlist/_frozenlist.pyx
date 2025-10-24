@@ -6,7 +6,6 @@ from cpython.list cimport PyList_GET_SIZE
 from cpython.long cimport PyLong_FromLong
 from cpython.sequence cimport (
     PySequence_Count,
-    PySequence_Fast_ITEMS,
     PySequence_InPlaceConcat,
 )
 from libcpp.atomic cimport atomic
