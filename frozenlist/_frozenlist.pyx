@@ -4,7 +4,11 @@
 from cpython.bool cimport PyBool_FromLong
 from cpython.list cimport PyList_GET_SIZE
 from cpython.long cimport PyLong_FromLong
-from cpython.sequence cimport PySequence_InPlaceConcat, PySequence_Count, PySequence_Fast_ITEMS
+from cpython.sequence cimport (
+    PySequence_Count,
+    PySequence_Fast_ITEMS,
+    PySequence_InPlaceConcat,
+)
 from libcpp.atomic cimport atomic
 
 import copy
@@ -39,7 +43,7 @@ cdef class FrozenList:
 
     def __getitem__(self, index):
         return self._items[index]
-    
+
     def __setitem__(self, index, value):
         self._check_frozen()
         self._items[index] = value
@@ -75,7 +79,7 @@ cdef class FrozenList:
     def insert(self, *args):
         self._check_frozen()
         self._items.insert(*args)
-        
+
     def __contains__(self, item):
         return item in self._items
 
@@ -106,7 +110,7 @@ cdef class FrozenList:
         self._items.reverse()
 
     def pop(self, index=-1):
-        # XXX: Current pop is impossible to refractor and may 
+        # XXX: Current pop is impossible to refractor and may
         # require the Cython maintainers to brainstorm a new idea.
         self._check_frozen()
         return self._items.pop(index)
