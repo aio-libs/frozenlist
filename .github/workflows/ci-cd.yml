@@ -252,7 +252,7 @@ jobs:
         workflow-artifact-name: >-
           ${{ needs.pre-setup.outputs.dists-artifact-name }}
     - name: Download distributions
-      uses: actions/download-artifact@v5
+      uses: actions/download-artifact@v6
       with:
         path: dist
         pattern: ${{ needs.pre-setup.outputs.dists-artifact-name }}*
@@ -497,7 +497,7 @@ jobs:
           ${{ needs.pre-setup.outputs.dists-artifact-name }}
 
     - name: Download distributions
-      uses: actions/download-artifact@v5
+      uses: actions/download-artifact@v6
       with:
         path: dist
         pattern: ${{ needs.pre-setup.outputs.dists-artifact-name }}*
