@@ -2,8 +2,6 @@
 
 ci:
   autoupdate_schedule: quarterly
-  skip:
-  - actionlint-docker
 
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -184,10 +182,10 @@ repos:
     - --html-report=.tox/.tmp/.mypy/python-3.11
     pass_filenames: false
 
-- repo: https://github.com/rhysd/actionlint
+- repo: https://github.com/rhysd/actionlint.git
   rev: v1.7.7
   hooks:
-  - id: actionlint-docker
+  - id: actionlint
     args:
     - -ignore
     - >-  # https://github.com/rhysd/actionlint/issues/384
