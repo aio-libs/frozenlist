@@ -1,1 +1,3 @@
-Update the pull request template to be consistent with ``CHANGES/README.rst``, particularly the list of categories.
+The pull request template to be consistent with :ref:`the contributing guidelines
+<adding change notes with your prs>`, particularly the list of categories
+-- by :user:`musicinmybrain`.
