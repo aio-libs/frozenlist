@@ -108,7 +108,7 @@ jobs:
         }
         >> "${GITHUB_OUTPUT}"
     - name: Upload built artifacts for testing
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         if-no-files-found: error
         name: ${{ needs.pre-setup.outputs.dists-artifact-name  }}
@@ -252,7 +252,7 @@ jobs:
         workflow-artifact-name: >-
           ${{ needs.pre-setup.outputs.dists-artifact-name }}
     - name: Download distributions
-      uses: actions/download-artifact@v5
+      uses: actions/download-artifact@v6
       with:
         path: dist
         pattern: ${{ needs.pre-setup.outputs.dists-artifact-name }}*
@@ -497,7 +497,7 @@ jobs:
           ${{ needs.pre-setup.outputs.dists-artifact-name }}
 
     - name: Download distributions
-      uses: actions/download-artifact@v5
+      uses: actions/download-artifact@v6
       with:
         path: dist
         pattern: ${{ needs.pre-setup.outputs.dists-artifact-name }}*
