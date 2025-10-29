@@ -84,7 +84,7 @@ cdef class FrozenList:
 
     def __iadd__(self, items):
         self._check_frozen()
-        PySequence_InPlaceConcat(self._items, items)
+        self._items = PySequence_InPlaceConcat(self._items, items)
         return self
 
     def index(self, *args):
