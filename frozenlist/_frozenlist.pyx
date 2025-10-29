@@ -116,7 +116,7 @@ cdef class FrozenList:
 
     def append(self, item):
         self._check_frozen()
-        # Cython will generate an approperate function for append
+        # Cython will generate an appropriate function for append
         self._items.append(item)
 
     def count(self, item):
