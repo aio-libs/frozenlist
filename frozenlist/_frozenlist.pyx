@@ -109,7 +109,7 @@ cdef class FrozenList:
         self._items.reverse()
 
     def pop(self, index=-1):
-        # XXX: Current pop is impossible to refractor and may
+        # XXX: Current pop is impossible to refactor and may
         # require the Cython maintainers to brainstorm a new idea.
         self._check_frozen()
         return self._items.pop(index)
