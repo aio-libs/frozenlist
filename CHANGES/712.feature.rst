@@ -1,2 +1,2 @@
 Refractor methods `__len__`, `__iadd__`, `index`, `extend`, `append`, `count` and `__deecopy__` and add notes for `pop`, `append` and `extend` for contributors who are looking to
-refractor anything further. -- by :user:`Vizonex`.
+refractor anything further -- by :user:`Vizonex`.
