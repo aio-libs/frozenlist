@@ -1,0 +1,9 @@
+---
+
+# Workaround since actionlint does not include windows-11-arm support yet
+# https://github.com/rhysd/actionlint/issues/533
+self-hosted-runner:
+  labels:
+  - windows-11-arm
+
+...
