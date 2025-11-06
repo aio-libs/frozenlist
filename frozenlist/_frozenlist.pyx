@@ -11,7 +11,12 @@ from collections.abc import MutableSequence
 cimport cython
 
 
+<<<<<<< HEAD
 @cython.auto_pickle(False) # disable cython from doing pickling with atomic variables.
+=======
+# Disable pickling due to atomic variable
+@cython.auto_pickle(False)
+>>>>>>> b834c960eaab2c665a3f4769ab02a93eb3a9c48d
 cdef class FrozenList:
     __class_getitem__ = classmethod(types.GenericAlias)
 
@@ -147,6 +152,7 @@ cdef class FrozenList:
 
         return new_list
 
+<<<<<<< HEAD
     def __reduce_ex__(self, protocol):
         return type(self).__unreduce_ex__, (self.frozen, self._items)
 
@@ -156,6 +162,10 @@ cdef class FrozenList:
         if frozen:
             fl.freeze()
         return fl
+=======
+    def __reduce__(self):
+        return (self.__class__, (self._items, self.frozen))
+>>>>>>> b834c960eaab2c665a3f4769ab02a93eb3a9c48d
 
 
 MutableSequence.register(FrozenList)
