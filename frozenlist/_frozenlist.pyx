@@ -10,7 +10,6 @@ from collections.abc import MutableSequence
 
 cimport cython
 
-
 <<<<<<< HEAD
 @cython.auto_pickle(False) # disable cython from doing pickling with atomic variables.
 =======
