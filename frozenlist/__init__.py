@@ -74,16 +74,16 @@ class PyFrozenList(MutableSequence):
         else:
             raise RuntimeError("Cannot hash unfrozen list.")
 
-
     def __reduce_ex__(self, protocol):
         return type(self).__unreduce_ex__, (self._frozen, self._items)
 
     @classmethod
-    def __unreduce_ex__(cls, frozen:bool, _items:list):
+    def __unreduce_ex__(cls, frozen: bool, _items: list):
         fl = cls(_items)
         if frozen:
             fl.freeze()
         return fl
+
 
 if not NO_EXTENSIONS:
     try:
