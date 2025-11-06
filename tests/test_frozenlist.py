@@ -1,11 +1,11 @@
 # FIXME:
 # mypy: disable-error-code="misc"
 
+import pickle
 from collections.abc import MutableSequence
 from copy import deepcopy
 
 import pytest
-import pickle
 
 from frozenlist import FrozenList, PyFrozenList
 
@@ -377,7 +377,7 @@ class FrozenListMixin:
         f = self.FrozenList([1, 2])
         result = pickle.loads(pickle.dumps(f))
         assert result == f
-    
+
     def test_pickling_frozen(self):
         f = self.FrozenList([1, 2])
         f.freeze()

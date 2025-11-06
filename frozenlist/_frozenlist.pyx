@@ -10,6 +10,7 @@ from collections.abc import MutableSequence
 
 cimport cython
 
+
 # Disable pickling due to atomic variable
 @cython.auto_pickle(False)
 cdef class FrozenList:
@@ -149,6 +150,6 @@ cdef class FrozenList:
 
     def __reduce__(self):
         return (self.__class__, (self._items, self.frozen))
-    
+
 
 MutableSequence.register(FrozenList)

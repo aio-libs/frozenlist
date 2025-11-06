@@ -73,6 +73,7 @@ class FrozenList(MutableSequence):
         else:
             raise RuntimeError("Cannot hash unfrozen list.")
 
+
 PyFrozenList = FrozenList
 
 
