@@ -17,6 +17,9 @@ class FrozenListMixin:
         "__slots__",
         "__static_attributes__",
         "__firstlineno__",
+        # Since Python 3.15.0a2: https://github.com/python/cpython/pull/132345
+        "__annotate_func__",
+        "__annotations_cache__",
     }
 
     def test___class_getitem__(self) -> None:
