@@ -1,4 +1,4 @@
 build
 pre-commit==4.3.0
 twine
-types-setuptools==80.9.0.20250822
+types-setuptools==80.9.0.20251223
