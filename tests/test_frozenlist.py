@@ -18,6 +18,7 @@ class FrozenListMixin:
         "__static_attributes__",
         "__firstlineno__",
         "__annotations_cache__",
+        "__annotate_func__",
     }
 
     def test___class_getitem__(self) -> None:
