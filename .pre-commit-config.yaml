@@ -15,17 +15,17 @@ repos:
     additional_dependencies:
     - wemake-python-styleguide
 - repo: https://github.com/PyCQA/isort
-  rev: '6.1.0'
+  rev: '8.0.1'
   hooks:
   - id: isort
 - repo: https://github.com/psf/black-pre-commit-mirror
-  rev: '25.9.0'
+  rev: '26.3.1'
   hooks:
   - id: black
     language_version: python3  # Should be a command that runs python3
 
 - repo: https://github.com/python-jsonschema/check-jsonschema.git
-  rev: 0.34.0
+  rev: 0.37.1
   hooks:
   - id: check-github-workflows
     files: ^\.github/workflows/[^/]+$
@@ -74,7 +74,7 @@ repos:
   - id: detect-private-key
     exclude: ^examples/
 - repo: https://github.com/asottile/pyupgrade
-  rev: 'v3.20.0'
+  rev: 'v3.21.2'
   hooks:
   - id: pyupgrade
     args: ['--py36-plus']
@@ -85,19 +85,19 @@ repos:
     exclude: "^docs/"
 
 - repo: https://github.com/codespell-project/codespell.git
-  rev: v2.4.1
+  rev: v2.4.2
   hooks:
   - id: codespell
 
 - repo: https://github.com/adrienverge/yamllint.git
-  rev: v1.37.1
+  rev: v1.38.0
   hooks:
   - id: yamllint
     args:
     - --strict
 
 - repo: https://github.com/MarcoGorelli/cython-lint.git
-  rev: v0.17.0
+  rev: v0.19.0
   hooks:
   - id: cython-lint
 
@@ -161,7 +161,7 @@ repos:
     - rst
 
 - repo: https://github.com/pre-commit/mirrors-mypy.git
-  rev: v1.18.2
+  rev: v1.20.0
   hooks:
   - id: mypy
     alias: mypy-py311
@@ -181,7 +181,7 @@ repos:
     pass_filenames: false
 
 - repo: https://github.com/rhysd/actionlint.git
-  rev: v1.7.7
+  rev: v1.7.12
   hooks:
   - id: actionlint
     args:
