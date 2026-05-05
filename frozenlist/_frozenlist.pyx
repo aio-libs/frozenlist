@@ -2,15 +2,13 @@
 # distutils: language = c++
 
 from cpython.bool cimport PyBool_FromLong
-from cpython.list cimport ( 
-    # Cython makes an unessesary amount of NoneChecks on self._items
-    # So tthe C-API is used as a workaround for these bottlenecks.
-    PyList_GET_SIZE, 
-    PyList_Append, 
-    PyList_Insert,
+from cpython.list cimport (  # Cython makes an unessesary amount of NoneChecks on self._items; So tthe C-API is used as a workaround for these bottlenecks.
+    PyList_Append,
     PyList_Clear,
-    PyList_Reverse,
     PyList_Extend,
+    PyList_GET_SIZE,
+    PyList_Insert,
+    PyList_Reverse,
 )
 from cpython.sequence cimport PySequence_Index
 from libcpp.atomic cimport atomic
@@ -122,7 +120,7 @@ cdef class FrozenList:
     def pop(self, index=-1):
         # XXX: Currently pop is impossible to refactor
         # any other ways as PyList_Pop doesn't exist yet...
-        # An equivilent of MutableSequence.pop gets 
+        # An equivilent of MutableSequence.pop gets
         # around this problem.
         self._check_frozen()
         return self._items.pop(index)
@@ -130,7 +128,7 @@ cdef class FrozenList:
     def append(self, item):
         self._check_frozen()
         # Cython will generate an appropriate function for append
-        # However, Cython does an unnessesary None check before 
+        # However, Cython does an unnessesary None check before
         # calling PyList_Append so calling directly is the faster choice.
         PyList_Append(self._items, item)
 
