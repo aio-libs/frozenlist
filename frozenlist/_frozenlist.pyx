@@ -2,18 +2,31 @@
 # distutils: language = c++
 
 from cpython.bool cimport PyBool_FromLong
-from cpython.list cimport PyList_GET_SIZE
-from cpython.long cimport PyLong_FromLong
-from cpython.sequence cimport (
-    PySequence_Count,
-    PySequence_InPlaceConcat,
+from cpython.list cimport ( 
+    # Cython makes an unessesary amount of NoneChecks on self._items
+    # So tthe C-API is used as a workaround for these bottlenecks.
+    PyList_GET_SIZE, 
+    PyList_Append, 
+    PyList_Insert,
+    PyList_Clear,
+    PyList_Reverse,
+    PyList_Extend,
 )
+from cpython.sequence cimport PySequence_Index
 from libcpp.atomic cimport atomic
 
 import copy
 import types
 from collections.abc import MutableSequence
 
+
+cdef extern from "Python.h":
+    # XXX: Cython makes an unessesary list-check in __iadd__
+    # changing the signature of the function to say it returns a list
+    # remedies the problems.
+    list PySequence_InPlaceConcat(object o1, object o2)
+    # Signature in Cython's module is wrong.
+    Py_ssize_t PySequence_Count(object o, object value) except -1
 
 cdef class FrozenList:
     __class_getitem__ = classmethod(types.GenericAlias)
@@ -75,9 +88,9 @@ cdef class FrozenList:
         if op == 5:  # =>
             return list(self) >= other
 
-    def insert(self, *args):
+    def insert(self, index, value):
         self._check_frozen()
-        self._items.insert(*args)
+        PyList_Insert(self._items, index, value)
 
     def __contains__(self, item):
         return item in self._items
@@ -87,42 +100,44 @@ cdef class FrozenList:
         self._items = PySequence_InPlaceConcat(self._items, items)
         return self
 
-    def index(self, *args):
-        return self._items.index(*args)
+    def index(self, item):
+        return PySequence_Index(self._items, item)
 
-    def remove(self, item):
+    def remove(self, value):
         self._check_frozen()
-        self._items.remove(item)
+        self._items.remove(value)
 
     def clear(self):
         self._check_frozen()
-        self._items.clear()
+        PyList_Clear(self._items)
 
     def extend(self, items):
         self._check_frozen()
-        # Cython will generate __Pyx_PyList_Extend
-        self._items.extend(items)
+        PyList_Extend(self._items, items)
 
     def reverse(self):
         self._check_frozen()
-        # Cython will do PyList_Reverse by default...
-        self._items.reverse()
+        PyList_Reverse(self._items)
 
     def pop(self, index=-1):
-        # XXX: Current pop is impossible to refactor and may
-        # require the Cython maintainers to brainstorm a new idea.
+        # XXX: Currently pop is impossible to refactor
+        # any other ways as PyList_Pop doesn't exist yet...
+        # An equivilent of MutableSequence.pop gets 
+        # around this problem.
         self._check_frozen()
         return self._items.pop(index)
 
     def append(self, item):
         self._check_frozen()
         # Cython will generate an appropriate function for append
-        self._items.append(item)
+        # However, Cython does an unnessesary None check before 
+        # calling PyList_Append so calling directly is the faster choice.
+        PyList_Append(self._items, item)
 
     def count(self, item):
         # NOTE: doing self._items.count(item) Generates expensive call
-        # As for PyLong_FromLong it's a bit faster to call the direct C-API
-        return PyLong_FromLong(PySequence_Count(self._items, item))
+        # making it a bit faster to call the direct C-API
+        return PySequence_Count(self._items, item)
 
     def __repr__(self):
         return '<FrozenList(frozen={}, {!r})>'.format(self._frozen.load(),
