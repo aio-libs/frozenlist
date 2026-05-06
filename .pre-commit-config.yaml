@@ -161,7 +161,7 @@ repos:
     - rst
 
 - repo: https://github.com/pre-commit/mirrors-mypy.git
-  rev: v1.20.0
+  rev: v1.20.2
   hooks:
   - id: mypy
     alias: mypy-py311
