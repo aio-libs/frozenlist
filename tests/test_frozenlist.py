@@ -14,6 +14,7 @@ class FrozenListMixin:
 
     SKIP_METHODS = {
         "__abstractmethods__",
+        "__annotate_func__",
         "__annotations_cache__",
         "__slots__",
         "__static_attributes__",
