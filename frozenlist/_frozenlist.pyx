@@ -127,10 +127,6 @@ cdef class FrozenList:
         cdef FrozenList new_list
         obj_id = id(self)
 
-        # Return existing copy if already processed (circular reference)
-        if obj_id in memo:
-            return memo[obj_id]
-
         # Create new instance and register immediately
         new_list = self.__class__([])
         memo[obj_id] = new_list
@@ -143,6 +139,16 @@ cdef class FrozenList:
             new_list.freeze()
 
         return new_list
+
+    def __reduce__(self):
+        return (
+            self.__class__,
+            (self._items,),
+            {"_frozen": self._frozen.load()},
+        )
+
+    def __setstate__(self, state):
+        self._frozen.store(state["_frozen"])
 
 
 MutableSequence.register(FrozenList)

@@ -1,12 +1,20 @@
 # FIXME:
 # mypy: disable-error-code="misc"
 
+import pickle
 from collections.abc import MutableSequence
 from copy import deepcopy
 
 import pytest
 
 from frozenlist import FrozenList, PyFrozenList
+
+try:
+    from frozenlist import CFrozenList
+
+    HAS_CFROZENLIST = True
+except ImportError:
+    HAS_CFROZENLIST = False
 
 
 class FrozenListMixin:
@@ -273,6 +281,17 @@ class FrozenListMixin:
         with pytest.raises(RuntimeError):
             copied.append(4)
 
+    def test_deepcopy_frozen_circular(self) -> None:
+        orig = self.FrozenList([1, 2])
+        orig.append(orig)  # Create circular reference
+        orig.freeze()
+        copied = deepcopy(orig)
+        assert copied[0] == 1
+        assert copied[1] == 2
+        assert copied[2] is copied
+        assert copied is not orig
+        assert orig.frozen
+
     def test_deepcopy_nested(self) -> None:
         inner = self.FrozenList([1, 2])
         orig = self.FrozenList([inner, 3])
@@ -372,10 +391,76 @@ class FrozenListMixin:
         assert len(copied[1]) == 3  # Should see the change
         assert len(shared) == 2  # Original unchanged
 
+    @pytest.mark.parametrize("freeze", [True, False], ids=["frozen", "not frozen"])
+    def test_picklability(self, freeze: bool) -> None:
+        # Test that the list can be pickled and unpickled successfully
+        orig = self.FrozenList([1, 2, 3])
+        if freeze:
+            orig.freeze()
 
-class TestFrozenList(FrozenListMixin):
-    FrozenList = FrozenList  # type: ignore[assignment]  # FIXME
+        assert orig.frozen == freeze
+
+        pickled = pickle.dumps(orig)
+        unpickled = pickle.loads(pickled)
+        assert unpickled == orig
+        assert unpickled is not orig
+        assert list(unpickled) == list(orig)
+
+        assert unpickled.frozen == freeze
+
+    @pytest.mark.parametrize("freeze", [True, False], ids=["frozen", "not frozen"])
+    def test_picklability_forward_compatible(self, freeze: bool) -> None:
+        orig = self.FrozenList([1, 2])
+        if freeze:
+            orig.freeze()
+
+        assert orig.frozen == freeze
+
+        # 0 is the original pickle protocol. It's compatible with all supported Python versions.
+        pickled = pickle.dumps(orig, protocol=0)
+
+        # If this test breaks, we've changed the frozenlist data structure in an incompatible way
+        # with previous pickled binaries.
+        if self.FrozenList is PyFrozenList:
+            if freeze:
+                assert (
+                    pickled
+                    == b"cfrozenlist\nPyFrozenList\np0\n((lp1\nI1\naI2\natp2\nRp3\n(dp4\nV_frozen\np5\nI01\nsb."
+                )
+            else:
+                assert (
+                    pickled
+                    == b"cfrozenlist\nPyFrozenList\np0\n((lp1\nI1\naI2\natp2\nRp3\n(dp4\nV_frozen\np5\nI00\nsb."
+                )
+        elif self.FrozenList is FrozenList:
+            if freeze:
+                assert (
+                    pickled
+                    == b"cfrozenlist._frozenlist\nFrozenList\np0\n((lp1\nI1\naI2\natp2\nRp3\n(dp4\nV_frozen\np5\nI01\nsb."
+                )
+            else:
+                assert (
+                    pickled
+                    == b"cfrozenlist._frozenlist\nFrozenList\np0\n((lp1\nI1\naI2\natp2\nRp3\n(dp4\nV_frozen\np5\nI00\nsb."
+                )
+        else:
+            pytest.fail("Unknown FrozenList implementation.")
+
+
+if HAS_CFROZENLIST:
+    # If we don't have CFrozenList, skip adding the test class specifically for it.
+    class TestFrozenList(FrozenListMixin):
+        FrozenList = CFrozenList  # type: ignore[assignment]  # FIXME
 
 
 class TestFrozenListPy(FrozenListMixin):
+    # All implementations will at least have the Python version.
     FrozenList = PyFrozenList  # type: ignore[assignment]  # FIXME
+
+
+def test_frozenlist_aliasing() -> None:
+    """Test that FrozenList name points to the C extension if available, else to PyFrozenList."""
+    if HAS_CFROZENLIST:
+        assert FrozenList is CFrozenList
+    else:
+        assert FrozenList is PyFrozenList

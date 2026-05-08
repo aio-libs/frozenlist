@@ -1,0 +1,5 @@
+Fixed a bug where :class:`~frozenlist.FrozenList` could not be pickled/unpickled.
+
+Pickling is a requirement for :class:`~frozenlist.FrozenList` to be able to be passed to :class:`multiprocessing.Process`\ es. Without this
+fix, users receive a :exc:`TypeError` upon attempting to pickle a :class:`~frozenlist.FrozenList`.
+-- by :user:`csm10495`.

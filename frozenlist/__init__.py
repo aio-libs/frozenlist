@@ -1,3 +1,4 @@
+import copy
 import os
 import types
 from collections.abc import MutableSequence
@@ -12,7 +13,7 @@ NO_EXTENSIONS = bool(os.environ.get("FROZENLIST_NO_EXTENSIONS"))  # type: bool
 
 
 @total_ordering
-class FrozenList(MutableSequence):
+class PyFrozenList(MutableSequence):
     __slots__ = ("_frozen", "_items")
     __class_getitem__ = classmethod(types.GenericAlias)
 
@@ -73,8 +74,36 @@ class FrozenList(MutableSequence):
         else:
             raise RuntimeError("Cannot hash unfrozen list.")
 
+    def __deepcopy__(self, memo: dict[int, object]):
+        obj_id = id(self)
 
-PyFrozenList = FrozenList
+        # Create new instance and register immediately
+        new_list = self.__class__([])
+        memo[obj_id] = new_list
+
+        # Deep copy items
+        new_list._items[:] = [copy.deepcopy(item, memo) for item in self._items]
+
+        # Preserve frozen state
+        if self._frozen:
+            new_list.freeze()
+
+        return new_list
+
+    def __reduce__(self):
+        return (
+            self.__class__,
+            (self._items,),
+            {"_frozen": self._frozen},
+        )
+
+    def __setstate__(self, state: dict[str, object]):
+        self._frozen = state["_frozen"]
+
+
+# Rename the pure Python implementation. The C extension (if available) will
+# override this name.
+FrozenList = PyFrozenList
 
 
 if not NO_EXTENSIONS:

@@ -1,6 +1,7 @@
 - Contributors -
 ----------------
 Andrew Svetlov
+Charles Machalow
 Edgar Ramírez-Mondragón
 Marcin Konowalczyk
 Martijn Pieters
