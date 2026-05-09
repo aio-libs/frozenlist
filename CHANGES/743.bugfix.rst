@@ -1,0 +1,3 @@
+Fixed ``copy.copy()`` producing a broken shallow copy that shared
+the internal items list with the original ``FrozenList``, causing
+mutations to one to affect the other -- by :user:`veeceey`.

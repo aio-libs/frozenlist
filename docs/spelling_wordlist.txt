@@ -249,6 +249,8 @@ resolvehost
 resolvers
 reusage
 reuseconn
+riscv
+riscv64
 Runit
 runtimes
 sa

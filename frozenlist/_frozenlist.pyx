@@ -147,6 +147,13 @@ cdef class FrozenList:
         else:
             raise RuntimeError("Cannot hash unfrozen list.")
 
+    def __copy__(self):
+        cdef FrozenList new_list
+        new_list = self.__class__(self._items)
+        if self._frozen.load():
+            new_list.freeze()
+        return new_list
+
     def __deepcopy__(self, memo):
         cdef FrozenList new_list
         obj_id = id(self)

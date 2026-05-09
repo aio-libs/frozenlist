@@ -31,7 +31,7 @@ jobs:
     timeout-minutes: 5
     steps:
     - name: Checkout
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
     - name: Setup Python ${{ env.PYTHON_LATEST }}
       uses: actions/setup-python@v6
       with:
@@ -47,7 +47,7 @@ jobs:
         cache-key-for-dependency-files: >-
           ${{ steps.calc-cache-key-files.outputs.cache-key-for-dep-files }}
     - name: Cache pre-commit.com virtualenvs
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ~/.cache/pre-commit
         key: >-
