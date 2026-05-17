@@ -28,12 +28,6 @@ concurrency:
 env:
   COLOR: >-  # Supposedly, pytest or coveragepy use this
     yes
-  # The Cython.Coverage plugin uses file tracers which the SysMonitor
-  # core (default on Python 3.14+ with coverage.py >= 7.7) does not
-  # support, so pin the coverage core to ``ctrace``. The env var has
-  # been honored since coverage.py 7.4 and is a no-op on older
-  # versions whose default core is already ``ctrace``.
-  COVERAGE_CORE: ctrace
   FORCE_COLOR: 1  # Request colored output from CLI tools supporting it
   MYPY_FORCE_COLOR: 1  # MyPy's color enforcement
   PIP_DISABLE_PIP_VERSION_CHECK: 1
@@ -247,6 +241,15 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     continue-on-error: ${{ matrix.experimental }}
+    env:
+      # Pin the coverage.py core to ``ctrace`` on CPython. On Python
+      # 3.14+ with coverage.py >= 7.7, the default is the ``sysmon``
+      # core, which does not support plugin file tracers and breaks
+      # the ``Cython.Coverage`` plugin. PyPy ships without CTracer
+      # and would abort with "COVERAGE_CORE is 'ctrace' but can't
+      # import CTracer!", so leave the value empty there.
+      COVERAGE_CORE: >-
+        ${{ startsWith(matrix.pyver, 'pypy') && '' || 'ctrace' }}
     steps:
     - name: Retrieve the project source from an sdist inside the GHA artifact
       uses: re-actors/checkout-python-sdist@release/v2
