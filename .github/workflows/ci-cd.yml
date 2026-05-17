@@ -28,6 +28,12 @@ concurrency:
 env:
   COLOR: >-  # Supposedly, pytest or coveragepy use this
     yes
+  # The Cython.Coverage plugin uses file tracers which the SysMonitor
+  # core (default on Python 3.14+ with coverage.py >= 7.7) does not
+  # support, so pin the coverage core to ``ctrace``. The env var has
+  # been honored since coverage.py 7.4 and is a no-op on older
+  # versions whose default core is already ``ctrace``.
+  COVERAGE_CORE: ctrace
   FORCE_COLOR: 1  # Request colored output from CLI tools supporting it
   MYPY_FORCE_COLOR: 1  # MyPy's color enforcement
   PIP_DISABLE_PIP_VERSION_CHECK: 1
