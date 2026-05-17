@@ -1,0 +1,4 @@
+Added an ``AGENTS.md`` file at the repository root with
+orientation and pull request rules for LLM-based contributors,
+adapted from the ``yarl`` and ``multidict`` equivalents
+-- by :user:`bdraco`.
