@@ -14,15 +14,23 @@ repos:
   - id: yesqa
     additional_dependencies:
     - wemake-python-styleguide
-- repo: https://github.com/PyCQA/isort
-  rev: '8.0.1'
+- repo: https://github.com/astral-sh/ruff-pre-commit.git
+  rev: v0.15.13
   hooks:
-  - id: isort
-- repo: https://github.com/psf/black-pre-commit-mirror
-  rev: '26.3.1'
-  hooks:
-  - id: black
-    language_version: python3  # Should be a command that runs python3
+  - id: ruff-check
+    name: ruff check | frozenlist & tests
+    # Uses the [tool.ruff] config in pyproject.toml. Enforces the ``I``
+    # rule (import sorting, replacing the standalone isort hook). Runs
+    # before ruff-format because --fix is used.
+    args:
+    # Ref: https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+    - --exit-non-zero-on-fix
+    - --fix
+    - --show-fixes
+  - id: ruff-format
+    name: ruff format | frozenlist & tests
+    # Replaces the standalone black hook. Defaults to a black-compatible
+    # 88-column style; see [tool.ruff] in pyproject.toml.
 
 - repo: https://github.com/python-jsonschema/check-jsonschema.git
   rev: 0.37.1
