@@ -241,6 +241,18 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     continue-on-error: ${{ matrix.experimental }}
+    env:
+      # Pin the coverage.py core to ``ctrace`` on CPython. On Python
+      # 3.14+ with coverage.py >= 7.7, the default is the ``sysmon``
+      # core, which does not support plugin file tracers and breaks
+      # the ``Cython.Coverage`` plugin. PyPy ships without CTracer
+      # and would abort with "COVERAGE_CORE is 'ctrace' but can't
+      # import CTracer!", so use ``pytrace`` there (its default).
+      # An empty string would be falsy in the GHA expression below
+      # and collapse back to ``ctrace``, so the PyPy branch needs a
+      # real value.
+      COVERAGE_CORE: >-
+        ${{ startsWith(matrix.pyver, 'pypy') && 'pytrace' || 'ctrace' }}
     steps:
     - name: Retrieve the project source from an sdist inside the GHA artifact
       uses: re-actors/checkout-python-sdist@release/v2

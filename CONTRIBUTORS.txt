@@ -2,6 +2,7 @@
 ----------------
 Andrew Svetlov
 Edgar Ramírez-Mondragón
+J. Nick Koston
 Marcin Konowalczyk
 Martijn Pieters
 Pau Freixes
