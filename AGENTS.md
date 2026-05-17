@@ -282,6 +282,43 @@ Python is declared in `pyproject.toml`
 (`requires-python = ">=3.9"`); do not use syntax or stdlib
 features that postdate it.
 
+### Every line in a test must be covered
+
+The coverage gate applies to test code too, not just
+`frozenlist/`. A test that contains a branch or statement the
+suite never reaches will fail CI. This catches a class of
+mistake agents make all the time: defensive `raise` inside a
+monkeypatched stub, a cleanup branch behind
+`if had_own_getstate:` that the happy path never enters, an
+`else` arm guarding a condition that is always true under the
+fixture. From the perspective of a unit suite all of those
+lines are dead code, and the coverage report flags them the
+same as dead code in `frozenlist/`.
+
+Design tests so every line runs:
+
+- Drive the fixture deterministically so both arms of any
+  conditional are hit, or drop the conditional entirely and
+  assert the single shape you actually set up.
+- Do not add `raise TypeError("must not be invoked")` guards
+  inside stubs the test installs; if the stub is never meant to
+  fire, either omit it or assert at the call site that it did
+  not. An unreachable `raise` is the most common form of this
+  failure.
+- Cleanup branches that only run when setup took a particular
+  shape (`if had_own_getstate: ...` style restores) need a
+  second test, or a parametrize, that exercises the other shape.
+  If you cannot justify the second case, unconditionally restore
+  instead.
+- Prefer `monkeypatch` (which auto-reverts) over hand-rolled
+  save/restore blocks; the auto-revert path has no untaken
+  branch for coverage to flag.
+
+See [aio-libs/yarl#1687](https://github.com/aio-libs/yarl/pull/1687)
+for the canonical example: the test added an unreachable `raise`
+inside a patched `__getstate__` and a conditional restore of the
+original attribute, both of which CI rejected as uncovered.
+
 ## Cython extension
 
 `frozenlist/_frozenlist.pyx` is the compiled implementation
@@ -334,6 +371,11 @@ than disabling the check).
   (`frozenlist/_frozenlist.c`,
   `frozenlist/_frozenlist.html`, `*.so`) alongside source
   changes.
+- Do not leave unreachable lines in tests (defensive `raise`
+  inside a stub the suite never invokes, cleanup branches that
+  only run for a setup shape the test does not exercise). The
+  coverage gate applies to test code; see _Every line in a test
+  must be covered_ above.
 - Do not change one of the two `FrozenList` implementations
   (Cython or pure-Python) without making the matching change
   in the other and extending the tests so both paths are
