@@ -1,0 +1,5 @@
+Pinned the coverage core to ``ctrace`` in :file:`.coveragerc`
+so that the ``Cython.Coverage`` plugin keeps working on Python
+3.14, where coverage otherwise defaults to the ``sysmon`` core
+that does not support plugin file tracers
+-- by :user:`bdraco`.
