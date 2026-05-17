@@ -1,0 +1,348 @@
+# Notes for LLM contributors
+
+## Rule zero: prove it works before opening the PR
+
+**Your job is to deliver code that is proven to work.** If you
+have not proven the change works, it is not time to open the PR
+yet. "It compiles", "type checks pass", and "the diff looks
+right" are not proof. Proof is: the relevant tests run locally
+and pass, the new behaviour is exercised by a test you added or
+extended, and any user-visible path you touched has been
+executed end-to-end. If you cannot run the suite in your
+environment, say so explicitly in the PR body rather than
+implying coverage you did not actually achieve. Opening a PR
+that turns out not to work wastes the reviewer's time and is
+the single fastest way to lose trust on this repo.
+
+The rest of this document covers how to dress up that proven
+change for review. None of it matters if rule zero is not met.
+
+---
+
+Read this before opening a pull request against
+`aio-libs/frozenlist`. Agents keep getting the same things
+wrong in this repo, so the rules below are not optional. If
+you are about to skip a section because it sounds boilerplate,
+that is exactly the section to re-read.
+
+Human-facing contributor docs live under
+[docs/contributing/](docs/contributing/) and
+[CHANGES/README.rst](CHANGES/README.rst); this file is the
+short orientation for agents.
+
+## What this project is
+
+`frozenlist` provides `FrozenList`, a list-like
+`collections.abc.MutableSequence` that becomes immutable (and
+hashable) once `freeze()` is called. It is a small, widely
+deployed dependency of `aiohttp` and the rest of the
+`aio-libs` stack, so it is performance sensitive. The
+pure-Python implementation lives in `frozenlist/__init__.py`
+and the Cythonized fast path lives in
+`frozenlist/_frozenlist.pyx`; the package picks the compiled
+class when the extension is importable and falls back to the
+pure-Python `PyFrozenList` otherwise (or when the
+`FROZENLIST_NO_EXTENSIONS` environment variable is set).
+
+Useful entry points:
+
+| Path                          | What                                                   |
+| ----------------------------- | ------------------------------------------------------ |
+| `frozenlist/__init__.py`      | pure-Python `FrozenList`, public API, extension loader |
+| `frozenlist/__init__.pyi`     | type stubs for the public API                          |
+| `frozenlist/_frozenlist.pyx`  | Cython `FrozenList` (hot path; ships in wheels)        |
+| `tests/test_frozenlist.py`    | pytest suite (covers both implementations)             |
+| `CHANGES/`                    | towncrier news fragments, one per PR                   |
+| `docs/`                       | Sphinx docs source                                     |
+| `packaging/pep517_backend/`   | in-tree PEP 517 backend that drives `cythonize`        |
+
+## Pull request rules
+
+These are the rules agents most often violate. Treat them as
+mandatory.
+
+### 1. Use the aio-libs pull request template
+
+`frozenlist` ships its own
+[`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md)
+following the standard `aio-libs` shape. Do not invent your
+own `## What / ## Why / ## How / ## Testing` layout; that is
+the marker that the PR was written by an agent without reading
+the conventions.
+
+Fill out the template verbatim, like so:
+
+```markdown
+<!-- Thank you for your contribution! -->
+
+## What do these changes do?
+
+<short prose describing the change>
+
+## Are there changes in behavior for the user?
+
+<yes or no, plus a sentence if yes>
+
+## Related issue number
+
+Fixes #NNNN
+<!-- or a bare reference if the change is related but does not close -->
+
+## Checklist
+
+- [x] I think the code is well written
+- [x] Unit tests for the changes exist
+- [x] Documentation reflects the changes
+- [ ] If you provide code modifications, please add yourself to `CONTRIBUTORS.txt`
+- [x] Add a new news fragment into the `CHANGES` folder
+```
+
+Tick the boxes that actually apply. If a row does not apply
+(e.g. CI-only change with no tests), write `N/A` next to it
+rather than silently leaving it blank.
+
+### 2. Add a CHANGES fragment
+
+Every user-visible PR needs a towncrier news fragment in
+`CHANGES/`, named `<pr_number>.<category>.rst`. Categories
+(defined in [CHANGES/README.rst](CHANGES/README.rst) and
+[`towncrier.toml`](towncrier.toml)):
+
+| Category       | When to use                                                     |
+| -------------- | --------------------------------------------------------------- |
+| `bugfix`       | corrects undesired behaviour                                    |
+| `feature`      | new public API or behaviour                                     |
+| `deprecation`  | announces a future removal                                      |
+| `breaking`     | removes or changes something public in a breaking way           |
+| `doc`          | documentation structure or build process                        |
+| `packaging`    | downstream-visible packaging or build changes                   |
+| `contrib`      | contributor experience (CI, dev env, test invocation)           |
+| `misc`         | does not fit any of the above                                   |
+
+Conventions for the fragment body:
+
+- Use the past tense (`Fixed`, `Added`, `Bumped`), since it is
+  read as a "what changed since the previous release" digest.
+- Use reStructuredText, not Markdown.
+- Do not include the issue or PR number in the body; towncrier
+  adds it automatically from the filename.
+- Sign with `-- by :user:\`github-handle\`` at the end.
+
+Example (`CHANGES/743.bugfix.rst` style):
+
+```rst
+Fixed ``copy.copy()`` sharing the internal list between the
+original and the copy, so mutating one no longer mutates the
+other -- by :user:`github-handle`.
+```
+
+Pick the number for the fragment filename as follows:
+
+- **If the change has a linked issue, name the fragment after
+  the issue number** (e.g. `CHANGES/757.contrib.rst` for a
+  change that closes `#757`). The issue number is stable and
+  known before the PR is opened.
+- **If there is no linked issue,** you have two options:
+  - Open the PR first, then add the fragment as a follow-up
+    commit on the same branch using the assigned PR number; or
+  - Guess the next PR number (scan
+    `gh pr list --state all --limit 5` for the current top of
+    the range), include the fragment in your initial push, and
+    rename in a follow-up commit if the guess was off by the
+    time the PR opened.
+- **If both an issue and a PR number are in play and you want
+  both to resolve,** keep the issue-numbered file as the real
+  fragment and add a symlink at
+  `CHANGES/<pr_number>.<category>.rst` pointing to it, so
+  towncrier and the GitHub cross-reference both find the
+  entry:
+
+  ```bash
+  ln -s 757.contrib.rst CHANGES/760.contrib.rst
+  ```
+
+### 3. Open the PR as a draft, and leave it that way
+
+Use `gh pr create --draft`. **Every LLM-authored submission
+must be fully reviewed by a human before it is marked ready
+out of draft, with no exceptions.** That review is the
+responsibility of the person running the agent, not of the
+project maintainers; do not shift the burden of reviewing LLM
+work onto them. Maintainers do not look at drafts, so the
+draft state is the agent's hand-off to the operator's review,
+not a request for the project to review the code on the
+operator's behalf. Do not mark the PR ready yourself, and do
+not request reviewers from the agent session; the human who
+reviewed the change and flipped it out of draft is the one who
+routes it.
+
+### 4. Disclose the agent, do not advertise it
+
+Disclosure is required, advertising is not welcome. Put one
+plain line at the bottom of the PR body naming the agent that
+drafted the change, for example:
+
+```
+Drafted with <agent name and version>; reviewed by <human handle>.
+```
+
+That single line is enough. Beyond that:
+
+- **No `Co-Authored-By:` trailers** for an LLM or any AI tool,
+  in commits or in the PR body. Attribution goes to the human
+  who reviewed the change.
+- **Agent output goes in a footer below the PR summary,
+  ideally in a collapsed `<details>` block.** The aio-libs
+  template sections (What / Are there changes in behavior /
+  etc.) come first and read like a human wrote them. Anything
+  the agent wants to surface for reviewers (scan results, test
+  logs, branch hygiene notes, pipeline output) goes
+  underneath that. A collapsed `<details>` block at the very
+  bottom is the recommended shape; it keeps the summary
+  readable while still letting a curious reviewer expand the
+  agent's work:
+
+  ```markdown
+  <details>
+  <summary>Agent run details (optional, for reviewers)</summary>
+
+  Tests: <command and result>
+  Lint: <command and result>
+  </details>
+  ```
+
+  What is not OK is mixing this content into the template
+  sections themselves, or pushing it above the human-readable
+  summary so reviewers have to scroll past it. The shape and
+  content of the footer is otherwise up to the agent.
+- No `🤖`, `✨`, `🚀` emoji decoration in commit messages, PR
+  titles, PR bodies, or news fragments. Project style is
+  plain prose.
+- Commit messages and PR prose should read as if a human
+  contributor wrote them. Specifically:
+  - **No em-dashes (`—`)** and no dashes used as sentence
+    separators (`foo - bar`). Use a semicolon or a comma.
+    This is the strongest tell for AI-generated prose in this
+    project, and reviewers do read for it.
+  - No "Let me", "I'll", or first-person narration of what
+    the agent did. Describe the change, not the author.
+  - No filler sections ("Overview", "Summary of changes",
+    "Key takeaways") on top of the template. The template
+    already has the right sections.
+
+### 5. Keep the PR body short
+
+A couple of sentences per template section is plenty. If the
+change is non-obvious, a short reproducer or a paragraph on
+root cause is welcome. Long, multi-section essays with bolded
+sub-headings are not the style here.
+
+### 6. Commit hygiene
+
+- One logical change per PR. If a refactor and a bugfix are
+  bundled together, split them.
+- Pre-commit auto-fixes (`black`, `isort`, `yesqa`,
+  trailing-whitespace, end-of-file-fixer, and friends) run on
+  commit and rewrite files in place; when a hook rewrites a
+  file the commit aborts, so re-stage and commit again. See
+  [`.pre-commit-config.yaml`](.pre-commit-config.yaml) for
+  the full list.
+- The repo does **not** use Conventional Commits as a CI
+  gate. Match the existing landed subjects (short imperative
+  or descriptive prose, optionally prefixed with `Build(deps):`
+  for dependabot-style dependency bumps); do not force
+  `feat:` / `fix:` prefixes onto every commit.
+
+## Tests
+
+Install dev deps, build the Cython extension in place, and run
+the suite:
+
+```bash
+make .develop      # installs deps, runs lint, builds the extension in place
+make test          # quiet pytest run
+```
+
+Other useful Makefile targets: `make vtest` is verbose,
+`make cov` runs the tox-driven coverage matrix, `make cov-dev`
+produces an HTML coverage report under `htmlcov/`, and
+`make lint` runs `pre-commit` across the tree.
+
+To exercise the pure-Python `FrozenList` instead of the
+Cython one, set `FROZENLIST_NO_EXTENSIONS=1` before invoking
+pytest. The `tests/conftest.py` fixture already parametrises
+most tests across both implementations, but new tests that
+target behaviour shared by both should follow the same
+pattern rather than hard-coding `from frozenlist import
+FrozenList`.
+
+CI runs the full matrix across the supported Python versions
+plus a wheel build via `cibuildwheel`. The minimum supported
+Python is declared in `pyproject.toml`
+(`requires-python = ">=3.9"`); do not use syntax or stdlib
+features that postdate it.
+
+## Cython extension
+
+`frozenlist/_frozenlist.pyx` is the compiled implementation
+and `frozenlist/__init__.py` carries the pure-Python
+equivalent. They must stay behaviourally identical: any
+change to one must land in the other in the same PR, and the
+test suite exercises both paths (directly via the public
+`FrozenList` import and via `PyFrozenList`). The Cython
+module is marked `freethreading_compatible = True` and uses
+an atomic `_frozen` flag; if you touch the freeze semantics,
+keep both implementations in lockstep and update the tests
+accordingly.
+
+Generated files (`frozenlist/_frozenlist.c`,
+`frozenlist/_frozenlist.html`, the built `*.so`) are build
+outputs; do not commit them. `make cythonize` regenerates the
+`.c` sibling of the `.pyx` source during development; the
+in-tree PEP 517 backend under `packaging/pep517_backend/`
+handles the same step during a wheel build.
+
+## Documentation
+
+User-visible API changes need a docs update under `docs/`
+(typically `docs/index.rst`, plus any narrative pages). The
+docstring goes in the code; the prose context goes in the
+Sphinx sources. `make doc` builds the docs locally;
+`make doc-spelling` runs the spellcheck (extend
+`docs/spelling_wordlist.txt` for legitimate new terms rather
+than disabling the check).
+
+## Things not to do
+
+- Do not open a PR for code you have not proven works (see
+  _Rule zero_ at the top of this file). Run the relevant
+  tests, cover the new behaviour with a test, exercise the
+  user-visible path end-to-end, and say so honestly in the PR
+  body if any of that was not possible in your environment.
+- Do not invent a `## What / ## Why / ## How / ## Testing` PR
+  body; use the aio-libs template above.
+- Do not skip the `CHANGES/` fragment "because the change is
+  small". Even a one-line bugfix needs one.
+- Do not add `Co-Authored-By` trailers for LLM tools, in
+  either commits or the PR body.
+- Do not mix agent-generated scan output, test summaries, or
+  pipeline reports into the template sections. Put them in a
+  collapsed `<details>` footer below the PR summary instead.
+- Do not use em-dashes or sentence-separating dashes in PR
+  prose or commit messages.
+- Do not commit Cython build artefacts
+  (`frozenlist/_frozenlist.c`,
+  `frozenlist/_frozenlist.html`, `*.so`) alongside source
+  changes.
+- Do not change one of the two `FrozenList` implementations
+  (Cython or pure-Python) without making the matching change
+  in the other and extending the tests so both paths are
+  covered.
+- Do not mark the PR ready for review yourself; that is the
+  call of the human running the agent, not the agent itself.
+  Maintainers do not look at drafts, but that does not mean
+  they should be doing your review; the operator is
+  responsible for reviewing the LLM-authored change before
+  flipping the PR out of draft.
+- Do not request reviewers from the agent session; the human
+  who flips the PR out of draft will route it.
