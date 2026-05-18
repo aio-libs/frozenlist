@@ -159,6 +159,7 @@ login
 lookup
 lookups
 lossless
+macOS
 Mako
 Martijn
 manylinux
