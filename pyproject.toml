@@ -134,6 +134,10 @@ select = [
   # formatter (ruff format) and the import sorter (ruff check --select I)
   # come from the same tool and rev.
   "I",
+  # pyupgrade. Keeps the codebase aligned with the minimum supported
+  # Python version (3.10+), e.g. PEP 585 builtin generics and PEP 604
+  # union syntax over the typing module aliases.
+  "UP",
 ]
 
 [tool.ruff.lint.isort]
