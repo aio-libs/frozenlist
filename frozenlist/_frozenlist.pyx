@@ -10,12 +10,8 @@ from collections.abc import MutableSequence
 
 cimport cython
 
-<<<<<<< HEAD
-@cython.auto_pickle(False) # disable cython from doing pickling with atomic variables.
-=======
-# Disable pickling due to atomic variable
+# Disable cython auto-pickling because it cannot handle atomic variables
 @cython.auto_pickle(False)
->>>>>>> b834c960eaab2c665a3f4769ab02a93eb3a9c48d
 cdef class FrozenList:
     __class_getitem__ = classmethod(types.GenericAlias)
 
@@ -130,6 +126,13 @@ cdef class FrozenList:
         else:
             raise RuntimeError("Cannot hash unfrozen list.")
 
+    def __copy__(self):
+        cdef FrozenList new_list
+        new_list = self.__class__(self._items)
+        if self._frozen.load():
+            new_list.freeze()
+        return new_list
+
     def __deepcopy__(self, memo):
         cdef FrozenList new_list
         obj_id = id(self)
@@ -151,20 +154,15 @@ cdef class FrozenList:
 
         return new_list
 
-<<<<<<< HEAD
     def __reduce_ex__(self, protocol):
         return type(self).__unreduce_ex__, (self.frozen, self._items)
 
     @classmethod
-    def __unreduce_ex__(cls, frozen:bool, _items:list):
+    def __unreduce_ex__(cls, frozen: bool, _items: list):
         fl = cls(_items)
         if frozen:
             fl.freeze()
         return fl
-=======
-    def __reduce__(self):
-        return (self.__class__, (self._items, self.frozen))
->>>>>>> b834c960eaab2c665a3f4769ab02a93eb3a9c48d
 
 
 MutableSequence.register(FrozenList)

@@ -74,6 +74,12 @@ class PyFrozenList(MutableSequence):
         else:
             raise RuntimeError("Cannot hash unfrozen list.")
 
+    def __copy__(self):
+        new_list = self.__class__(self._items)
+        if self._frozen:
+            new_list.freeze()
+        return new_list
+
     def __reduce_ex__(self, protocol):
         return type(self).__unreduce_ex__, (self._frozen, self._items)
 

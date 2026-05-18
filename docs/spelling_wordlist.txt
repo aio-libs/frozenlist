@@ -152,6 +152,7 @@ keepaliving
 kwarg
 latin
 linux
+LLM
 localhost
 Locator
 login
@@ -249,6 +250,8 @@ resolvehost
 resolvers
 reusage
 reuseconn
+riscv
+riscv64
 Runit
 runtimes
 sa

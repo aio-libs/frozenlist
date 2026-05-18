@@ -3,7 +3,7 @@
 
 import pickle
 from collections.abc import MutableSequence
-from copy import deepcopy
+from copy import copy, deepcopy
 
 import pytest
 
@@ -15,9 +15,13 @@ class FrozenListMixin:
 
     SKIP_METHODS = {
         "__abstractmethods__",
+        "__annotate_func__",
+        "__annotations_cache__",
         "__slots__",
         "__static_attributes__",
         "__firstlineno__",
+        "__annotations_cache__",
+        "__annotate_func__",
     }
 
     def test___class_getitem__(self) -> None:
@@ -249,6 +253,40 @@ class FrozenListMixin:
     def test_count(self) -> None:
         _list = self.FrozenList([1, 2])
         assert _list.count(1) == 1
+
+    def test_copy_unfrozen(self) -> None:
+        orig = self.FrozenList([1, 2, 3])
+        copied = copy(orig)
+        assert copied == orig
+        assert copied is not orig
+        assert not copied.frozen
+        # Verify the copy has independent storage
+        orig.append(4)
+        assert len(orig) == 4
+        assert len(copied) == 3
+
+    def test_copy_frozen(self) -> None:
+        orig = self.FrozenList([1, 2, 3])
+        orig.freeze()
+        copied = copy(orig)
+        assert copied == orig
+        assert copied is not orig
+        assert copied.frozen
+        # Verify the copy is also frozen
+        with pytest.raises(RuntimeError):
+            copied.append(4)
+
+    def test_copy_preserves_items(self) -> None:
+        inner = [1, 2]
+        orig = self.FrozenList([inner, 3])
+        copied = copy(orig)
+        # Shallow copy: inner objects are shared (same as list behavior)
+        assert copied[0] is orig[0]
+        # But the FrozenList containers are independent
+        assert copied is not orig
+        orig.append(4)
+        assert len(orig) == 3
+        assert len(copied) == 2
 
     def test_deepcopy_unfrozen(self) -> None:
         orig = self.FrozenList([1, 2, 3])
