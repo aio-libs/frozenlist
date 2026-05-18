@@ -209,7 +209,6 @@ jobs:
         - 3.11
         - >-
           3.10
-        - 3.9
         no-extensions: ['', 'Y']
         os:
         - ubuntu-latest
@@ -226,14 +225,8 @@ jobs:
           no-extensions: Y
         - os: windows-11-arm
           pyver: 3.10  # not supported by setup-python action
-        - os: windows-11-arm
-          pyver: 3.9  # not supported by setup-python action
         include:
         - pyver: pypy-3.10
-          no-extensions: Y
-          experimental: false
-          os: ubuntu-latest
-        - pyver: pypy-3.9
           no-extensions: Y
           experimental: false
           os: ubuntu-latest

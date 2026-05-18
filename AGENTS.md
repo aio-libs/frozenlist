@@ -279,7 +279,7 @@ FrozenList`.
 CI runs the full matrix across the supported Python versions
 plus a wheel build via `cibuildwheel`. The minimum supported
 Python is declared in `pyproject.toml`
-(`requires-python = ">=3.9"`); do not use syntax or stdlib
+(`requires-python = ">=3.10"`); do not use syntax or stdlib
 features that postdate it.
 
 ### Every line in a test must be covered
