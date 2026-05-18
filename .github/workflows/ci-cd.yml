@@ -74,7 +74,7 @@ jobs:
         ${{ steps.dist-filenames-detection.outputs.wheel-filename }}
     steps:
     - name: Checkout project
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
     - name: Set up Python
       uses: actions/setup-python@v6
       with:
@@ -108,7 +108,7 @@ jobs:
         }
         >> "${GITHUB_OUTPUT}"
     - name: Upload built artifacts for testing
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v7
       with:
         if-no-files-found: error
         name: ${{ needs.pre-setup.outputs.dists-artifact-name  }}
@@ -123,8 +123,6 @@ jobs:
 
   lint:
     uses: ./.github/workflows/reusable-linters.yml
-    secrets:
-      codecov-token: ${{ secrets.CODECOV_TOKEN }}
 
   build-wheels-for-tested-arches:
     name: >-  # ${{ '' } is a hack to nest jobs under the same sidebar category
@@ -243,6 +241,18 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     continue-on-error: ${{ matrix.experimental }}
+    env:
+      # Pin the coverage.py core to ``ctrace`` on CPython. On Python
+      # 3.14+ with coverage.py >= 7.7, the default is the ``sysmon``
+      # core, which does not support plugin file tracers and breaks
+      # the ``Cython.Coverage`` plugin. PyPy ships without CTracer
+      # and would abort with "COVERAGE_CORE is 'ctrace' but can't
+      # import CTracer!", so use ``pytrace`` there (its default).
+      # An empty string would be falsy in the GHA expression below
+      # and collapse back to ``ctrace``, so the PyPy branch needs a
+      # real value.
+      COVERAGE_CORE: >-
+        ${{ startsWith(matrix.pyver, 'pypy') && 'pytrace' || 'ctrace' }}
     steps:
     - name: Retrieve the project source from an sdist inside the GHA artifact
       uses: re-actors/checkout-python-sdist@release/v2
@@ -252,7 +262,7 @@ jobs:
         workflow-artifact-name: >-
           ${{ needs.pre-setup.outputs.dists-artifact-name }}
     - name: Download distributions
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v8
       with:
         path: dist
         pattern: ${{ needs.pre-setup.outputs.dists-artifact-name }}*
@@ -357,7 +367,7 @@ jobs:
     - name: Produce markdown test summary from JUnit
       if: >-
         !cancelled()
-      uses: test-summary/action@v2.4
+      uses: test-summary/action@v2.6
       with:
         paths: .test-results/pytest/test.xml
     - name: Append coverage results to Job Summary
@@ -381,7 +391,7 @@ jobs:
     - name: Send coverage data to Codecov
       if: >-
         !cancelled()
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v6
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: ./coverage.xml
@@ -431,6 +441,7 @@ jobs:
         - ppc64le
         - s390x
         - armv7l
+        - riscv64
         tag:
         - ''
         - musllinux
@@ -497,7 +508,7 @@ jobs:
           ${{ needs.pre-setup.outputs.dists-artifact-name }}
 
     - name: Download distributions
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v8
       with:
         path: dist
         pattern: ${{ needs.pre-setup.outputs.dists-artifact-name }}*
@@ -525,7 +536,7 @@ jobs:
       uses: pypa/gh-action-pypi-publish@release/v1
 
     - name: Sign the dists with Sigstore
-      uses: sigstore/gh-action-sigstore-python@v3.1.0
+      uses: sigstore/gh-action-sigstore-python@v3.3.0
       with:
         inputs: >-
           ./dist/${{ needs.build-pure-python-dists.outputs.sdist-filename }}
@@ -535,7 +546,7 @@ jobs:
       # Confusingly, this action also supports updating releases, not
       # just creating them. This is what we want here, since we've manually
       # created the release above.
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v3
       with:
         # dist/ contains the built packages, which smoketest-artifacts/
         # contains the signatures and certificates.
