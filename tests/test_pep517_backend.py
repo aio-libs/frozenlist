@@ -222,6 +222,5 @@ def test_patched_env_appends_to_existing_cflags(
         assert "-O2" in os.environ["CFLAGS"].split()
         assert "-O3" in os.environ["CXXFLAGS"].split()
         assert any(
-            tok.startswith("-ffile-prefix-map=")
-            for tok in os.environ["CFLAGS"].split()
+            tok.startswith("-ffile-prefix-map=") for tok in os.environ["CFLAGS"].split()
         )
