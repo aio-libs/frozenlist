@@ -2,15 +2,18 @@
 
 These exercise the bits of ``packaging/pep517_backend/`` that drive the
 reproducibility behaviour added for issue #577: the ``build-inplace``
-config-setting / ``FROZENLIST_BUILD_INPLACE`` env-var precedence ladder, and
-the ``-ffile-prefix-map`` injection into ``CFLAGS`` / ``CXXFLAGS`` from
-``patched_env``.
+config-setting / ``FROZENLIST_BUILD_INPLACE`` env-var precedence ladder, the
+``-ffile-prefix-map`` injection into ``CFLAGS`` / ``CXXFLAGS`` from
+``patched_env``, and the way ``maybe_prebuild_c_extensions`` /
+``build_editable`` thread those paths through to the Cython env hook.
 """
 
 from __future__ import annotations
 
 import os
 import sys
+from collections.abc import Iterator
+from contextlib import contextmanager
 from pathlib import Path
 
 import pytest
@@ -22,15 +25,15 @@ import pytest
 # this module there instead of failing to collect.
 pytest.importorskip("expandvars")
 
-_REPO_ROOT = Path(__file__).resolve().parent.parent
-_BACKEND_PARENT = _REPO_ROOT / "packaging"
-if str(_BACKEND_PARENT) not in sys.path:
-    sys.path.insert(0, str(_BACKEND_PARENT))
-
+# ``sys.path`` is amended in ``conftest.py`` so the in-tree PEP 517 backend
+# under ``packaging/`` becomes importable.
+from pep517_backend import _backend  # noqa: E402
 from pep517_backend._backend import (  # noqa: E402
     BUILD_INPLACE_CONFIG_SETTING,
     BUILD_INPLACE_ENV_VAR,
     _build_inplace,
+    build_editable,
+    maybe_prebuild_c_extensions,
 )
 from pep517_backend._cython_configuration import patched_env  # noqa: E402
 
@@ -229,5 +232,126 @@ def test_patched_env_appends_to_existing_cflags(
         assert "-O2" in os.environ["CFLAGS"].split()
         assert "-O3" in os.environ["CXXFLAGS"].split()
         assert any(
-            tok.startswith("-ffile-prefix-map=") for tok in os.environ["CFLAGS"].split()
+            tok.startswith("-ffile-prefix-map=")
+            for tok in os.environ["CFLAGS"].split()
         )
+
+
+def _install_backend_stubs(
+    monkeypatch: pytest.MonkeyPatch,
+) -> dict[str, object]:
+    """Replace the heavy bits of the build pipeline with cheap recorders.
+
+    Returns a dict the caller can inspect to assert on observed arguments.
+    Used by ``maybe_prebuild_c_extensions`` / ``build_editable`` tests so the
+    contexts can be entered without invoking ``cythonize`` or ``setuptools``.
+    """
+    observed: dict[str, object] = {}
+
+    def fake_get_config() -> dict[str, object]:
+        return {"env": {}, "flags": {}, "kwargs": {}, "src": []}
+
+    def fake_make_args(config: object, line_tracing: bool) -> list[str]:
+        return []
+
+    def fake_cythonize(args: list[str]) -> None:
+        observed["cythonize_called"] = True
+
+    def fake_build_editable(
+        wheel_directory: str,
+        config_settings: object = None,
+        metadata_directory: str | None = None,
+    ) -> str:
+        observed["editable_directory"] = wheel_directory
+        return "stub-editable"
+
+    @contextmanager
+    def fake_patched_env(
+        env: dict[str, str],
+        cython_line_tracing_requested: bool,
+        *,
+        original_source_directory: Path | None = None,
+        temporary_build_directory: Path | None = None,
+    ) -> Iterator[None]:
+        observed["original_source_directory"] = original_source_directory
+        observed["temporary_build_directory"] = temporary_build_directory
+        yield
+
+    monkeypatch.setattr(_backend, "_get_local_cython_config", fake_get_config)
+    monkeypatch.setattr(
+        _backend, "_make_cythonize_cli_args_from_config", fake_make_args,
+    )
+    monkeypatch.setattr(_backend, "_cythonize_cli_cmd", fake_cythonize)
+    monkeypatch.setattr(_backend, "_setuptools_build_editable", fake_build_editable)
+    monkeypatch.setattr(_backend, "_patched_cython_env", fake_patched_env)
+    return observed
+
+
+def test_maybe_prebuild_c_extensions_inplace_passes_no_tmp_dir(
+    clean_env: None,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """``build_inplace=True`` takes the ``nullcontext`` branch.
+
+    ``patched_env`` should receive ``temporary_build_directory=None`` so the
+    ``-ffile-prefix-map`` flag is *not* injected when the build runs in-tree.
+    """
+    observed = _install_backend_stubs(monkeypatch)
+
+    with maybe_prebuild_c_extensions(build_inplace=True):
+        pass
+
+    assert observed["temporary_build_directory"] is None
+    assert isinstance(observed["original_source_directory"], Path)
+    assert observed["cythonize_called"] is True
+
+
+def test_maybe_prebuild_c_extensions_tmp_dir_threads_paths(
+    clean_env: None,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    """``build_inplace=False`` enters ``_in_temporary_directory``.
+
+    Verify both ``original_source_directory`` and ``temporary_build_directory``
+    are forwarded to ``patched_env`` so the reproducibility flag fires.
+    """
+    observed = _install_backend_stubs(monkeypatch)
+    fake_tmp_dir = tmp_path / "fake-tmp"
+    fake_tmp_dir.mkdir()
+
+    @contextmanager
+    def fake_in_temporary_directory(src_dir: Path) -> Iterator[Path]:
+        observed["in_tmp_src_dir"] = src_dir
+        yield fake_tmp_dir
+
+    monkeypatch.setattr(
+        _backend, "_in_temporary_directory", fake_in_temporary_directory,
+    )
+
+    with maybe_prebuild_c_extensions(build_inplace=False):
+        pass
+
+    assert observed["temporary_build_directory"] == fake_tmp_dir
+    assert observed["original_source_directory"] == observed["in_tmp_src_dir"]
+
+
+def test_build_editable_warns_when_user_disables_inplace(
+    clean_env: None,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    """``build_editable`` rejects ``build-inplace=false`` with a warning.
+
+    Editable installs require in-tree artifacts; downstream packagers passing
+    the opt-out get a ``RuntimeWarning`` explaining why their override was
+    ignored. Covers the ``build_editable`` warning branch.
+    """
+    _install_backend_stubs(monkeypatch)
+
+    with pytest.warns(RuntimeWarning, match="in-tree"):
+        result = build_editable(
+            str(tmp_path),
+            config_settings={BUILD_INPLACE_CONFIG_SETTING: "false"},
+        )
+    assert result == "stub-editable"
