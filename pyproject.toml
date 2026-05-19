@@ -145,7 +145,6 @@ known-first-party = ["frozenlist"]
 known-third-party = ["pytest"]
 
 [tool.cibuildwheel]
-enable = ["cpython-freethreading"]
 # `build[uv]` makes cibuildwheel use `uv` for every venv it provisions,
 # both on the build side (passed to `python -m build` as `--installer=uv`)
 # and when materializing the test environment. uv resolves and installs
