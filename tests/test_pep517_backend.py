@@ -15,6 +15,13 @@ from pathlib import Path
 
 import pytest
 
+# The build backend transitively imports ``expandvars``, which is a build-time
+# dependency declared in ``pyproject.toml`` rather than a test requirement. CI
+# only installs it on the non-``no-extensions`` matrix cells where the wheel
+# is built; on the ``FROZENLIST_NO_EXTENSIONS=Y`` cells it is absent, so skip
+# this module there instead of failing to collect.
+pytest.importorskip("expandvars")
+
 _REPO_ROOT = Path(__file__).resolve().parent.parent
 _BACKEND_PARENT = _REPO_ROOT / "packaging"
 if str(_BACKEND_PARENT) not in sys.path:
