@@ -86,130 +86,180 @@ def clean_env(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("CPPFLAGS", raising=False)
 
 
-class TestBuildInplaceSetting:
-    """Cover the precedence ladder of ``_build_inplace``."""
+def test_build_inplace_default_false(clean_env: None) -> None:
+    assert _build_inplace() is False
 
-    def test_default_false(self, clean_env: None) -> None:
-        assert _build_inplace() is False
 
-    def test_default_true(self, clean_env: None) -> None:
-        assert _build_inplace(default=True) is True
+def test_build_inplace_default_true(clean_env: None) -> None:
+    assert _build_inplace(default=True) is True
 
-    @pytest.mark.parametrize(
-        ("value", "expected"),
-        [
-            ("true", True),
-            ("1", True),
-            ("on", True),
-            ("", True),
-            ("false", False),
-            ("0", False),
-            ("off", False),
-        ],
+
+@pytest.mark.parametrize(
+    ("value", "expected"),
+    [
+        ("true", True),
+        ("1", True),
+        ("on", True),
+        ("", True),
+        ("false", False),
+        ("0", False),
+        ("off", False),
+    ],
+)
+def test_build_inplace_config_setting(
+    clean_env: None,
+    value: str,
+    expected: bool,
+) -> None:
+    assert (
+        _build_inplace(
+            {BUILD_INPLACE_CONFIG_SETTING: value},
+        )
+        is expected
     )
-    def test_config_setting(self, clean_env: None, value: str, expected: bool) -> None:
-        assert _build_inplace({BUILD_INPLACE_CONFIG_SETTING: value}) is expected
-
-    def test_env_var(self, clean_env: None, monkeypatch: pytest.MonkeyPatch) -> None:
-        monkeypatch.setenv(BUILD_INPLACE_ENV_VAR, "true")
-        assert _build_inplace() is True
-
-    def test_config_setting_beats_env_var(
-        self, clean_env: None, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
-        monkeypatch.setenv(BUILD_INPLACE_ENV_VAR, "true")
-        assert _build_inplace({BUILD_INPLACE_CONFIG_SETTING: "false"}) is False
 
 
-class TestPatchedEnvFilePrefixMap:
-    """Cover the ``-ffile-prefix-map`` injection in ``patched_env``."""
+def test_build_inplace_env_var(
+    clean_env: None,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv(BUILD_INPLACE_ENV_VAR, "true")
+    assert _build_inplace() is True
 
-    def test_injects_flag_when_tmp_dir_set(
-        self, clean_env: None, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-    ) -> None:
-        monkeypatch.setattr(sys, "platform", "linux")
-        src_dir = tmp_path / "src"
-        build_dir = tmp_path / "build"
-        expected = f"-ffile-prefix-map={build_dir!s}={src_dir!s}"
 
+def test_build_inplace_config_setting_beats_env_var(
+    clean_env: None,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv(BUILD_INPLACE_ENV_VAR, "true")
+    assert (
+        _build_inplace(
+            {BUILD_INPLACE_CONFIG_SETTING: "false"},
+        )
+        is False
+    )
+
+
+def test_patched_env_injects_flag_when_tmp_dir_set(
+    clean_env: None,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    monkeypatch.setattr(sys, "platform", "linux")
+    src_dir = tmp_path / "src"
+    build_dir = tmp_path / "build"
+    src_dir.mkdir()
+    build_dir.mkdir()
+    expected = f"-ffile-prefix-map={build_dir!s}={src_dir!s}"
+
+    with patched_env(
+        env={},
+        cython_line_tracing_requested=False,
+        original_source_directory=src_dir,
+        temporary_build_directory=build_dir,
+    ):
+        assert expected in os.environ["CPPFLAGS"].split()
+
+
+def test_patched_env_skipped_when_no_tmp_dir(
+    clean_env: None,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(sys, "platform", "linux")
+
+    with patched_env(
+        env={},
+        cython_line_tracing_requested=False,
+    ):
+        assert "CPPFLAGS" not in os.environ
+
+
+def test_patched_env_skipped_on_windows(
+    clean_env: None,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    monkeypatch.setattr(sys, "platform", "win32")
+
+    with patched_env(
+        env={},
+        cython_line_tracing_requested=False,
+        original_source_directory=tmp_path / "src",
+        temporary_build_directory=tmp_path / "build",
+    ):
+        assert "CPPFLAGS" not in os.environ
+
+
+def test_patched_env_line_tracing_still_applied_on_windows(
+    clean_env: None,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(sys, "platform", "win32")
+
+    with patched_env(
+        env={},
+        cython_line_tracing_requested=True,
+    ):
+        assert TRACE_MACRO in os.environ["CPPFLAGS"].split()
+
+
+def test_patched_env_raises_when_source_dir_missing(
+    clean_env: None,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    monkeypatch.setattr(sys, "platform", "linux")
+    with pytest.raises(ValueError, match="original_source_directory"):
         with patched_env(
             env={},
             cython_line_tracing_requested=False,
-            original_source_directory=src_dir,
-            temporary_build_directory=build_dir,
-        ):
-            assert expected in os.environ["CPPFLAGS"].split()
-
-    def test_skipped_when_no_tmp_dir(
-        self, clean_env: None, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
-        monkeypatch.setattr(sys, "platform", "linux")
-
-        with patched_env(env={}, cython_line_tracing_requested=False):
-            assert "CPPFLAGS" not in os.environ
-
-    def test_skipped_on_windows(
-        self, clean_env: None, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-    ) -> None:
-        monkeypatch.setattr(sys, "platform", "win32")
-
-        with patched_env(
-            env={},
-            cython_line_tracing_requested=False,
-            original_source_directory=tmp_path / "src",
+            original_source_directory=None,
             temporary_build_directory=tmp_path / "build",
         ):
-            assert "CPPFLAGS" not in os.environ
+            pass  # pragma: no cover
 
-    def test_raises_when_source_dir_missing(
-        self, clean_env: None, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-    ) -> None:
-        monkeypatch.setattr(sys, "platform", "linux")
-        with pytest.raises(ValueError, match="original_source_directory"):
-            with patched_env(
-                env={},
-                cython_line_tracing_requested=False,
-                original_source_directory=None,
-                temporary_build_directory=tmp_path / "build",
-            ):
-                pass  # pragma: no cover
 
-    @pytest.mark.parametrize(
-        ("src_name", "build_name"),
-        [("src with space", "build"), ("src", "build with space")],
-    )
-    def test_raises_on_whitespace_in_paths(
-        self,
-        clean_env: None,
-        monkeypatch: pytest.MonkeyPatch,
-        tmp_path: Path,
-        src_name: str,
-        build_name: str,
-    ) -> None:
-        monkeypatch.setattr(sys, "platform", "linux")
-        with pytest.raises(ValueError, match="whitespace"):
-            with patched_env(
-                env={},
-                cython_line_tracing_requested=False,
-                original_source_directory=tmp_path / src_name,
-                temporary_build_directory=tmp_path / build_name,
-            ):
-                pass  # pragma: no cover
-
-    def test_appends_to_existing_cppflags(
-        self, clean_env: None, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-    ) -> None:
-        monkeypatch.setattr(sys, "platform", "linux")
-        monkeypatch.setenv("CPPFLAGS", "-DUSER=1")
-        monkeypatch.setenv("CFLAGS", "-fuser-cflag")
-
+@pytest.mark.parametrize(
+    ("src_name", "build_name"),
+    [
+        ("src with space", "build"),
+        ("src", "build with space"),
+    ],
+)
+def test_patched_env_raises_on_whitespace_in_paths(
+    clean_env: None,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+    src_name: str,
+    build_name: str,
+) -> None:
+    monkeypatch.setattr(sys, "platform", "linux")
+    with pytest.raises(ValueError, match="whitespace"):
         with patched_env(
             env={},
             cython_line_tracing_requested=False,
-            original_source_directory=tmp_path / "src",
-            temporary_build_directory=tmp_path / "build",
+            original_source_directory=tmp_path / src_name,
+            temporary_build_directory=tmp_path / build_name,
         ):
-            cppflags = os.environ["CPPFLAGS"].split()
-            assert cppflags[0] == "-DUSER=1"
-            assert cppflags[1].startswith("-ffile-prefix-map=")
-            assert os.environ["CFLAGS"] == "-fuser-cflag"
+            pass  # pragma: no cover
+
+
+def test_patched_env_appends_to_existing_cppflags(
+    clean_env: None,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    monkeypatch.setattr(sys, "platform", "linux")
+    monkeypatch.setenv("CPPFLAGS", "-DUSER=1")
+    monkeypatch.setenv("CFLAGS", "-fuser-cflag")
+
+    with patched_env(
+        env={},
+        cython_line_tracing_requested=False,
+        original_source_directory=tmp_path / "src",
+        temporary_build_directory=tmp_path / "build",
+    ):
+        cppflags = os.environ["CPPFLAGS"].split()
+        assert cppflags[0] == "-DUSER=1"
+        assert cppflags[1].startswith("-ffile-prefix-map=")
+        assert os.environ["CFLAGS"] == "-fuser-cflag"
