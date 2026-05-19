@@ -232,8 +232,7 @@ def test_patched_env_appends_to_existing_cflags(
         assert "-O2" in os.environ["CFLAGS"].split()
         assert "-O3" in os.environ["CXXFLAGS"].split()
         assert any(
-            tok.startswith("-ffile-prefix-map=")
-            for tok in os.environ["CFLAGS"].split()
+            tok.startswith("-ffile-prefix-map=") for tok in os.environ["CFLAGS"].split()
         )
 
 
@@ -279,7 +278,9 @@ def _install_backend_stubs(
 
     monkeypatch.setattr(_backend, "_get_local_cython_config", fake_get_config)
     monkeypatch.setattr(
-        _backend, "_make_cythonize_cli_args_from_config", fake_make_args,
+        _backend,
+        "_make_cythonize_cli_args_from_config",
+        fake_make_args,
     )
     monkeypatch.setattr(_backend, "_cythonize_cli_cmd", fake_cythonize)
     monkeypatch.setattr(_backend, "_setuptools_build_editable", fake_build_editable)
@@ -326,7 +327,9 @@ def test_maybe_prebuild_c_extensions_tmp_dir_threads_paths(
         yield fake_tmp_dir
 
     monkeypatch.setattr(
-        _backend, "_in_temporary_directory", fake_in_temporary_directory,
+        _backend,
+        "_in_temporary_directory",
+        fake_in_temporary_directory,
     )
 
     with maybe_prebuild_c_extensions(build_inplace=False):
