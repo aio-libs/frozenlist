@@ -291,13 +291,15 @@ def maybe_prebuild_c_extensions(
         yield
         return
 
-    print("**********************", file=_standard_error_stream)
-    print("* Accelerated build *", file=_standard_error_stream)
-    print(
-        f'* Build location: {"in-tree" if build_inplace else "tmp dir"} *',
-        file=_standard_error_stream,
+    banner_lines = (
+        'Accelerated build',
+        f'Build location: {"in-tree" if build_inplace else "tmp dir"}',
     )
-    print("**********************", file=_standard_error_stream)
+    banner_width = max(len(line) for line in banner_lines) + 4
+    print('*' * banner_width, file=_standard_error_stream)
+    for line in banner_lines:
+        print(f'* {line.ljust(banner_width - 4)} *', file=_standard_error_stream)
+    print('*' * banner_width, file=_standard_error_stream)
     if not IS_CPYTHON:
         _warn_that(
             'Building C-extensions under the runtimes other than CPython is '
