@@ -1,7 +1,7 @@
-Added tests that re-import :mod:`frozenlist` with
+Added tests that re-import ``frozenlist`` with
 ``FROZENLIST_NO_EXTENSIONS`` set and unset, so every Codecov
 upload exercises both directions of the import-time
 ``if not NO_EXTENSIONS:`` branch in
-:file:`frozenlist/__init__.py` and the ``codecov/project/lib``
+``frozenlist/__init__.py`` and the ``codecov/project/lib``
 gate no longer treats it as a one-sided partial
 -- by :user:`bdraco`.
