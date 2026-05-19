@@ -220,6 +220,7 @@ pyenv
 pyflakes
 pytest
 Pytest
+pyupgrade
 Quickstart
 quote’s
 readonly
