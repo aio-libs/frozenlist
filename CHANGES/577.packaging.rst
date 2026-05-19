@@ -1,0 +1,23 @@
+The :pep:`517` build backend now supports a new ``build-inplace``
+config setting (and ``FROZENLIST_BUILD_INPLACE`` environment variable)
+for controlling whether to build the project in-tree or in a
+temporary directory. It only affects wheels and is set up to build
+in a temporary directory by default. It does not affect editable
+wheel builds; they will keep being built in-tree regardless.
+
+Here's an example of using this setting:
+
+.. code-block:: console
+
+   $ python -m build --config-setting=build-inplace=true
+
+Additionally, when building wheels in an automatically created
+temporary directory, the build backend now normalizes the
+respective file system path to a deterministic source checkout
+directory by injecting the ``-ffile-prefix-map`` compiler option
+into the ``CFLAGS`` environment variable, as suggested by known
+`reproducible build practices
+<https://reproducible-builds.org/docs/build-path/>`__.
+
+The effect is that downstreams will get reproducible build results
+-- by :user:`bdraco`.
