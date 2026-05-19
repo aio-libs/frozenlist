@@ -31,6 +31,8 @@ from pep517_backend import _backend  # noqa: E402
 from pep517_backend._backend import (  # noqa: E402
     BUILD_INPLACE_CONFIG_SETTING,
     BUILD_INPLACE_ENV_VAR,
+    CYTHON_TRACING_ENV_VAR,
+    PURE_PYTHON_ENV_VAR,
     _build_inplace,
     build_editable,
     maybe_prebuild_c_extensions,
@@ -40,8 +42,18 @@ from pep517_backend._cython_configuration import patched_env  # noqa: E402
 
 @pytest.fixture
 def clean_env(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Strip env vars that could leak into the build-inplace lookup."""
+    """Strip env vars that could leak into the build-inplace lookup.
+
+    ``FROZENLIST_NO_EXTENSIONS`` is wiped because CI exports it (set to the
+    matrix's ``no-extensions`` value, which may be the empty string) when
+    running the ``Test`` job; the backend's ``_is_truthy_setting_value``
+    treats an empty string as truthy and would otherwise force
+    ``maybe_prebuild_c_extensions`` into the pure-Python early-return,
+    skipping the stub-calling code these tests exercise.
+    """
     monkeypatch.delenv(BUILD_INPLACE_ENV_VAR, raising=False)
+    monkeypatch.delenv(PURE_PYTHON_ENV_VAR, raising=False)
+    monkeypatch.delenv(CYTHON_TRACING_ENV_VAR, raising=False)
     monkeypatch.delenv("CFLAGS", raising=False)
     monkeypatch.delenv("CXXFLAGS", raising=False)
 
