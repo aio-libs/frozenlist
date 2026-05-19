@@ -16,7 +16,7 @@ from pathlib import Path
 import pytest
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
-_BACKEND_PARENT = _REPO_ROOT / 'packaging'
+_BACKEND_PARENT = _REPO_ROOT / "packaging"
 if str(_BACKEND_PARENT) not in sys.path:
     sys.path.insert(0, str(_BACKEND_PARENT))
 
@@ -32,8 +32,8 @@ from pep517_backend._cython_configuration import patched_env  # noqa: E402
 def clean_env(monkeypatch: pytest.MonkeyPatch) -> None:
     """Strip env vars that could leak into the build-inplace lookup."""
     monkeypatch.delenv(BUILD_INPLACE_ENV_VAR, raising=False)
-    monkeypatch.delenv('CFLAGS', raising=False)
-    monkeypatch.delenv('CXXFLAGS', raising=False)
+    monkeypatch.delenv("CFLAGS", raising=False)
+    monkeypatch.delenv("CXXFLAGS", raising=False)
 
 
 class TestBuildInplaceSetting:
@@ -46,15 +46,15 @@ class TestBuildInplaceSetting:
         assert _build_inplace(default=True) is True
 
     @pytest.mark.parametrize(
-        ('value', 'expected'),
+        ("value", "expected"),
         [
-            ('true', True),
-            ('1', True),
-            ('on', True),
-            ('', True),
-            ('false', False),
-            ('0', False),
-            ('off', False),
+            ("true", True),
+            ("1", True),
+            ("on", True),
+            ("", True),
+            ("false", False),
+            ("0", False),
+            ("off", False),
         ],
     )
     def test_config_setting(
@@ -63,16 +63,19 @@ class TestBuildInplaceSetting:
         value: str,
         expected: bool,
     ) -> None:
-        assert _build_inplace(
-            {BUILD_INPLACE_CONFIG_SETTING: value},
-        ) is expected
+        assert (
+            _build_inplace(
+                {BUILD_INPLACE_CONFIG_SETTING: value},
+            )
+            is expected
+        )
 
     def test_env_var(
         self,
         clean_env: None,
         monkeypatch: pytest.MonkeyPatch,
     ) -> None:
-        monkeypatch.setenv(BUILD_INPLACE_ENV_VAR, 'true')
+        monkeypatch.setenv(BUILD_INPLACE_ENV_VAR, "true")
         assert _build_inplace() is True
 
     def test_config_setting_beats_env_var(
@@ -80,10 +83,13 @@ class TestBuildInplaceSetting:
         clean_env: None,
         monkeypatch: pytest.MonkeyPatch,
     ) -> None:
-        monkeypatch.setenv(BUILD_INPLACE_ENV_VAR, 'true')
-        assert _build_inplace(
-            {BUILD_INPLACE_CONFIG_SETTING: 'false'},
-        ) is False
+        monkeypatch.setenv(BUILD_INPLACE_ENV_VAR, "true")
+        assert (
+            _build_inplace(
+                {BUILD_INPLACE_CONFIG_SETTING: "false"},
+            )
+            is False
+        )
 
 
 class TestPatchedEnvFilePrefixMap:
@@ -95,12 +101,12 @@ class TestPatchedEnvFilePrefixMap:
         monkeypatch: pytest.MonkeyPatch,
         tmp_path: Path,
     ) -> None:
-        monkeypatch.setattr(sys, 'platform', 'linux')
-        src_dir = tmp_path / 'src'
-        build_dir = tmp_path / 'build'
+        monkeypatch.setattr(sys, "platform", "linux")
+        src_dir = tmp_path / "src"
+        build_dir = tmp_path / "build"
         src_dir.mkdir()
         build_dir.mkdir()
-        expected = f'-ffile-prefix-map={build_dir!s}={src_dir!s}'
+        expected = f"-ffile-prefix-map={build_dir!s}={src_dir!s}"
 
         with patched_env(
             env={},
@@ -108,22 +114,22 @@ class TestPatchedEnvFilePrefixMap:
             original_source_directory=src_dir,
             temporary_build_directory=build_dir,
         ):
-            assert expected in os.environ['CFLAGS'].split()
-            assert expected in os.environ['CXXFLAGS'].split()
+            assert expected in os.environ["CFLAGS"].split()
+            assert expected in os.environ["CXXFLAGS"].split()
 
     def test_skipped_when_no_tmp_dir(
         self,
         clean_env: None,
         monkeypatch: pytest.MonkeyPatch,
     ) -> None:
-        monkeypatch.setattr(sys, 'platform', 'linux')
+        monkeypatch.setattr(sys, "platform", "linux")
 
         with patched_env(
             env={},
             cython_line_tracing_requested=False,
         ):
-            assert 'CFLAGS' not in os.environ
-            assert 'CXXFLAGS' not in os.environ
+            assert "CFLAGS" not in os.environ
+            assert "CXXFLAGS" not in os.environ
 
     def test_skipped_on_windows(
         self,
@@ -131,30 +137,30 @@ class TestPatchedEnvFilePrefixMap:
         monkeypatch: pytest.MonkeyPatch,
         tmp_path: Path,
     ) -> None:
-        monkeypatch.setattr(sys, 'platform', 'win32')
+        monkeypatch.setattr(sys, "platform", "win32")
 
         with patched_env(
             env={},
             cython_line_tracing_requested=False,
-            original_source_directory=tmp_path / 'src',
-            temporary_build_directory=tmp_path / 'build',
+            original_source_directory=tmp_path / "src",
+            temporary_build_directory=tmp_path / "build",
         ):
-            assert 'CFLAGS' not in os.environ
-            assert 'CXXFLAGS' not in os.environ
+            assert "CFLAGS" not in os.environ
+            assert "CXXFLAGS" not in os.environ
 
     def test_line_tracing_still_applied_on_windows(
         self,
         clean_env: None,
         monkeypatch: pytest.MonkeyPatch,
     ) -> None:
-        monkeypatch.setattr(sys, 'platform', 'win32')
+        monkeypatch.setattr(sys, "platform", "win32")
 
         with patched_env(
             env={},
             cython_line_tracing_requested=True,
         ):
-            assert '-DCYTHON_TRACE_NOGIL=1' in os.environ['CFLAGS'].split()
-            assert '-DCYTHON_TRACE_NOGIL=1' in os.environ['CXXFLAGS'].split()
+            assert "-DCYTHON_TRACE_NOGIL=1" in os.environ["CFLAGS"].split()
+            assert "-DCYTHON_TRACE_NOGIL=1" in os.environ["CXXFLAGS"].split()
 
     def test_raises_when_source_dir_missing(
         self,
@@ -162,21 +168,21 @@ class TestPatchedEnvFilePrefixMap:
         monkeypatch: pytest.MonkeyPatch,
         tmp_path: Path,
     ) -> None:
-        monkeypatch.setattr(sys, 'platform', 'linux')
-        with pytest.raises(ValueError, match='original_source_directory'):
+        monkeypatch.setattr(sys, "platform", "linux")
+        with pytest.raises(ValueError, match="original_source_directory"):
             with patched_env(
                 env={},
                 cython_line_tracing_requested=False,
                 original_source_directory=None,
-                temporary_build_directory=tmp_path / 'build',
+                temporary_build_directory=tmp_path / "build",
             ):
                 pass
 
     @pytest.mark.parametrize(
-        ('src_name', 'build_name'),
+        ("src_name", "build_name"),
         [
-            ('src with space', 'build'),
-            ('src', 'build with space'),
+            ("src with space", "build"),
+            ("src", "build with space"),
         ],
     )
     def test_raises_on_whitespace_in_paths(
@@ -187,10 +193,10 @@ class TestPatchedEnvFilePrefixMap:
         src_name: str,
         build_name: str,
     ) -> None:
-        monkeypatch.setattr(sys, 'platform', 'linux')
+        monkeypatch.setattr(sys, "platform", "linux")
         src_dir = tmp_path / src_name
         build_dir = tmp_path / build_name
-        with pytest.raises(ValueError, match='whitespace'):
+        with pytest.raises(ValueError, match="whitespace"):
             with patched_env(
                 env={},
                 cython_line_tracing_requested=False,
@@ -205,11 +211,11 @@ class TestPatchedEnvFilePrefixMap:
         monkeypatch: pytest.MonkeyPatch,
         tmp_path: Path,
     ) -> None:
-        monkeypatch.setattr(sys, 'platform', 'linux')
-        monkeypatch.setenv('CFLAGS', '-O2')
-        monkeypatch.setenv('CXXFLAGS', '-O3')
-        src_dir = tmp_path / 'src'
-        build_dir = tmp_path / 'build'
+        monkeypatch.setattr(sys, "platform", "linux")
+        monkeypatch.setenv("CFLAGS", "-O2")
+        monkeypatch.setenv("CXXFLAGS", "-O3")
+        src_dir = tmp_path / "src"
+        build_dir = tmp_path / "build"
         src_dir.mkdir()
         build_dir.mkdir()
 
@@ -219,9 +225,9 @@ class TestPatchedEnvFilePrefixMap:
             original_source_directory=src_dir,
             temporary_build_directory=build_dir,
         ):
-            assert '-O2' in os.environ['CFLAGS'].split()
-            assert '-O3' in os.environ['CXXFLAGS'].split()
+            assert "-O2" in os.environ["CFLAGS"].split()
+            assert "-O3" in os.environ["CXXFLAGS"].split()
             assert any(
-                tok.startswith('-ffile-prefix-map=')
-                for tok in os.environ['CFLAGS'].split()
+                tok.startswith("-ffile-prefix-map=")
+                for tok in os.environ["CFLAGS"].split()
             )
