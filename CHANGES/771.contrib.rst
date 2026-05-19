@@ -1,6 +1,4 @@
 Overrode ``CIBW_BUILD_FRONTEND=build`` for the odd-arches wheel
-matrix so the QEMU-emulated ``aarch64``, ``armv7l``, ``ppc64le``,
-``riscv64``, and ``s390x`` manylinux/musllinux jobs fall back to
-plain ``pip`` until the pypa odd-arch containers ship ``uv``
-preinstalled
+matrix so the jobs do not fail on the pypa containers that lack
+a preinstalled ``uv``
 -- by :user:`bdraco`.

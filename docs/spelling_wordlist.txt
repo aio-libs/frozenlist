@@ -1,4 +1,3 @@
-aarch64
 abc
 aiodns
 aioes
@@ -14,7 +13,6 @@ apps
 app’s
 arg
 armv
-armv7l
 Arsenic
 async
 asyncio
@@ -181,7 +179,6 @@ multidict’s
 Multidicts
 multipart
 Multipart
-musllinux
 Nagle
 Nagle’s
 namedtuple
@@ -212,7 +209,6 @@ plugin
 poller
 pong
 Postgres
-ppc64le
 pre
 preinstalled
 programmatically
@@ -259,7 +255,6 @@ riscv
 riscv64
 Runit
 runtimes
-s390x
 sa
 Satisfiable
 schemas
