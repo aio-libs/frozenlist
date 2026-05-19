@@ -222,6 +222,7 @@ pyflakes
 pypa
 pytest
 Pytest
+pyupgrade
 Quickstart
 quote’s
 readonly
