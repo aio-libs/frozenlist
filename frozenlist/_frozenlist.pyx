@@ -8,7 +8,10 @@ import copy
 import types
 from collections.abc import MutableSequence
 
+cimport cython
 
+# Disable cython auto-pickling because it cannot handle atomic variables
+@cython.auto_pickle(False)
 cdef class FrozenList:
     __class_getitem__ = classmethod(types.GenericAlias)
 
@@ -150,6 +153,16 @@ cdef class FrozenList:
             new_list.freeze()
 
         return new_list
+
+    def __reduce_ex__(self, protocol):
+        return type(self).__unreduce_ex__, (self.frozen, self._items)
+
+    @classmethod
+    def __unreduce_ex__(cls, frozen: bool, _items: list):
+        fl = cls(_items)
+        if frozen:
+            fl.freeze()
+        return fl
 
 
 MutableSequence.register(FrozenList)
