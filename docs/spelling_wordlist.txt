@@ -219,6 +219,7 @@ Punycode
 py
 pyenv
 pyflakes
+pypa
 pytest
 Pytest
 Quickstart
