@@ -1,6 +1,8 @@
 # FIXME:
 # mypy: disable-error-code="misc"
 
+import importlib
+import sys
 from collections.abc import MutableSequence
 from copy import copy, deepcopy
 
@@ -417,3 +419,22 @@ class TestFrozenList(FrozenListMixin):
 
 class TestFrozenListPy(FrozenListMixin):
     FrozenList = PyFrozenList  # type: ignore[assignment]  # FIXME
+
+
+def test_reimport_with_no_extensions_uses_pure_python(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("FROZENLIST_NO_EXTENSIONS", "1")
+    monkeypatch.delitem(sys.modules, "frozenlist", raising=False)
+    reloaded = importlib.import_module("frozenlist")
+    assert reloaded.NO_EXTENSIONS is True
+    assert reloaded.FrozenList is reloaded.PyFrozenList
+
+
+def test_reimport_without_no_extensions_attempts_extension(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("FROZENLIST_NO_EXTENSIONS", raising=False)
+    monkeypatch.delitem(sys.modules, "frozenlist", raising=False)
+    reloaded = importlib.import_module("frozenlist")
+    assert reloaded.NO_EXTENSIONS is False
