@@ -25,8 +25,8 @@ import pytest
 # this module there instead of failing to collect.
 pytest.importorskip("expandvars")
 
-# ``sys.path`` is amended in ``conftest.py`` so the in-tree PEP 517 backend
-# under ``packaging/`` becomes importable.
+# ``pytest.ini`` sets ``pythonpath = packaging`` so the in-tree PEP 517 backend
+# under ``packaging/`` becomes importable for these tests.
 from pep517_backend import _backend  # noqa: E402
 from pep517_backend._backend import (  # noqa: E402
     BUILD_INPLACE_CONFIG_SETTING,
