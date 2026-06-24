@@ -1,4 +1,4 @@
 -e .
 -r test.txt
 -r lint.txt
-tox==4.55.1
+tox==4.56.0
