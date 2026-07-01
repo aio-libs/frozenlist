@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import sys
 from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
@@ -103,7 +104,13 @@ def make_cythonize_cli_args_from_config(config: Config, cython_line_tracing_requ
 
 
 @contextmanager
-def patched_env(env: dict[str, str], cython_line_tracing_requested: bool) -> Iterator[None]:
+def patched_env(
+    env: dict[str, str],
+    cython_line_tracing_requested: bool,
+    *,
+    original_source_directory: Path | None = None,
+    temporary_build_directory: Path | None = None,
+) -> Iterator[None]:
     """Temporary set given env vars.
 
     :param env: tmp env vars to set
@@ -111,15 +118,49 @@ def patched_env(env: dict[str, str], cython_line_tracing_requested: bool) -> Ite
 
     :yields: None
     """
+    extra_cflags: list[str] = []
+    if cython_line_tracing_requested:
+        extra_cflags.append('-DCYTHON_TRACE_NOGIL=1')  # Implies CYTHON_TRACE=1
+    # When building in a temporary directory, rewrite the random tmp dir
+    # path back to the original source directory so the compiled artifacts
+    # are reproducible. `-ffile-prefix-map` is a GCC/Clang flag and is not
+    # understood by MSVC, so skip it on Windows. Validation runs before we
+    # touch ``os.environ`` so a configuration error cannot leave the process
+    # environment half-mutated.
+    # Ref: https://github.com/aio-libs/frozenlist/issues/577
+    if temporary_build_directory is not None and sys.platform != 'win32':
+        if original_source_directory is None:
+            raise ValueError(
+                'original_source_directory is required '
+                'when temporary_build_directory is set',
+            )
+        tmp_path = str(temporary_build_directory)
+        src_path = str(original_source_directory)
+        # `CFLAGS`/`CXXFLAGS` are split on whitespace by the compiler driver,
+        # so a build path containing a space would silently tokenise into
+        # multiple arguments and break the mapping. Fail loudly instead of
+        # producing a broken-but-quiet reproducibility result.
+        if ' ' in tmp_path or ' ' in src_path:
+            raise ValueError(
+                'Build paths must not contain whitespace for '
+                '`-ffile-prefix-map` to apply cleanly; got '
+                f'temporary_build_directory={tmp_path!r}, '
+                f'original_source_directory={src_path!r}',
+            )
+        extra_cflags.append(f'-ffile-prefix-map={tmp_path}={src_path}')
+
     orig_env = os.environ.copy()
     expanded_env = {name: expandvars(var_val) for name, var_val in env.items()}
     os.environ.update(expanded_env)
-
-    if cython_line_tracing_requested:
-        os.environ['CFLAGS'] = ' '.join((
-            os.getenv('CFLAGS', ''),
-            '-DCYTHON_TRACE_NOGIL=1',  # Implies CYTHON_TRACE=1
-        )).strip()
+    if extra_cflags:
+        # The Cython extension compiles as C++ (``# distutils: language = c++``),
+        # so setuptools' ``customize_compiler`` uses ``CXXFLAGS`` rather than
+        # ``CFLAGS`` for the compile step. Set both so the flags also apply
+        # when downstream forks switch the language.
+        for env_var in ('CFLAGS', 'CXXFLAGS'):
+            os.environ[env_var] = ' '.join(
+                (os.getenv(env_var, ''), *extra_cflags),
+            ).strip()
     try:
         yield
     finally:
