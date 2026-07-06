@@ -15,7 +15,7 @@ repos:
     additional_dependencies:
     - wemake-python-styleguide
 - repo: https://github.com/astral-sh/ruff-pre-commit.git
-  rev: v0.15.13
+  rev: v0.15.20
   hooks:
   - id: ruff-check
     name: ruff check | frozenlist & tests
@@ -33,7 +33,7 @@ repos:
     # 88-column style; see [tool.ruff] in pyproject.toml.
 
 - repo: https://github.com/python-jsonschema/check-jsonschema.git
-  rev: 0.37.1
+  rev: 0.37.4
   hooks:
   - id: check-github-workflows
     files: ^\.github/workflows/[^/]+$
@@ -105,7 +105,7 @@ repos:
     - --strict
 
 - repo: https://github.com/MarcoGorelli/cython-lint.git
-  rev: v0.19.0
+  rev: v0.21.0
   hooks:
   - id: cython-lint
 
@@ -169,7 +169,7 @@ repos:
     - rst
 
 - repo: https://github.com/pre-commit/mirrors-mypy.git
-  rev: v1.19.0
+  rev: v2.1.0
   hooks:
   - id: mypy
     alias: mypy-py311
