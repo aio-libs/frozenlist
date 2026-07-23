@@ -2,12 +2,13 @@
 
 import os
 import sys
+from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Iterator
 
 if sys.version_info >= (3, 11):
     from contextlib import chdir as chdir_cm
+
     from tomllib import loads as load_toml_from_string
 else:
     from tomli import loads as load_toml_from_string

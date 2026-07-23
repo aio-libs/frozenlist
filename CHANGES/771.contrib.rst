@@ -1,0 +1,4 @@
+Overrode ``CIBW_BUILD_FRONTEND=build`` for the odd-arches wheel
+matrix so the jobs do not fail on the pypa containers that lack
+a preinstalled ``uv``
+-- by :user:`bdraco`.
