@@ -1,0 +1,5 @@
+Enabled the ``UP`` (pyupgrade) rule set in the ``ruff`` lint
+configuration and upgraded the existing type annotations to use
+PEP 585 builtin generics and PEP 604 union syntax, now that the
+minimum supported Python version is 3.10
+-- by :user:`bdraco`.

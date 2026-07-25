@@ -1,0 +1,2 @@
+Dropped support for the experimental free-threaded build of
+CPython 3.13 -- by :user:`bdraco`.
