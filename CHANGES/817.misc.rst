@@ -1,0 +1,3 @@
+Optimize :class:`FrozenList` in Cython by cutting out unwanted none checks
+when using the ``append`` function
+-- by :user:`Vizonex`.
