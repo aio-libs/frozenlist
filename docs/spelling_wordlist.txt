@@ -1,3 +1,4 @@
+aarch
 abc
 aiodns
 aioes
@@ -88,6 +89,7 @@ Dev
 dict
 Dict
 Discord
+dists
 django
 Django
 dns
@@ -152,6 +154,7 @@ keepaliving
 kwarg
 latin
 linux
+LLM
 localhost
 Locator
 login
@@ -209,6 +212,7 @@ poller
 pong
 Postgres
 pre
+preinstalled
 programmatically
 proxied
 PRs
@@ -217,8 +221,10 @@ Punycode
 py
 pyenv
 pyflakes
+pypa
 pytest
 Pytest
+pyupgrade
 Quickstart
 quote’s
 readonly

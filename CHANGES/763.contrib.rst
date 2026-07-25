@@ -1,0 +1,6 @@
+Pinned the coverage.py core to ``ctrace`` via the
+``COVERAGE_CORE`` environment variable in the CI workflow so
+that the ``Cython.Coverage`` plugin keeps working on Python
+3.14, where coverage.py otherwise defaults to the ``sysmon``
+core that does not support plugin file tracers
+-- by :user:`bdraco`.

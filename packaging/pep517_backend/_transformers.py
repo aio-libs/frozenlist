@@ -1,15 +1,15 @@
 """Data conversion helpers for the in-tree PEP 517 build backend."""
 
+from collections.abc import Iterable, Iterator, Mapping
 from itertools import chain
 from re import sub as _substitute_with_regexp
-from typing import Dict, Iterable, Iterator, List, Mapping, Tuple, Union
 
 
-def _emit_opt_pairs(opt_pair: Tuple[str, Union[str, Dict[str, str]]]) -> Iterator[str]:
+def _emit_opt_pairs(opt_pair: tuple[str, str | dict[str, str]]) -> Iterator[str]:
     flag, flag_value = opt_pair
     flag_opt = f"--{flag!s}"
     if isinstance(flag_value, dict):
-        sub_pairs: Iterable[Tuple[str, ...]] = flag_value.items()
+        sub_pairs: Iterable[tuple[str, ...]] = flag_value.items()
     else:
         sub_pairs = ((flag_value,),)
 
@@ -17,13 +17,13 @@ def _emit_opt_pairs(opt_pair: Tuple[str, Union[str, Dict[str, str]]]) -> Iterato
 
 
 def get_cli_kwargs_from_config(
-    kwargs_map: Mapping[str, Union[str, Dict[str, str]]],
-) -> List[str]:
+    kwargs_map: Mapping[str, str | dict[str, str]],
+) -> list[str]:
     """Make a list of options with values from config."""
     return list(chain.from_iterable(map(_emit_opt_pairs, kwargs_map.items())))
 
 
-def get_enabled_cli_flags_from_config(flags_map: Mapping[str, bool]) -> List[str]:
+def get_enabled_cli_flags_from_config(flags_map: Mapping[str, bool]) -> list[str]:
     """Make a list of enabled boolean flags from config."""
     return [f"--{flag}" for flag, is_enabled in flags_map.items() if is_enabled]
 
