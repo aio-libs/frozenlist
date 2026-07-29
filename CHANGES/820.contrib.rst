@@ -2,4 +2,4 @@ Removed duplicate entries in test skip sets, simplified boolean
 assertions in tests, dropped unnecessary ``else`` after ``raise`` in
 ``FrozenList.__hash__``, combined nested context managers in the
 PEP 517 backend, and aligned import lint suppressions with current
-Ruff conventions -- by :user:`inquilabee`.
+``ruff`` conventions -- by :user:`inquilabee`.
