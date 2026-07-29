@@ -65,7 +65,7 @@ extensions = [
 
 with suppress(ImportError):
     # spelling extension is optional, only add it when installed
-    import sphinxcontrib.spelling  # noqa # type: ignore
+    import sphinxcontrib.spelling  # ruff:ignore[unused-import] # type: ignore
 
     extensions.append("sphinxcontrib.spelling")
 

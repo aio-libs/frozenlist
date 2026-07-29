@@ -24,4 +24,4 @@ else:
             os.chdir(original_wd)
 
 
-__all__ = ("chdir_cm", "load_toml_from_string")  # noqa: WPS410
+__all__ = ("chdir_cm", "load_toml_from_string")

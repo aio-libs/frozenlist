@@ -70,8 +70,7 @@ class FrozenList(MutableSequence):
     def __hash__(self):
         if self._frozen:
             return hash(tuple(self))
-        else:
-            raise RuntimeError("Cannot hash unfrozen list.")
+        raise RuntimeError("Cannot hash unfrozen list.")
 
     def __copy__(self):
         new_list = self.__class__(self._items)

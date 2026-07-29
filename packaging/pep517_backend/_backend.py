@@ -49,7 +49,7 @@ from ._cython_configuration import (
 from ._cython_configuration import patched_env as _patched_cython_env
 from ._transformers import sanitize_rst_roles
 
-__all__ = (  # noqa: WPS410
+__all__ = (
     'build_sdist',
     'build_wheel',
     'get_requires_for_build_wheel',
@@ -143,7 +143,7 @@ def patched_distutils_cmd_install() -> Iterator[None]:
     # Without this, build_lib puts stuff under `*.data/purelib/` folder
     orig_finalize = _distutils_install_cmd.finalize_options
 
-    def new_finalize_options(self: _distutils_install_cmd) -> None:  # noqa: WPS430
+    def new_finalize_options(self: _distutils_install_cmd) -> None:
         self.install_lib = self.install_platlib
         orig_finalize(self)
 
@@ -294,9 +294,8 @@ def maybe_prebuild_c_extensions(
         cythonize_args = _make_cythonize_cli_args_from_config(config, cython_line_tracing_requested)
         with _patched_cython_env(config['env'], cython_line_tracing_requested):
             _cythonize_cli_cmd(cythonize_args)
-        with patched_distutils_cmd_install():
-            with patched_dist_has_ext_modules():
-                yield
+        with patched_distutils_cmd_install(), patched_dist_has_ext_modules():
+            yield
 
 
 @patched_dist_get_long_description()
