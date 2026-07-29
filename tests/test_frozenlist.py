@@ -21,8 +21,6 @@ class FrozenListMixin:
         "__slots__",
         "__static_attributes__",
         "__firstlineno__",
-        "__annotations_cache__",
-        "__annotate_func__",
     }
 
     def test___class_getitem__(self) -> None:
@@ -159,7 +157,7 @@ class FrozenListMixin:
     def test_remove(self) -> None:
         _list = self.FrozenList([1])
         _list.remove(1)
-        assert len(_list) == 0
+        assert not _list
 
     def test_remove_frozen(self) -> None:
         _list = self.FrozenList([1])
@@ -171,7 +169,7 @@ class FrozenListMixin:
     def test_clear(self) -> None:
         _list = self.FrozenList([1])
         _list.clear()
-        assert len(_list) == 0
+        assert not _list
 
     def test_clear_frozen(self) -> None:
         _list = self.FrozenList([1])
