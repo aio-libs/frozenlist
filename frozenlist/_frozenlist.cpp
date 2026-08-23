@@ -1745,10 +1745,10 @@ struct __pyx_obj_10frozenlist_11_frozenlist_FrozenList;
 
 /* "frozenlist/_frozenlist.pyx":19
  *     return fl
- * 
+ *
  * cdef class FrozenList:             # <<<<<<<<<<<<<<
  *     __class_getitem__ = classmethod(types.GenericAlias)
- * 
+ *
 */
 struct __pyx_obj_10frozenlist_11_frozenlist_FrozenList {
   PyObject_HEAD
@@ -3277,14 +3277,14 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_42__repr__(str
 static Py_hash_t __pyx_pf_10frozenlist_11_frozenlist_10FrozenList_44__hash__(struct __pyx_obj_10frozenlist_11_frozenlist_FrozenList *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_46__copy__(struct __pyx_obj_10frozenlist_11_frozenlist_FrozenList *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_48__deepcopy__(struct __pyx_obj_10frozenlist_11_frozenlist_FrozenList *__pyx_v_self, PyObject *__pyx_v_memo); /* proto */
-static PyObject *__pyx_tp_new__initialisation_10frozenlist_11_frozenlist_FrozenList(PyObject *o, 
+static PyObject *__pyx_tp_new__initialisation_10frozenlist_11_frozenlist_FrozenList(PyObject *o,
 #if CYTHON_VECTORCALL_TPNEW
     PyObject *const *args, Py_ssize_t nargs, PyObject *kwnames
 #else
     PyObject *a, PyObject *k
 #endif
 ); /*proto*/
-static PyObject *__pyx_tp_new_vectorcall_10frozenlist_11_frozenlist_FrozenList(PyTypeObject *t, 
+static PyObject *__pyx_tp_new_vectorcall_10frozenlist_11_frozenlist_FrozenList(PyTypeObject *t,
 #if CYTHON_VECTORCALL_TPNEW
     PyObject *const *args, Py_ssize_t nargs, PyObject *kwnames
 #else
@@ -3588,15 +3588,15 @@ return 0;
 /* #### Code section: module_code ### */
 
 /* "frozenlist/_frozenlist.pyx":13
- * 
- * 
+ *
+ *
  * def _unpickle_frozen_list(cls, items, frozen):             # <<<<<<<<<<<<<<
  *     fl = cls(items)
  *     if frozen:
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_1_unpickle_frozen_list(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_1_unpickle_frozen_list(PyObject *__pyx_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -3605,7 +3605,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 ); /*proto*/
 PyDoc_STRVAR(__pyx_doc_10frozenlist_11_frozenlist__unpickle_frozen_list, "_unpickle_frozen_list(cls, items, frozen)");
 static PyMethodDef __pyx_mdef_10frozenlist_11_frozenlist_1_unpickle_frozen_list = {"_unpickle_frozen_list", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_10frozenlist_11_frozenlist_1_unpickle_frozen_list, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_10frozenlist_11_frozenlist__unpickle_frozen_list};
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_1_unpickle_frozen_list(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_1_unpickle_frozen_list(PyObject *__pyx_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -3715,7 +3715,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist__unpickle_frozen_list(CYTHO
   __Pyx_TraceStartFunc("_unpickle_frozen_list", __pyx_f[0], 13, 0, 0, 0, __PYX_ERR(0, 13, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":14
- * 
+ *
  * def _unpickle_frozen_list(cls, items, frozen):
  *     fl = cls(items)             # <<<<<<<<<<<<<<
  *     if frozen:
@@ -3724,7 +3724,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist__unpickle_frozen_list(CYTHO
   __Pyx_TraceLine(14,3,0,__PYX_ERR(0, 14, __pyx_L1_error))
   __pyx_t_2 = NULL;
   __Pyx_INCREF(__pyx_v_cls);
-  __pyx_t_3 = __pyx_v_cls; 
+  __pyx_t_3 = __pyx_v_cls;
   __pyx_t_4 = 1;
   #if CYTHON_UNPACK_METHODS
   if (unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -3765,7 +3765,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist__unpickle_frozen_list(CYTHO
  *     if frozen:
  *         fl.freeze()             # <<<<<<<<<<<<<<
  *     return fl
- * 
+ *
 */
     __Pyx_TraceLine(16,7,0,__PYX_ERR(0, 16, __pyx_L1_error))
     __pyx_t_3 = __pyx_v_fl;
@@ -3793,7 +3793,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist__unpickle_frozen_list(CYTHO
  *     if frozen:
  *         fl.freeze()
  *     return fl             # <<<<<<<<<<<<<<
- * 
+ *
  * cdef class FrozenList:
 */
   __Pyx_TraceLine(17,11,0,__PYX_ERR(0, 17, __pyx_L1_error))
@@ -3810,8 +3810,8 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist__unpickle_frozen_list(CYTHO
   goto __pyx_L0;
 
   /* "frozenlist/_frozenlist.pyx":13
- * 
- * 
+ *
+ *
  * def _unpickle_frozen_list(cls, items, frozen):             # <<<<<<<<<<<<<<
  *     fl = cls(items)
  *     if frozen:
@@ -3840,21 +3840,21 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist__unpickle_frozen_list(CYTHO
 
 /* "frozenlist/_frozenlist.pyx":25
  *     cdef list _items
- * 
+ *
  *     def __init__(self, items=None):             # <<<<<<<<<<<<<<
  *         self._frozen.store(False)
  *         if items is not None:
 */
 
 /* Python wrapper */
-static int __pyx_pw_10frozenlist_11_frozenlist_10FrozenList_1__init__(PyObject *__pyx_v_self, 
+static int __pyx_pw_10frozenlist_11_frozenlist_10FrozenList_1__init__(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL_TPNEW
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static int __pyx_pw_10frozenlist_11_frozenlist_10FrozenList_1__init__(PyObject *__pyx_v_self, 
+static int __pyx_pw_10frozenlist_11_frozenlist_10FrozenList_1__init__(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL_TPNEW
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -3948,7 +3948,7 @@ static int __pyx_pf_10frozenlist_11_frozenlist_10FrozenList___init__(struct __py
   __Pyx_INCREF(__pyx_v_items);
 
   /* "frozenlist/_frozenlist.pyx":26
- * 
+ *
  *     def __init__(self, items=None):
  *         self._frozen.store(False)             # <<<<<<<<<<<<<<
  *         if items is not None:
@@ -3997,7 +3997,7 @@ static int __pyx_pf_10frozenlist_11_frozenlist_10FrozenList___init__(struct __py
  *         else:
  *             items = []             # <<<<<<<<<<<<<<
  *         self._items = items
- * 
+ *
 */
   __Pyx_TraceLine(30,16,0,__PYX_ERR(0, 30, __pyx_L1_error))
   /*else*/ {
@@ -4012,7 +4012,7 @@ static int __pyx_pf_10frozenlist_11_frozenlist_10FrozenList___init__(struct __py
  *         else:
  *             items = []
  *         self._items = items             # <<<<<<<<<<<<<<
- * 
+ *
  *     @property
 */
   __Pyx_TraceLine(31,19,0,__PYX_ERR(0, 31, __pyx_L1_error))
@@ -4027,7 +4027,7 @@ static int __pyx_pf_10frozenlist_11_frozenlist_10FrozenList___init__(struct __py
 
   /* "frozenlist/_frozenlist.pyx":25
  *     cdef list _items
- * 
+ *
  *     def __init__(self, items=None):             # <<<<<<<<<<<<<<
  *         self._frozen.store(False)
  *         if items is not None:
@@ -4057,7 +4057,7 @@ static int __pyx_pf_10frozenlist_11_frozenlist_10FrozenList___init__(struct __py
 
 /* "frozenlist/_frozenlist.pyx":33
  *         self._items = items
- * 
+ *
  *     @property             # <<<<<<<<<<<<<<
  *     def frozen(self):
  *         return PyBool_FromLong(self._frozen.load())
@@ -4094,7 +4094,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_6frozen___get_
  *     @property
  *     def frozen(self):
  *         return PyBool_FromLong(self._frozen.load())             # <<<<<<<<<<<<<<
- * 
+ *
  *     def __reduce__(self):
 */
   __Pyx_TraceLine(35,3,0,__PYX_ERR(0, 35, __pyx_L1_error))
@@ -4114,7 +4114,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_6frozen___get_
 
   /* "frozenlist/_frozenlist.pyx":33
  *         self._items = items
- * 
+ *
  *     @property             # <<<<<<<<<<<<<<
  *     def frozen(self):
  *         return PyBool_FromLong(self._frozen.load())
@@ -4140,14 +4140,14 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_6frozen___get_
 
 /* "frozenlist/_frozenlist.pyx":37
  *         return PyBool_FromLong(self._frozen.load())
- * 
+ *
  *     def __reduce__(self):             # <<<<<<<<<<<<<<
  *         # The default Cython-generated reducer cannot serialize the C++
  *         # atomic[bint] `_frozen` member, so pickle the state explicitly.
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_3__reduce__(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_3__reduce__(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -4156,7 +4156,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 ); /*proto*/
 PyDoc_STRVAR(__pyx_doc_10frozenlist_11_frozenlist_10FrozenList_2__reduce__, "FrozenList.__reduce__(self)");
 static PyMethodDef __pyx_mdef_10frozenlist_11_frozenlist_10FrozenList_3__reduce__ = {"__reduce__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_3__reduce__, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_10frozenlist_11_frozenlist_10FrozenList_2__reduce__};
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_3__reduce__(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_3__reduce__(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -4273,7 +4273,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_2__reduce__(st
 
   /* "frozenlist/_frozenlist.pyx":37
  *         return PyBool_FromLong(self._frozen.load())
- * 
+ *
  *     def __reduce__(self):             # <<<<<<<<<<<<<<
  *         # The default Cython-generated reducer cannot serialize the C++
  *         # atomic[bint] `_frozen` member, so pickle the state explicitly.
@@ -4328,7 +4328,7 @@ static PyObject *__pyx_f_10frozenlist_11_frozenlist_10FrozenList__check_frozen(s
  *     cdef object _check_frozen(self):
  *         if self._frozen.load():             # <<<<<<<<<<<<<<
  *             raise RuntimeError("Cannot modify frozen list.")
- * 
+ *
 */
   __Pyx_TraceLine(45,5,0,__PYX_ERR(0, 45, __pyx_L1_error))
   __pyx_t_1 = __pyx_v_self->_frozen.load();
@@ -4340,7 +4340,7 @@ static PyObject *__pyx_f_10frozenlist_11_frozenlist_10FrozenList__check_frozen(s
  *     cdef object _check_frozen(self):
  *         if self._frozen.load():
  *             raise RuntimeError("Cannot modify frozen list.")             # <<<<<<<<<<<<<<
- * 
+ *
  *     cdef inline object _fast_len(self):
 */
     __Pyx_TraceLine(46,8,0,__PYX_ERR(0, 46, __pyx_L1_error))
@@ -4362,7 +4362,7 @@ static PyObject *__pyx_f_10frozenlist_11_frozenlist_10FrozenList__check_frozen(s
  *     cdef object _check_frozen(self):
  *         if self._frozen.load():             # <<<<<<<<<<<<<<
  *             raise RuntimeError("Cannot modify frozen list.")
- * 
+ *
 */
   }
 
@@ -4398,10 +4398,10 @@ static PyObject *__pyx_f_10frozenlist_11_frozenlist_10FrozenList__check_frozen(s
 
 /* "frozenlist/_frozenlist.pyx":48
  *             raise RuntimeError("Cannot modify frozen list.")
- * 
+ *
  *     cdef inline object _fast_len(self):             # <<<<<<<<<<<<<<
  *         return len(self._items)
- * 
+ *
 */
 
 static CYTHON_INLINE PyObject *__pyx_f_10frozenlist_11_frozenlist_10FrozenList__fast_len(struct __pyx_obj_10frozenlist_11_frozenlist_FrozenList *__pyx_v_self) {
@@ -4418,10 +4418,10 @@ static CYTHON_INLINE PyObject *__pyx_f_10frozenlist_11_frozenlist_10FrozenList__
   __Pyx_TraceStartFunc("_fast_len", __pyx_f[0], 48, 0, 0, 0, __PYX_ERR(0, 48, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":49
- * 
+ *
  *     cdef inline object _fast_len(self):
  *         return len(self._items)             # <<<<<<<<<<<<<<
- * 
+ *
  *     def freeze(self):
 */
   __Pyx_TraceLine(49,5,0,__PYX_ERR(0, 49, __pyx_L1_error))
@@ -4450,10 +4450,10 @@ static CYTHON_INLINE PyObject *__pyx_f_10frozenlist_11_frozenlist_10FrozenList__
 
   /* "frozenlist/_frozenlist.pyx":48
  *             raise RuntimeError("Cannot modify frozen list.")
- * 
+ *
  *     cdef inline object _fast_len(self):             # <<<<<<<<<<<<<<
  *         return len(self._items)
- * 
+ *
 */
 
   /* function exit code */
@@ -4476,14 +4476,14 @@ static CYTHON_INLINE PyObject *__pyx_f_10frozenlist_11_frozenlist_10FrozenList__
 
 /* "frozenlist/_frozenlist.pyx":51
  *         return len(self._items)
- * 
+ *
  *     def freeze(self):             # <<<<<<<<<<<<<<
  *         self._frozen.store(True)
- * 
+ *
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_5freeze(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_5freeze(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -4492,7 +4492,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 ); /*proto*/
 PyDoc_STRVAR(__pyx_doc_10frozenlist_11_frozenlist_10FrozenList_4freeze, "FrozenList.freeze(self)");
 static PyMethodDef __pyx_mdef_10frozenlist_11_frozenlist_10FrozenList_5freeze = {"freeze", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_5freeze, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_10frozenlist_11_frozenlist_10FrozenList_4freeze};
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_5freeze(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_5freeze(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -4537,10 +4537,10 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_4freeze(struct
   __Pyx_TraceStartFunc("freeze", __pyx_f[0], 51, 0, 0, 0, __PYX_ERR(0, 51, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":52
- * 
+ *
  *     def freeze(self):
  *         self._frozen.store(True)             # <<<<<<<<<<<<<<
- * 
+ *
  *     def __getitem__(self, index):
 */
   __Pyx_TraceLine(52,4,0,__PYX_ERR(0, 52, __pyx_L1_error))
@@ -4548,10 +4548,10 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_4freeze(struct
 
   /* "frozenlist/_frozenlist.pyx":51
  *         return len(self._items)
- * 
+ *
  *     def freeze(self):             # <<<<<<<<<<<<<<
  *         self._frozen.store(True)
- * 
+ *
 */
 
   /* function exit code */
@@ -4576,10 +4576,10 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_4freeze(struct
 
 /* "frozenlist/_frozenlist.pyx":54
  *         self._frozen.store(True)
- * 
+ *
  *     def __getitem__(self, index):             # <<<<<<<<<<<<<<
  *         return self._items[index]
- * 
+ *
 */
 
 /* Python wrapper */
@@ -4610,10 +4610,10 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_6__getitem__(s
   __Pyx_TraceStartFunc("__getitem__", __pyx_f[0], 54, 0, 0, 0, __PYX_ERR(0, 54, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":55
- * 
+ *
  *     def __getitem__(self, index):
  *         return self._items[index]             # <<<<<<<<<<<<<<
- * 
+ *
  *     def __setitem__(self, index, value):
 */
   __Pyx_TraceLine(55,3,0,__PYX_ERR(0, 55, __pyx_L1_error))
@@ -4637,10 +4637,10 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_6__getitem__(s
 
   /* "frozenlist/_frozenlist.pyx":54
  *         self._frozen.store(True)
- * 
+ *
  *     def __getitem__(self, index):             # <<<<<<<<<<<<<<
  *         return self._items[index]
- * 
+ *
 */
 
   /* function exit code */
@@ -4663,7 +4663,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_6__getitem__(s
 
 /* "frozenlist/_frozenlist.pyx":57
  *         return self._items[index]
- * 
+ *
  *     def __setitem__(self, index, value):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         self._items[index] = value
@@ -4697,11 +4697,11 @@ static int __pyx_pf_10frozenlist_11_frozenlist_10FrozenList_8__setitem__(struct 
   __Pyx_TraceStartFunc("__setitem__", __pyx_f[0], 57, 0, 0, 0, __PYX_ERR(0, 57, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":58
- * 
+ *
  *     def __setitem__(self, index, value):
  *         self._check_frozen()             # <<<<<<<<<<<<<<
  *         self._items[index] = value
- * 
+ *
 */
   __Pyx_TraceLine(58,3,0,__PYX_ERR(0, 58, __pyx_L1_error))
   __pyx_t_1 = ((struct __pyx_vtabstruct_10frozenlist_11_frozenlist_FrozenList *)__pyx_v_self->__pyx_vtab)->_check_frozen(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 58, __pyx_L1_error)
@@ -4712,7 +4712,7 @@ static int __pyx_pf_10frozenlist_11_frozenlist_10FrozenList_8__setitem__(struct 
  *     def __setitem__(self, index, value):
  *         self._check_frozen()
  *         self._items[index] = value             # <<<<<<<<<<<<<<
- * 
+ *
  *     def __delitem__(self, index):
 */
   __Pyx_TraceLine(59,5,0,__PYX_ERR(0, 59, __pyx_L1_error))
@@ -4724,7 +4724,7 @@ static int __pyx_pf_10frozenlist_11_frozenlist_10FrozenList_8__setitem__(struct 
 
   /* "frozenlist/_frozenlist.pyx":57
  *         return self._items[index]
- * 
+ *
  *     def __setitem__(self, index, value):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         self._items[index] = value
@@ -4753,7 +4753,7 @@ static int __pyx_pf_10frozenlist_11_frozenlist_10FrozenList_8__setitem__(struct 
 
 /* "frozenlist/_frozenlist.pyx":61
  *         self._items[index] = value
- * 
+ *
  *     def __delitem__(self, index):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         del self._items[index]
@@ -4787,11 +4787,11 @@ static int __pyx_pf_10frozenlist_11_frozenlist_10FrozenList_10__delitem__(struct
   __Pyx_TraceStartFunc("__delitem__", __pyx_f[0], 61, 0, 0, 0, __PYX_ERR(0, 61, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":62
- * 
+ *
  *     def __delitem__(self, index):
  *         self._check_frozen()             # <<<<<<<<<<<<<<
  *         del self._items[index]
- * 
+ *
 */
   __Pyx_TraceLine(62,3,0,__PYX_ERR(0, 62, __pyx_L1_error))
   __pyx_t_1 = ((struct __pyx_vtabstruct_10frozenlist_11_frozenlist_FrozenList *)__pyx_v_self->__pyx_vtab)->_check_frozen(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 62, __pyx_L1_error)
@@ -4802,7 +4802,7 @@ static int __pyx_pf_10frozenlist_11_frozenlist_10FrozenList_10__delitem__(struct
  *     def __delitem__(self, index):
  *         self._check_frozen()
  *         del self._items[index]             # <<<<<<<<<<<<<<
- * 
+ *
  *     def __len__(self):
 */
   __Pyx_TraceLine(63,6,0,__PYX_ERR(0, 63, __pyx_L1_error))
@@ -4814,7 +4814,7 @@ static int __pyx_pf_10frozenlist_11_frozenlist_10FrozenList_10__delitem__(struct
 
   /* "frozenlist/_frozenlist.pyx":61
  *         self._items[index] = value
- * 
+ *
  *     def __delitem__(self, index):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         del self._items[index]
@@ -4843,10 +4843,10 @@ static int __pyx_pf_10frozenlist_11_frozenlist_10FrozenList_10__delitem__(struct
 
 /* "frozenlist/_frozenlist.pyx":65
  *         del self._items[index]
- * 
+ *
  *     def __len__(self):             # <<<<<<<<<<<<<<
  *         return self._fast_len()
- * 
+ *
 */
 
 /* Python wrapper */
@@ -4878,10 +4878,10 @@ static Py_ssize_t __pyx_pf_10frozenlist_11_frozenlist_10FrozenList_12__len__(str
   __Pyx_TraceStartFunc("__len__", __pyx_f[0], 65, 0, 0, 0, __PYX_ERR(0, 65, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":66
- * 
+ *
  *     def __len__(self):
  *         return self._fast_len()             # <<<<<<<<<<<<<<
- * 
+ *
  *     def __iter__(self):
 */
   __Pyx_TraceLine(66,4,0,__PYX_ERR(0, 66, __pyx_L1_error))
@@ -4897,10 +4897,10 @@ static Py_ssize_t __pyx_pf_10frozenlist_11_frozenlist_10FrozenList_12__len__(str
 
   /* "frozenlist/_frozenlist.pyx":65
  *         del self._items[index]
- * 
+ *
  *     def __len__(self):             # <<<<<<<<<<<<<<
  *         return self._fast_len()
- * 
+ *
 */
 
   /* function exit code */
@@ -4923,10 +4923,10 @@ static Py_ssize_t __pyx_pf_10frozenlist_11_frozenlist_10FrozenList_12__len__(str
 
 /* "frozenlist/_frozenlist.pyx":68
  *         return self._fast_len()
- * 
+ *
  *     def __iter__(self):             # <<<<<<<<<<<<<<
  *         return self._items.__iter__()
- * 
+ *
 */
 
 /* Python wrapper */
@@ -4959,10 +4959,10 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_14__iter__(str
   __Pyx_TraceStartFunc("__iter__", __pyx_f[0], 68, 0, 0, 0, __PYX_ERR(0, 68, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":69
- * 
+ *
  *     def __iter__(self):
  *         return self._items.__iter__()             # <<<<<<<<<<<<<<
- * 
+ *
  *     def __reversed__(self):
 */
   __Pyx_TraceLine(69,3,0,__PYX_ERR(0, 69, __pyx_L1_error))
@@ -4990,10 +4990,10 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_14__iter__(str
 
   /* "frozenlist/_frozenlist.pyx":68
  *         return self._fast_len()
- * 
+ *
  *     def __iter__(self):             # <<<<<<<<<<<<<<
  *         return self._items.__iter__()
- * 
+ *
 */
 
   /* function exit code */
@@ -5017,14 +5017,14 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_14__iter__(str
 
 /* "frozenlist/_frozenlist.pyx":71
  *         return self._items.__iter__()
- * 
+ *
  *     def __reversed__(self):             # <<<<<<<<<<<<<<
  *         return self._items.__reversed__()
- * 
+ *
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_17__reversed__(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_17__reversed__(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -5033,7 +5033,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 ); /*proto*/
 PyDoc_STRVAR(__pyx_doc_10frozenlist_11_frozenlist_10FrozenList_16__reversed__, "FrozenList.__reversed__(self)");
 static PyMethodDef __pyx_mdef_10frozenlist_11_frozenlist_10FrozenList_17__reversed__ = {"__reversed__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_17__reversed__, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_10frozenlist_11_frozenlist_10FrozenList_16__reversed__};
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_17__reversed__(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_17__reversed__(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -5081,10 +5081,10 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_16__reversed__
   __Pyx_TraceStartFunc("__reversed__", __pyx_f[0], 71, 0, 0, 0, __PYX_ERR(0, 71, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":72
- * 
+ *
  *     def __reversed__(self):
  *         return self._items.__reversed__()             # <<<<<<<<<<<<<<
- * 
+ *
  *     def __richcmp__(self, other, op):
 */
   __Pyx_TraceLine(72,3,0,__PYX_ERR(0, 72, __pyx_L1_error))
@@ -5112,10 +5112,10 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_16__reversed__
 
   /* "frozenlist/_frozenlist.pyx":71
  *         return self._items.__iter__()
- * 
+ *
  *     def __reversed__(self):             # <<<<<<<<<<<<<<
  *         return self._items.__reversed__()
- * 
+ *
 */
 
   /* function exit code */
@@ -5139,7 +5139,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_16__reversed__
 
 /* "frozenlist/_frozenlist.pyx":74
  *         return self._items.__reversed__()
- * 
+ *
  *     def __richcmp__(self, other, op):             # <<<<<<<<<<<<<<
  *         if op == 0:  # <
  *             return list(self) < other
@@ -5188,7 +5188,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_18__richcmp__(
   __Pyx_TraceStartFunc("__richcmp__", __pyx_f[0], 74, 0, 0, 0, __PYX_ERR(0, 74, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":75
- * 
+ *
  *     def __richcmp__(self, other, op):
  *         if op == 0:  # <             # <<<<<<<<<<<<<<
  *             return list(self) < other
@@ -5224,7 +5224,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_18__richcmp__(
     goto __pyx_L0;
 
     /* "frozenlist/_frozenlist.pyx":75
- * 
+ *
  *     def __richcmp__(self, other, op):
  *         if op == 0:  # <             # <<<<<<<<<<<<<<
  *             return list(self) < other
@@ -5417,7 +5417,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_18__richcmp__(
  *             return list(self) > other
  *         if op == 5:  # =>             # <<<<<<<<<<<<<<
  *             return list(self) >= other
- * 
+ *
 */
   __Pyx_TraceLine(85,53,0,__PYX_ERR(0, 85, __pyx_L1_error))
   __pyx_t_1 = (__Pyx_PyLong_BoolEqObjC(__pyx_v_op, __pyx_mstate_global->__pyx_int_5, 5, 0)); if (unlikely((__pyx_t_1 < 0))) __PYX_ERR(0, 85, __pyx_L1_error)
@@ -5428,7 +5428,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_18__richcmp__(
  *             return list(self) > other
  *         if op == 5:  # =>
  *             return list(self) >= other             # <<<<<<<<<<<<<<
- * 
+ *
  *     def insert(self, pos, item):
 */
     __Pyx_TraceLine(86,57,0,__PYX_ERR(0, 86, __pyx_L1_error))
@@ -5453,13 +5453,13 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_18__richcmp__(
  *             return list(self) > other
  *         if op == 5:  # =>             # <<<<<<<<<<<<<<
  *             return list(self) >= other
- * 
+ *
 */
   }
 
   /* "frozenlist/_frozenlist.pyx":74
  *         return self._items.__reversed__()
- * 
+ *
  *     def __richcmp__(self, other, op):             # <<<<<<<<<<<<<<
  *         if op == 0:  # <
  *             return list(self) < other
@@ -5489,14 +5489,14 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_18__richcmp__(
 
 /* "frozenlist/_frozenlist.pyx":88
  *             return list(self) >= other
- * 
+ *
  *     def insert(self, pos, item):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         self._items.insert(pos, item)
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_21insert(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_21insert(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -5505,7 +5505,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 ); /*proto*/
 PyDoc_STRVAR(__pyx_doc_10frozenlist_11_frozenlist_10FrozenList_20insert, "FrozenList.insert(self, pos, item)");
 static PyMethodDef __pyx_mdef_10frozenlist_11_frozenlist_10FrozenList_21insert = {"insert", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_21insert, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_10frozenlist_11_frozenlist_10FrozenList_20insert};
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_21insert(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_21insert(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -5604,11 +5604,11 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_20insert(struc
   __Pyx_TraceStartFunc("insert", __pyx_f[0], 88, 0, 0, 0, __PYX_ERR(0, 88, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":89
- * 
+ *
  *     def insert(self, pos, item):
  *         self._check_frozen()             # <<<<<<<<<<<<<<
  *         self._items.insert(pos, item)
- * 
+ *
 */
   __Pyx_TraceLine(89,3,0,__PYX_ERR(0, 89, __pyx_L1_error))
   __pyx_t_1 = ((struct __pyx_vtabstruct_10frozenlist_11_frozenlist_FrozenList *)__pyx_v_self->__pyx_vtab)->_check_frozen(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 89, __pyx_L1_error)
@@ -5619,7 +5619,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_20insert(struc
  *     def insert(self, pos, item):
  *         self._check_frozen()
  *         self._items.insert(pos, item)             # <<<<<<<<<<<<<<
- * 
+ *
  *     def __contains__(self, item):
 */
   __Pyx_TraceLine(90,5,0,__PYX_ERR(0, 90, __pyx_L1_error))
@@ -5634,7 +5634,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_20insert(struc
 
   /* "frozenlist/_frozenlist.pyx":88
  *             return list(self) >= other
- * 
+ *
  *     def insert(self, pos, item):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         self._items.insert(pos, item)
@@ -5663,10 +5663,10 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_20insert(struc
 
 /* "frozenlist/_frozenlist.pyx":92
  *         self._items.insert(pos, item)
- * 
+ *
  *     def __contains__(self, item):             # <<<<<<<<<<<<<<
  *         return item in self._items
- * 
+ *
 */
 
 /* Python wrapper */
@@ -5695,10 +5695,10 @@ static int __pyx_pf_10frozenlist_11_frozenlist_10FrozenList_22__contains__(struc
   __Pyx_TraceStartFunc("__contains__", __pyx_f[0], 92, 0, 0, 0, __PYX_ERR(0, 92, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":93
- * 
+ *
  *     def __contains__(self, item):
  *         return item in self._items             # <<<<<<<<<<<<<<
- * 
+ *
  *     def __iadd__(self, items):
 */
   __Pyx_TraceLine(93,5,0,__PYX_ERR(0, 93, __pyx_L1_error))
@@ -5711,10 +5711,10 @@ static int __pyx_pf_10frozenlist_11_frozenlist_10FrozenList_22__contains__(struc
 
   /* "frozenlist/_frozenlist.pyx":92
  *         self._items.insert(pos, item)
- * 
+ *
  *     def __contains__(self, item):             # <<<<<<<<<<<<<<
  *         return item in self._items
- * 
+ *
 */
 
   /* function exit code */
@@ -5735,7 +5735,7 @@ static int __pyx_pf_10frozenlist_11_frozenlist_10FrozenList_22__contains__(struc
 
 /* "frozenlist/_frozenlist.pyx":95
  *         return item in self._items
- * 
+ *
  *     def __iadd__(self, items):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         self._items += list(items)
@@ -5770,7 +5770,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_24__iadd__(str
   __Pyx_TraceStartFunc("__iadd__", __pyx_f[0], 95, 0, 0, 0, __PYX_ERR(0, 95, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":96
- * 
+ *
  *     def __iadd__(self, items):
  *         self._check_frozen()             # <<<<<<<<<<<<<<
  *         self._items += list(items)
@@ -5786,7 +5786,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_24__iadd__(str
  *         self._check_frozen()
  *         self._items += list(items)             # <<<<<<<<<<<<<<
  *         return self
- * 
+ *
 */
   __Pyx_TraceLine(97,7,0,__PYX_ERR(0, 97, __pyx_L1_error))
   __pyx_t_1 = PySequence_List(__pyx_v_items); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 97, __pyx_L1_error)
@@ -5804,7 +5804,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_24__iadd__(str
  *         self._check_frozen()
  *         self._items += list(items)
  *         return self             # <<<<<<<<<<<<<<
- * 
+ *
  *     def index(self, item):
 */
   __Pyx_TraceLine(98,10,0,__PYX_ERR(0, 98, __pyx_L1_error))
@@ -5822,7 +5822,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_24__iadd__(str
 
   /* "frozenlist/_frozenlist.pyx":95
  *         return item in self._items
- * 
+ *
  *     def __iadd__(self, items):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         self._items += list(items)
@@ -5849,14 +5849,14 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_24__iadd__(str
 
 /* "frozenlist/_frozenlist.pyx":100
  *         return self
- * 
+ *
  *     def index(self, item):             # <<<<<<<<<<<<<<
  *         return self._items.index(item)
- * 
+ *
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_27index(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_27index(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -5865,7 +5865,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 ); /*proto*/
 PyDoc_STRVAR(__pyx_doc_10frozenlist_11_frozenlist_10FrozenList_26index, "FrozenList.index(self, item)");
 static PyMethodDef __pyx_mdef_10frozenlist_11_frozenlist_10FrozenList_27index = {"index", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_27index, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_10frozenlist_11_frozenlist_10FrozenList_26index};
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_27index(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_27index(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -5957,10 +5957,10 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_26index(struct
   __Pyx_TraceStartFunc("index", __pyx_f[0], 100, 0, 0, 0, __PYX_ERR(0, 100, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":101
- * 
+ *
  *     def index(self, item):
  *         return self._items.index(item)             # <<<<<<<<<<<<<<
- * 
+ *
  *     def remove(self, item):
 */
   __Pyx_TraceLine(101,3,0,__PYX_ERR(0, 101, __pyx_L1_error))
@@ -5993,10 +5993,10 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_26index(struct
 
   /* "frozenlist/_frozenlist.pyx":100
  *         return self
- * 
+ *
  *     def index(self, item):             # <<<<<<<<<<<<<<
  *         return self._items.index(item)
- * 
+ *
 */
 
   /* function exit code */
@@ -6020,14 +6020,14 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_26index(struct
 
 /* "frozenlist/_frozenlist.pyx":103
  *         return self._items.index(item)
- * 
+ *
  *     def remove(self, item):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         self._items.remove(item)
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_29remove(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_29remove(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -6036,7 +6036,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 ); /*proto*/
 PyDoc_STRVAR(__pyx_doc_10frozenlist_11_frozenlist_10FrozenList_28remove, "FrozenList.remove(self, item)");
 static PyMethodDef __pyx_mdef_10frozenlist_11_frozenlist_10FrozenList_29remove = {"remove", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_29remove, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_10frozenlist_11_frozenlist_10FrozenList_28remove};
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_29remove(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_29remove(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -6127,11 +6127,11 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_28remove(struc
   __Pyx_TraceStartFunc("remove", __pyx_f[0], 103, 0, 0, 0, __PYX_ERR(0, 103, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":104
- * 
+ *
  *     def remove(self, item):
  *         self._check_frozen()             # <<<<<<<<<<<<<<
  *         self._items.remove(item)
- * 
+ *
 */
   __Pyx_TraceLine(104,3,0,__PYX_ERR(0, 104, __pyx_L1_error))
   __pyx_t_1 = ((struct __pyx_vtabstruct_10frozenlist_11_frozenlist_FrozenList *)__pyx_v_self->__pyx_vtab)->_check_frozen(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 104, __pyx_L1_error)
@@ -6142,7 +6142,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_28remove(struc
  *     def remove(self, item):
  *         self._check_frozen()
  *         self._items.remove(item)             # <<<<<<<<<<<<<<
- * 
+ *
  *     def clear(self):
 */
   __Pyx_TraceLine(105,5,0,__PYX_ERR(0, 105, __pyx_L1_error))
@@ -6160,7 +6160,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_28remove(struc
 
   /* "frozenlist/_frozenlist.pyx":103
  *         return self._items.index(item)
- * 
+ *
  *     def remove(self, item):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         self._items.remove(item)
@@ -6190,14 +6190,14 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_28remove(struc
 
 /* "frozenlist/_frozenlist.pyx":107
  *         self._items.remove(item)
- * 
+ *
  *     def clear(self):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         self._items.clear()
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_31clear(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_31clear(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -6206,7 +6206,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 ); /*proto*/
 PyDoc_STRVAR(__pyx_doc_10frozenlist_11_frozenlist_10FrozenList_30clear, "FrozenList.clear(self)");
 static PyMethodDef __pyx_mdef_10frozenlist_11_frozenlist_10FrozenList_31clear = {"clear", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_31clear, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_10frozenlist_11_frozenlist_10FrozenList_30clear};
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_31clear(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_31clear(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -6254,11 +6254,11 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_30clear(struct
   __Pyx_TraceStartFunc("clear", __pyx_f[0], 107, 0, 0, 0, __PYX_ERR(0, 107, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":108
- * 
+ *
  *     def clear(self):
  *         self._check_frozen()             # <<<<<<<<<<<<<<
  *         self._items.clear()
- * 
+ *
 */
   __Pyx_TraceLine(108,3,0,__PYX_ERR(0, 108, __pyx_L1_error))
   __pyx_t_1 = ((struct __pyx_vtabstruct_10frozenlist_11_frozenlist_FrozenList *)__pyx_v_self->__pyx_vtab)->_check_frozen(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 108, __pyx_L1_error)
@@ -6269,7 +6269,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_30clear(struct
  *     def clear(self):
  *         self._check_frozen()
  *         self._items.clear()             # <<<<<<<<<<<<<<
- * 
+ *
  *     def extend(self, items):
 */
   __Pyx_TraceLine(109,5,0,__PYX_ERR(0, 109, __pyx_L1_error))
@@ -6287,7 +6287,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_30clear(struct
 
   /* "frozenlist/_frozenlist.pyx":107
  *         self._items.remove(item)
- * 
+ *
  *     def clear(self):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         self._items.clear()
@@ -6317,14 +6317,14 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_30clear(struct
 
 /* "frozenlist/_frozenlist.pyx":111
  *         self._items.clear()
- * 
+ *
  *     def extend(self, items):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         self._items += list(items)
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_33extend(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_33extend(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -6333,7 +6333,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 ); /*proto*/
 PyDoc_STRVAR(__pyx_doc_10frozenlist_11_frozenlist_10FrozenList_32extend, "FrozenList.extend(self, items)");
 static PyMethodDef __pyx_mdef_10frozenlist_11_frozenlist_10FrozenList_33extend = {"extend", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_33extend, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_10frozenlist_11_frozenlist_10FrozenList_32extend};
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_33extend(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_33extend(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -6423,11 +6423,11 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_32extend(struc
   __Pyx_TraceStartFunc("extend", __pyx_f[0], 111, 0, 0, 0, __PYX_ERR(0, 111, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":112
- * 
+ *
  *     def extend(self, items):
  *         self._check_frozen()             # <<<<<<<<<<<<<<
  *         self._items += list(items)
- * 
+ *
 */
   __Pyx_TraceLine(112,3,0,__PYX_ERR(0, 112, __pyx_L1_error))
   __pyx_t_1 = ((struct __pyx_vtabstruct_10frozenlist_11_frozenlist_FrozenList *)__pyx_v_self->__pyx_vtab)->_check_frozen(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 112, __pyx_L1_error)
@@ -6438,7 +6438,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_32extend(struc
  *     def extend(self, items):
  *         self._check_frozen()
  *         self._items += list(items)             # <<<<<<<<<<<<<<
- * 
+ *
  *     def reverse(self):
 */
   __Pyx_TraceLine(113,7,0,__PYX_ERR(0, 113, __pyx_L1_error))
@@ -6455,7 +6455,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_32extend(struc
 
   /* "frozenlist/_frozenlist.pyx":111
  *         self._items.clear()
- * 
+ *
  *     def extend(self, items):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         self._items += list(items)
@@ -6485,14 +6485,14 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_32extend(struc
 
 /* "frozenlist/_frozenlist.pyx":115
  *         self._items += list(items)
- * 
+ *
  *     def reverse(self):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         self._items.reverse()
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_35reverse(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_35reverse(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -6501,7 +6501,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 ); /*proto*/
 PyDoc_STRVAR(__pyx_doc_10frozenlist_11_frozenlist_10FrozenList_34reverse, "FrozenList.reverse(self)");
 static PyMethodDef __pyx_mdef_10frozenlist_11_frozenlist_10FrozenList_35reverse = {"reverse", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_35reverse, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_10frozenlist_11_frozenlist_10FrozenList_34reverse};
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_35reverse(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_35reverse(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -6548,11 +6548,11 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_34reverse(stru
   __Pyx_TraceStartFunc("reverse", __pyx_f[0], 115, 0, 0, 0, __PYX_ERR(0, 115, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":116
- * 
+ *
  *     def reverse(self):
  *         self._check_frozen()             # <<<<<<<<<<<<<<
  *         self._items.reverse()
- * 
+ *
 */
   __Pyx_TraceLine(116,3,0,__PYX_ERR(0, 116, __pyx_L1_error))
   __pyx_t_1 = ((struct __pyx_vtabstruct_10frozenlist_11_frozenlist_FrozenList *)__pyx_v_self->__pyx_vtab)->_check_frozen(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 116, __pyx_L1_error)
@@ -6563,7 +6563,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_34reverse(stru
  *     def reverse(self):
  *         self._check_frozen()
  *         self._items.reverse()             # <<<<<<<<<<<<<<
- * 
+ *
  *     def pop(self, index=-1):
 */
   __Pyx_TraceLine(117,5,0,__PYX_ERR(0, 117, __pyx_L1_error))
@@ -6576,7 +6576,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_34reverse(stru
 
   /* "frozenlist/_frozenlist.pyx":115
  *         self._items += list(items)
- * 
+ *
  *     def reverse(self):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         self._items.reverse()
@@ -6605,14 +6605,14 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_34reverse(stru
 
 /* "frozenlist/_frozenlist.pyx":119
  *         self._items.reverse()
- * 
+ *
  *     def pop(self, index=-1):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         return self._items.pop(index)
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_37pop(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_37pop(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -6621,7 +6621,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 ); /*proto*/
 PyDoc_STRVAR(__pyx_doc_10frozenlist_11_frozenlist_10FrozenList_36pop, "FrozenList.pop(self, index=-1)");
 static PyMethodDef __pyx_mdef_10frozenlist_11_frozenlist_10FrozenList_37pop = {"pop", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_37pop, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_10frozenlist_11_frozenlist_10FrozenList_36pop};
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_37pop(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_37pop(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -6714,11 +6714,11 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_36pop(struct _
   __Pyx_TraceStartFunc("pop", __pyx_f[0], 119, 0, 0, 0, __PYX_ERR(0, 119, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":120
- * 
+ *
  *     def pop(self, index=-1):
  *         self._check_frozen()             # <<<<<<<<<<<<<<
  *         return self._items.pop(index)
- * 
+ *
 */
   __Pyx_TraceLine(120,4,0,__PYX_ERR(0, 120, __pyx_L1_error))
   __pyx_t_1 = ((struct __pyx_vtabstruct_10frozenlist_11_frozenlist_FrozenList *)__pyx_v_self->__pyx_vtab)->_check_frozen(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 120, __pyx_L1_error)
@@ -6729,7 +6729,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_36pop(struct _
  *     def pop(self, index=-1):
  *         self._check_frozen()
  *         return self._items.pop(index)             # <<<<<<<<<<<<<<
- * 
+ *
  *     def append(self, item):
 */
   __Pyx_TraceLine(121,7,0,__PYX_ERR(0, 121, __pyx_L1_error))
@@ -6755,7 +6755,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_36pop(struct _
 
   /* "frozenlist/_frozenlist.pyx":119
  *         self._items.reverse()
- * 
+ *
  *     def pop(self, index=-1):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         return self._items.pop(index)
@@ -6781,14 +6781,14 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_36pop(struct _
 
 /* "frozenlist/_frozenlist.pyx":123
  *         return self._items.pop(index)
- * 
+ *
  *     def append(self, item):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         return self._items.append(item)
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_39append(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_39append(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -6797,7 +6797,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 ); /*proto*/
 PyDoc_STRVAR(__pyx_doc_10frozenlist_11_frozenlist_10FrozenList_38append, "FrozenList.append(self, item)");
 static PyMethodDef __pyx_mdef_10frozenlist_11_frozenlist_10FrozenList_39append = {"append", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_39append, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_10frozenlist_11_frozenlist_10FrozenList_38append};
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_39append(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_39append(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -6887,11 +6887,11 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_38append(struc
   __Pyx_TraceStartFunc("append", __pyx_f[0], 123, 0, 0, 0, __PYX_ERR(0, 123, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":124
- * 
+ *
  *     def append(self, item):
  *         self._check_frozen()             # <<<<<<<<<<<<<<
  *         return self._items.append(item)
- * 
+ *
 */
   __Pyx_TraceLine(124,3,0,__PYX_ERR(0, 124, __pyx_L1_error))
   __pyx_t_1 = ((struct __pyx_vtabstruct_10frozenlist_11_frozenlist_FrozenList *)__pyx_v_self->__pyx_vtab)->_check_frozen(__pyx_v_self); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 124, __pyx_L1_error)
@@ -6902,7 +6902,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_38append(struc
  *     def append(self, item):
  *         self._check_frozen()
  *         return self._items.append(item)             # <<<<<<<<<<<<<<
- * 
+ *
  *     def count(self, item):
 */
   __Pyx_TraceLine(125,6,0,__PYX_ERR(0, 125, __pyx_L1_error))
@@ -6928,7 +6928,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_38append(struc
 
   /* "frozenlist/_frozenlist.pyx":123
  *         return self._items.pop(index)
- * 
+ *
  *     def append(self, item):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         return self._items.append(item)
@@ -6954,14 +6954,14 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_38append(struc
 
 /* "frozenlist/_frozenlist.pyx":127
  *         return self._items.append(item)
- * 
+ *
  *     def count(self, item):             # <<<<<<<<<<<<<<
  *         return self._items.count(item)
- * 
+ *
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_41count(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_41count(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -6970,7 +6970,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 ); /*proto*/
 PyDoc_STRVAR(__pyx_doc_10frozenlist_11_frozenlist_10FrozenList_40count, "FrozenList.count(self, item)");
 static PyMethodDef __pyx_mdef_10frozenlist_11_frozenlist_10FrozenList_41count = {"count", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_41count, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_10frozenlist_11_frozenlist_10FrozenList_40count};
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_41count(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_41count(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -7062,10 +7062,10 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_40count(struct
   __Pyx_TraceStartFunc("count", __pyx_f[0], 127, 0, 0, 0, __PYX_ERR(0, 127, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":128
- * 
+ *
  *     def count(self, item):
  *         return self._items.count(item)             # <<<<<<<<<<<<<<
- * 
+ *
  *     def __repr__(self):
 */
   __Pyx_TraceLine(128,3,0,__PYX_ERR(0, 128, __pyx_L1_error))
@@ -7098,10 +7098,10 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_40count(struct
 
   /* "frozenlist/_frozenlist.pyx":127
  *         return self._items.append(item)
- * 
+ *
  *     def count(self, item):             # <<<<<<<<<<<<<<
  *         return self._items.count(item)
- * 
+ *
 */
 
   /* function exit code */
@@ -7125,7 +7125,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_40count(struct
 
 /* "frozenlist/_frozenlist.pyx":130
  *         return self._items.count(item)
- * 
+ *
  *     def __repr__(self):             # <<<<<<<<<<<<<<
  *         return '<FrozenList(frozen={}, {!r})>'.format(self._frozen.load(),
  *                                                       self._items)
@@ -7162,11 +7162,11 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_42__repr__(str
   __Pyx_TraceStartFunc("__repr__", __pyx_f[0], 130, 0, 0, 0, __PYX_ERR(0, 130, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":131
- * 
+ *
  *     def __repr__(self):
  *         return '<FrozenList(frozen={}, {!r})>'.format(self._frozen.load(),             # <<<<<<<<<<<<<<
  *                                                       self._items)
- * 
+ *
 */
   __Pyx_TraceLine(131,4,0,__PYX_ERR(0, 131, __pyx_L1_error))
   __pyx_t_2 = __pyx_mstate_global->__pyx_kp_u_FrozenList_frozen_r;
@@ -7178,7 +7178,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_42__repr__(str
  *     def __repr__(self):
  *         return '<FrozenList(frozen={}, {!r})>'.format(self._frozen.load(),
  *                                                       self._items)             # <<<<<<<<<<<<<<
- * 
+ *
  *     def __hash__(self):
 */
   __Pyx_TraceLine(132,10,0,__PYX_ERR(0, 132, __pyx_L1_error))
@@ -7193,11 +7193,11 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_42__repr__(str
   }
 
   /* "frozenlist/_frozenlist.pyx":131
- * 
+ *
  *     def __repr__(self):
  *         return '<FrozenList(frozen={}, {!r})>'.format(self._frozen.load(),             # <<<<<<<<<<<<<<
  *                                                       self._items)
- * 
+ *
 */
   __Pyx_TraceLine(131,4,0,__PYX_ERR(0, 131, __pyx_L1_error))
   if (!(likely(PyUnicode_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None) || __Pyx_RaiseUnexpectedTypeError("str", __pyx_t_1))) __PYX_ERR(0, 131, __pyx_L1_error)
@@ -7215,7 +7215,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_42__repr__(str
 
   /* "frozenlist/_frozenlist.pyx":130
  *         return self._items.count(item)
- * 
+ *
  *     def __repr__(self):             # <<<<<<<<<<<<<<
  *         return '<FrozenList(frozen={}, {!r})>'.format(self._frozen.load(),
  *                                                       self._items)
@@ -7243,7 +7243,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_42__repr__(str
 
 /* "frozenlist/_frozenlist.pyx":134
  *                                                       self._items)
- * 
+ *
  *     def __hash__(self):             # <<<<<<<<<<<<<<
  *         if self._frozen.load():
  *             return hash(tuple(self._items))
@@ -7281,7 +7281,7 @@ static Py_hash_t __pyx_pf_10frozenlist_11_frozenlist_10FrozenList_44__hash__(str
   __Pyx_TraceStartFunc("__hash__", __pyx_f[0], 134, 0, 0, 0, __PYX_ERR(0, 134, __pyx_L1_error));
 
   /* "frozenlist/_frozenlist.pyx":135
- * 
+ *
  *     def __hash__(self):
  *         if self._frozen.load():             # <<<<<<<<<<<<<<
  *             return hash(tuple(self._items))
@@ -7316,7 +7316,7 @@ static Py_hash_t __pyx_pf_10frozenlist_11_frozenlist_10FrozenList_44__hash__(str
     goto __pyx_L0;
 
     /* "frozenlist/_frozenlist.pyx":135
- * 
+ *
  *     def __hash__(self):
  *         if self._frozen.load():             # <<<<<<<<<<<<<<
  *             return hash(tuple(self._items))
@@ -7328,7 +7328,7 @@ static Py_hash_t __pyx_pf_10frozenlist_11_frozenlist_10FrozenList_44__hash__(str
  *             return hash(tuple(self._items))
  *         else:
  *             raise RuntimeError("Cannot hash unfrozen list.")             # <<<<<<<<<<<<<<
- * 
+ *
  *     def __copy__(self):
 */
   __Pyx_TraceLine(138,13,0,__PYX_ERR(0, 138, __pyx_L1_error))
@@ -7349,7 +7349,7 @@ static Py_hash_t __pyx_pf_10frozenlist_11_frozenlist_10FrozenList_44__hash__(str
 
   /* "frozenlist/_frozenlist.pyx":134
  *                                                       self._items)
- * 
+ *
  *     def __hash__(self):             # <<<<<<<<<<<<<<
  *         if self._frozen.load():
  *             return hash(tuple(self._items))
@@ -7377,14 +7377,14 @@ static Py_hash_t __pyx_pf_10frozenlist_11_frozenlist_10FrozenList_44__hash__(str
 
 /* "frozenlist/_frozenlist.pyx":140
  *             raise RuntimeError("Cannot hash unfrozen list.")
- * 
+ *
  *     def __copy__(self):             # <<<<<<<<<<<<<<
  *         cdef FrozenList new_list
  *         new_list = self.__class__(self._items)
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_47__copy__(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_47__copy__(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -7393,7 +7393,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 ); /*proto*/
 PyDoc_STRVAR(__pyx_doc_10frozenlist_11_frozenlist_10FrozenList_46__copy__, "FrozenList.__copy__(self)");
 static PyMethodDef __pyx_mdef_10frozenlist_11_frozenlist_10FrozenList_47__copy__ = {"__copy__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_47__copy__, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_10frozenlist_11_frozenlist_10FrozenList_46__copy__};
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_47__copy__(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_47__copy__(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -7482,7 +7482,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_46__copy__(str
  *         if self._frozen.load():
  *             new_list.freeze()             # <<<<<<<<<<<<<<
  *         return new_list
- * 
+ *
 */
     __Pyx_TraceLine(144,12,0,__PYX_ERR(0, 144, __pyx_L1_error))
     __pyx_t_2 = ((PyObject *)__pyx_v_new_list);
@@ -7510,7 +7510,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_46__copy__(str
  *         if self._frozen.load():
  *             new_list.freeze()
  *         return new_list             # <<<<<<<<<<<<<<
- * 
+ *
  *     def __deepcopy__(self, memo):
 */
   __Pyx_TraceLine(145,16,0,__PYX_ERR(0, 145, __pyx_L1_error))
@@ -7528,7 +7528,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_46__copy__(str
 
   /* "frozenlist/_frozenlist.pyx":140
  *             raise RuntimeError("Cannot hash unfrozen list.")
- * 
+ *
  *     def __copy__(self):             # <<<<<<<<<<<<<<
  *         cdef FrozenList new_list
  *         new_list = self.__class__(self._items)
@@ -7556,14 +7556,14 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_46__copy__(str
 
 /* "frozenlist/_frozenlist.pyx":147
  *         return new_list
- * 
+ *
  *     def __deepcopy__(self, memo):             # <<<<<<<<<<<<<<
  *         cdef FrozenList new_list
  *         obj_id = id(self)
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_49__deepcopy__(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_49__deepcopy__(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -7572,7 +7572,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 ); /*proto*/
 PyDoc_STRVAR(__pyx_doc_10frozenlist_11_frozenlist_10FrozenList_48__deepcopy__, "FrozenList.__deepcopy__(self, memo)");
 static PyMethodDef __pyx_mdef_10frozenlist_11_frozenlist_10FrozenList_49__deepcopy__ = {"__deepcopy__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_49__deepcopy__, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_10frozenlist_11_frozenlist_10FrozenList_48__deepcopy__};
-static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_49__deepcopy__(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_10frozenlist_11_frozenlist_10FrozenList_49__deepcopy__(PyObject *__pyx_v_self,
 #if CYTHON_VECTORCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -7675,7 +7675,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_48__deepcopy__
  *     def __deepcopy__(self, memo):
  *         cdef FrozenList new_list
  *         obj_id = id(self)             # <<<<<<<<<<<<<<
- * 
+ *
  *         # Return existing copy if already processed (circular reference)
 */
   __Pyx_TraceLine(149,3,0,__PYX_ERR(0, 149, __pyx_L1_error))
@@ -7692,11 +7692,11 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_48__deepcopy__
   __pyx_t_1 = 0;
 
   /* "frozenlist/_frozenlist.pyx":152
- * 
+ *
  *         # Return existing copy if already processed (circular reference)
  *         if obj_id in memo:             # <<<<<<<<<<<<<<
  *             return memo[obj_id]
- * 
+ *
 */
   __Pyx_TraceLine(152,8,0,__PYX_ERR(0, 152, __pyx_L1_error))
   __pyx_t_4 = (__Pyx_PySequence_ContainsTF(__pyx_v_obj_id, __pyx_v_memo, Py_EQ)); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 152, __pyx_L1_error)
@@ -7707,7 +7707,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_48__deepcopy__
  *         # Return existing copy if already processed (circular reference)
  *         if obj_id in memo:
  *             return memo[obj_id]             # <<<<<<<<<<<<<<
- * 
+ *
  *         # Create new instance and register immediately
 */
     __Pyx_TraceLine(153,11,0,__PYX_ERR(0, 153, __pyx_L1_error))
@@ -7726,20 +7726,20 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_48__deepcopy__
     goto __pyx_L0;
 
     /* "frozenlist/_frozenlist.pyx":152
- * 
+ *
  *         # Return existing copy if already processed (circular reference)
  *         if obj_id in memo:             # <<<<<<<<<<<<<<
  *             return memo[obj_id]
- * 
+ *
 */
   }
 
   /* "frozenlist/_frozenlist.pyx":156
- * 
+ *
  *         # Create new instance and register immediately
  *         new_list = self.__class__([])             # <<<<<<<<<<<<<<
  *         memo[obj_id] = new_list
- * 
+ *
 */
   __Pyx_TraceLine(156,14,0,__PYX_ERR(0, 156, __pyx_L1_error))
   __pyx_t_2 = ((PyObject *)__pyx_v_self);
@@ -7763,17 +7763,17 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_48__deepcopy__
  *         # Create new instance and register immediately
  *         new_list = self.__class__([])
  *         memo[obj_id] = new_list             # <<<<<<<<<<<<<<
- * 
+ *
  *         # Deep copy items
 */
   __Pyx_TraceLine(157,20,0,__PYX_ERR(0, 157, __pyx_L1_error))
   if (unlikely((PyObject_SetItem(__pyx_v_memo, __pyx_v_obj_id, ((PyObject *)__pyx_v_new_list)) < 0))) __PYX_ERR(0, 157, __pyx_L1_error)
 
   /* "frozenlist/_frozenlist.pyx":160
- * 
+ *
  *         # Deep copy items
  *         new_list._items[:] = [copy.deepcopy(item, memo) for item in self._items]             # <<<<<<<<<<<<<<
- * 
+ *
  *         # Preserve frozen state
 */
   __Pyx_TraceLine(160,25,0,__PYX_ERR(0, 160, __pyx_L1_error))
@@ -7847,11 +7847,11 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_48__deepcopy__
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "frozenlist/_frozenlist.pyx":163
- * 
+ *
  *         # Preserve frozen state
  *         if self._frozen.load():             # <<<<<<<<<<<<<<
  *             new_list.freeze()
- * 
+ *
 */
   __Pyx_TraceLine(163,39,0,__PYX_ERR(0, 163, __pyx_L1_error))
   __pyx_t_4 = __pyx_v_self->_frozen.load();
@@ -7863,7 +7863,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_48__deepcopy__
  *         # Preserve frozen state
  *         if self._frozen.load():
  *             new_list.freeze()             # <<<<<<<<<<<<<<
- * 
+ *
  *         return new_list
 */
     __Pyx_TraceLine(164,40,0,__PYX_ERR(0, 164, __pyx_L1_error))
@@ -7880,20 +7880,20 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_48__deepcopy__
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
     /* "frozenlist/_frozenlist.pyx":163
- * 
+ *
  *         # Preserve frozen state
  *         if self._frozen.load():             # <<<<<<<<<<<<<<
  *             new_list.freeze()
- * 
+ *
 */
   }
 
   /* "frozenlist/_frozenlist.pyx":166
  *             new_list.freeze()
- * 
+ *
  *         return new_list             # <<<<<<<<<<<<<<
- * 
- * 
+ *
+ *
 */
   __Pyx_TraceLine(166,44,0,__PYX_ERR(0, 166, __pyx_L1_error))
   {
@@ -7910,7 +7910,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_48__deepcopy__
 
   /* "frozenlist/_frozenlist.pyx":147
  *         return new_list
- * 
+ *
  *     def __deepcopy__(self, memo):             # <<<<<<<<<<<<<<
  *         cdef FrozenList new_list
  *         obj_id = id(self)
@@ -7944,7 +7944,7 @@ static PyObject *__pyx_pf_10frozenlist_11_frozenlist_10FrozenList_48__deepcopy__
 /* #### Code section: module_exttypes ### */
 static struct __pyx_vtabstruct_10frozenlist_11_frozenlist_FrozenList __pyx_vtable_10frozenlist_11_frozenlist_FrozenList;
 
-static PyObject *__pyx_tp_new__initialisation_10frozenlist_11_frozenlist_FrozenList(PyObject *o, 
+static PyObject *__pyx_tp_new__initialisation_10frozenlist_11_frozenlist_FrozenList(PyObject *o,
 #if CYTHON_VECTORCALL_TPNEW
     CYTHON_UNUSED PyObject *const *args, CYTHON_UNUSED Py_ssize_t nargs, CYTHON_UNUSED PyObject *kwnames
 #else
@@ -7958,7 +7958,7 @@ static PyObject *__pyx_tp_new__initialisation_10frozenlist_11_frozenlist_FrozenL
   return o;
 }
 
-static PyObject *__pyx_tp_new_vectorcall_10frozenlist_11_frozenlist_FrozenList(PyTypeObject *t, 
+static PyObject *__pyx_tp_new_vectorcall_10frozenlist_11_frozenlist_FrozenList(PyTypeObject *t,
 #if CYTHON_VECTORCALL_TPNEW
     PyObject *const *args, Py_ssize_t nargs, PyObject *kwnames
 #else
@@ -7968,7 +7968,7 @@ static PyObject *__pyx_tp_new_vectorcall_10frozenlist_11_frozenlist_FrozenList(P
   PyObject *o;
   o = __Pyx_AllocateExtensionType(t, 0);
   if (unlikely(!o)) return 0;
-  return __pyx_tp_new__initialisation_10frozenlist_11_frozenlist_FrozenList(o, 
+  return __pyx_tp_new__initialisation_10frozenlist_11_frozenlist_FrozenList(o,
 #if CYTHON_VECTORCALL_TPNEW
     args, nargs, kwnames
 #else
@@ -8664,7 +8664,7 @@ static CYTHON_SMALL_CODE int __pyx_pymod_exec__frozenlist(PyObject *__pyx_pyinit
         Py_FatalError("failed to import 'refnanny' module");
   }
   #endif
-  
+
 __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
   __Pyx_init_runtime_version();
   if (__Pyx_check_binary_version(__PYX_LIMITED_VERSION_HEX, __Pyx_get_runtime_version(), CYTHON_COMPILING_IN_LIMITED_API) < (0)) __PYX_ERR(0, 1, __pyx_L1_error)
@@ -8705,7 +8705,7 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
 
   /* "frozenlist/_frozenlist.pyx":7
  * from libcpp.atomic cimport atomic
- * 
+ *
  * import copy             # <<<<<<<<<<<<<<
  * import types
  * from collections.abc import MutableSequence
@@ -8718,11 +8718,11 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "frozenlist/_frozenlist.pyx":8
- * 
+ *
  * import copy
  * import types             # <<<<<<<<<<<<<<
  * from collections.abc import MutableSequence
- * 
+ *
 */
   __Pyx_TraceLine(8,4,0,__PYX_ERR(0, 8, __pyx_L1_error))
   __pyx_t_1 = __Pyx_Import(__pyx_mstate_global->__pyx_n_u_types, 0, 0, NULL, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 8, __pyx_L1_error)
@@ -8735,8 +8735,8 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
  * import copy
  * import types
  * from collections.abc import MutableSequence             # <<<<<<<<<<<<<<
- * 
- * 
+ *
+ *
 */
   __Pyx_TraceLine(9,6,0,__PYX_ERR(0, 9, __pyx_L1_error))
   {
@@ -8757,8 +8757,8 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "frozenlist/_frozenlist.pyx":13
- * 
- * 
+ *
+ *
  * def _unpickle_frozen_list(cls, items, frozen):             # <<<<<<<<<<<<<<
  *     fl = cls(items)
  *     if frozen:
@@ -8773,10 +8773,10 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "frozenlist/_frozenlist.pyx":20
- * 
+ *
  * cdef class FrozenList:
  *     __class_getitem__ = classmethod(types.GenericAlias)             # <<<<<<<<<<<<<<
- * 
+ *
  *     cdef atomic[bint] _frozen
 */
   __Pyx_TraceLine(20,13,0,__PYX_ERR(0, 20, __pyx_L1_error))
@@ -8793,7 +8793,7 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
 
   /* "frozenlist/_frozenlist.pyx":37
  *         return PyBool_FromLong(self._frozen.load())
- * 
+ *
  *     def __reduce__(self):             # <<<<<<<<<<<<<<
  *         # The default Cython-generated reducer cannot serialize the C++
  *         # atomic[bint] `_frozen` member, so pickle the state explicitly.
@@ -8819,20 +8819,20 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
 
   /* "frozenlist/_frozenlist.pyx":48
  *             raise RuntimeError("Cannot modify frozen list.")
- * 
+ *
  *     cdef inline object _fast_len(self):             # <<<<<<<<<<<<<<
  *         return len(self._items)
- * 
+ *
 */
   __Pyx_TraceLine(48,19,0,__PYX_ERR(0, 48, __pyx_L1_error))
 
 
   /* "frozenlist/_frozenlist.pyx":51
  *         return len(self._items)
- * 
+ *
  *     def freeze(self):             # <<<<<<<<<<<<<<
  *         self._frozen.store(True)
- * 
+ *
 */
   __Pyx_TraceLine(51,20,0,__PYX_ERR(0, 51, __pyx_L1_error))
   __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_10frozenlist_11_frozenlist_10FrozenList_5freeze, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_FrozenList_freeze, NULL, __pyx_mstate_global->__pyx_n_u_frozenlist__frozenlist, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[6])); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 51, __pyx_L1_error)
@@ -8845,10 +8845,10 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
 
   /* "frozenlist/_frozenlist.pyx":71
  *         return self._items.__iter__()
- * 
+ *
  *     def __reversed__(self):             # <<<<<<<<<<<<<<
  *         return self._items.__reversed__()
- * 
+ *
 */
   __Pyx_TraceLine(71,26,0,__PYX_ERR(0, 71, __pyx_L1_error))
   __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_10frozenlist_11_frozenlist_10FrozenList_17__reversed__, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_FrozenList___reversed, NULL, __pyx_mstate_global->__pyx_n_u_frozenlist__frozenlist, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[12])); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 71, __pyx_L1_error)
@@ -8861,7 +8861,7 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
 
   /* "frozenlist/_frozenlist.pyx":88
  *             return list(self) >= other
- * 
+ *
  *     def insert(self, pos, item):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         self._items.insert(pos, item)
@@ -8877,10 +8877,10 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
 
   /* "frozenlist/_frozenlist.pyx":100
  *         return self
- * 
+ *
  *     def index(self, item):             # <<<<<<<<<<<<<<
  *         return self._items.index(item)
- * 
+ *
 */
   __Pyx_TraceLine(100,31,0,__PYX_ERR(0, 100, __pyx_L1_error))
   __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_10frozenlist_11_frozenlist_10FrozenList_27index, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_FrozenList_index, NULL, __pyx_mstate_global->__pyx_n_u_frozenlist__frozenlist, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[17])); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 100, __pyx_L1_error)
@@ -8893,7 +8893,7 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
 
   /* "frozenlist/_frozenlist.pyx":103
  *         return self._items.index(item)
- * 
+ *
  *     def remove(self, item):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         self._items.remove(item)
@@ -8909,7 +8909,7 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
 
   /* "frozenlist/_frozenlist.pyx":107
  *         self._items.remove(item)
- * 
+ *
  *     def clear(self):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         self._items.clear()
@@ -8925,7 +8925,7 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
 
   /* "frozenlist/_frozenlist.pyx":111
  *         self._items.clear()
- * 
+ *
  *     def extend(self, items):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         self._items += list(items)
@@ -8941,7 +8941,7 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
 
   /* "frozenlist/_frozenlist.pyx":115
  *         self._items += list(items)
- * 
+ *
  *     def reverse(self):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         self._items.reverse()
@@ -8957,7 +8957,7 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
 
   /* "frozenlist/_frozenlist.pyx":119
  *         self._items.reverse()
- * 
+ *
  *     def pop(self, index=-1):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         return self._items.pop(index)
@@ -8974,7 +8974,7 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
 
   /* "frozenlist/_frozenlist.pyx":123
  *         return self._items.pop(index)
- * 
+ *
  *     def append(self, item):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         return self._items.append(item)
@@ -8990,10 +8990,10 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
 
   /* "frozenlist/_frozenlist.pyx":127
  *         return self._items.append(item)
- * 
+ *
  *     def count(self, item):             # <<<<<<<<<<<<<<
  *         return self._items.count(item)
- * 
+ *
 */
   __Pyx_TraceLine(127,39,0,__PYX_ERR(0, 127, __pyx_L1_error))
   __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_10frozenlist_11_frozenlist_10FrozenList_41count, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_FrozenList_count, NULL, __pyx_mstate_global->__pyx_n_u_frozenlist__frozenlist, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[24])); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 127, __pyx_L1_error)
@@ -9006,7 +9006,7 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
 
   /* "frozenlist/_frozenlist.pyx":140
  *             raise RuntimeError("Cannot hash unfrozen list.")
- * 
+ *
  *     def __copy__(self):             # <<<<<<<<<<<<<<
  *         cdef FrozenList new_list
  *         new_list = self.__class__(self._items)
@@ -9022,7 +9022,7 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
 
   /* "frozenlist/_frozenlist.pyx":147
  *         return new_list
- * 
+ *
  *     def __deepcopy__(self, memo):             # <<<<<<<<<<<<<<
  *         cdef FrozenList new_list
  *         obj_id = id(self)
@@ -9037,8 +9037,8 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "frozenlist/_frozenlist.pyx":169
- * 
- * 
+ *
+ *
  * MutableSequence.register(FrozenList)             # <<<<<<<<<<<<<<
 */
   __Pyx_TraceLine(169,46,0,__PYX_ERR(0, 169, __pyx_L1_error))
@@ -9062,7 +9062,7 @@ __Pyx_RefNannySetupContext("PyInit__frozenlist", 0);
   /* "frozenlist/_frozenlist.pyx":1
  * # cython: freethreading_compatible = True             # <<<<<<<<<<<<<<
  * # distutils: language = c++
- * 
+ *
 */
   __Pyx_TraceLine(1,0,0,__PYX_ERR(0, 1, __pyx_L1_error))
   __pyx_t_2 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1, __pyx_L1_error)
@@ -9141,7 +9141,7 @@ static int __Pyx_InitCachedConstants(__pyx_mstatetype *__pyx_mstate) {
 
   /* "frozenlist/_frozenlist.pyx":119
  *         self._items.reverse()
- * 
+ *
  *     def pop(self, index=-1):             # <<<<<<<<<<<<<<
  *         self._check_frozen()
  *         return self._items.pop(index)
@@ -9494,7 +9494,7 @@ static int __Pyx_InitGlobals(void) {
   int __pyx_clineno = 0;
   /* PythonCompatibility.init */
   if (likely(__Pyx_init_co_variables() == 0 && __Pyx_init_tpflags_variables() == 0)); else
-  
+
   if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1, __pyx_L1_error)
 
   /* PyFrozenDict.init */
@@ -9516,12 +9516,12 @@ static int __Pyx_InitGlobals(void) {
       }
   } // error handling follows
   #endif
-  
+
   if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1, __pyx_L1_error)
 
   /* CommonTypesMetaclass.init */
   if (likely(__pyx_CommonTypesMetaclass_init(__pyx_m) == 0)); else
-  
+
   if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1, __pyx_L1_error)
 
   /* CachedMethodType.init */
@@ -9535,7 +9535,7 @@ static int __Pyx_InitGlobals(void) {
       }
   } // error handling follows
   #endif
-  
+
   if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1, __pyx_L1_error)
 
   return 0;
@@ -9550,7 +9550,7 @@ static int __Pyx_InitAfterSharedUtility(void) {
   int __pyx_clineno = 0;
   /* CythonFunctionPerModule.init */
   if (likely(__pyx_CyFunction_init(__pyx_m) == 0)); else
-  
+
   if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1, __pyx_L1_error)
 
   return 0;
@@ -9898,7 +9898,7 @@ static CYTHON_INLINE int __Pyx_PyObject_CompareBoolEq_str_str(PyObject *op1, PyO
     if (unlikely(op2 == Py_None)) {
         if (op1 == Py_None) goto __pyx_return_true; else goto __pyx_return_false;
     }
-    
+
     if (likely(op1 != Py_None)) {
         if (op1 == op2) goto __pyx_return_true;
         if (likely(op2 != Py_None)) {
@@ -9906,7 +9906,7 @@ static CYTHON_INLINE int __Pyx_PyObject_CompareBoolEq_str_str(PyObject *op1, PyO
         }
         goto __pyx_richcmp;
     }
-    
+
     if ((0)) goto __pyx_richcmp;
     if ((0)) goto __pyx_return_true;
     if ((0)) goto __pyx_return_false;

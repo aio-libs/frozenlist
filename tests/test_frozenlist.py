@@ -448,6 +448,7 @@ class TestPickleC(FrozenListMixin):
 class TestPicklePy(FrozenListMixin):
     FrozenList = PyFrozenList
 
+
 class _SubC(FrozenList):
     pass
 
