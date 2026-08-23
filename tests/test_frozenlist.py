@@ -442,23 +442,25 @@ def test_reimport_without_no_extensions_attempts_extension(
 
 
 class TestPickleC(FrozenListMixin):
-    FrozenList = FrozenList
+    # Class-attr alias assignment is intentional: the mixin dispatches on this
+    # attribute, and mypy cannot know it always holds a class at runtime.
+    FrozenList = FrozenList  # type: ignore[assignment]
 
 
 class TestPicklePy(FrozenListMixin):
-    FrozenList = PyFrozenList
+    FrozenList = PyFrozenList  # type: ignore[assignment]
 
 
-class _SubC(FrozenList):
+class _SubC(FrozenList):  # type: ignore[type-arg]
     pass
 
 
-class _SubPy(PyFrozenList):
+class _SubPy(PyFrozenList):  # type: ignore[valid-type]
     pass
 
 
 class TestPickleSubclass(FrozenListMixin):
-    FrozenList = FrozenList
+    FrozenList = FrozenList  # type: ignore[assignment]
 
     def test_subclass_roundtrip_preserves_class(self) -> None:
         for cls in (_SubC, _SubPy):
