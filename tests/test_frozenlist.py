@@ -7,6 +7,7 @@ from collections.abc import MutableSequence
 from copy import copy, deepcopy
 
 import pytest
+import pickle
 
 from frozenlist import FrozenList, PyFrozenList
 
@@ -438,3 +439,11 @@ def test_reimport_without_no_extensions_attempts_extension(
     monkeypatch.delitem(sys.modules, "frozenlist", raising=False)
     reloaded = importlib.import_module("frozenlist")
     assert reloaded.NO_EXTENSIONS is False
+
+
+class TestPickleC(FrozenListMixin):
+    FrozenList = FrozenList
+
+
+class TestPicklePy(FrozenListMixin):
+    FrozenList = PyFrozenList
