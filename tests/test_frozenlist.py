@@ -447,3 +447,23 @@ class TestPickleC(FrozenListMixin):
 
 class TestPicklePy(FrozenListMixin):
     FrozenList = PyFrozenList
+
+class _SubC(FrozenList):
+    pass
+
+
+class _SubPy(PyFrozenList):
+    pass
+
+
+class TestPickleSubclass(FrozenListMixin):
+    FrozenList = FrozenList
+
+    def test_subclass_roundtrip_preserves_class(self) -> None:
+        for cls in (_SubC, _SubPy):
+            sub = cls([1, 2])
+            sub.freeze()
+            restored = pickle.loads(pickle.dumps(sub))
+            assert type(restored) is cls
+            assert restored.frozen
+            assert list(restored) == [1, 2]
