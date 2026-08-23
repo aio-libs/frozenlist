@@ -2,12 +2,12 @@
 # mypy: disable-error-code="misc"
 
 import importlib
+import pickle
 import sys
 from collections.abc import MutableSequence
 from copy import copy, deepcopy
 
 import pytest
-import pickle
 
 from frozenlist import FrozenList, PyFrozenList
 
