@@ -9,12 +9,12 @@ import types
 from collections.abc import MutableSequence
 
 
-
 def _unpickle_frozen_list(cls, items, frozen):
     fl = cls(items)
     if frozen:
         fl.freeze()
     return fl
+
 
 cdef class FrozenList:
     __class_getitem__ = classmethod(types.GenericAlias)
