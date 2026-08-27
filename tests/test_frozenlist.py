@@ -6,6 +6,7 @@ import pickle
 import sys
 from collections.abc import MutableSequence
 from copy import copy, deepcopy
+from typing import cast
 
 import pytest
 
@@ -293,7 +294,7 @@ class FrozenListMixin:
     def test_pickle_unfrozen(self, monkeypatch: pytest.MonkeyPatch) -> None:
         orig = self.FrozenList([1, 2, 3])
         monkeypatch.setattr(sys.modules["frozenlist"], "FrozenList", self.FrozenList)
-        copied = pickle.loads(pickle.dumps(orig))
+        copied = cast(FrozenList[object], pickle.loads(pickle.dumps(orig)))
         assert copied == orig
         assert not copied.frozen
 
@@ -301,7 +302,7 @@ class FrozenListMixin:
         orig = self.FrozenList([1, 2, 3])
         orig.freeze()
         monkeypatch.setattr(sys.modules["frozenlist"], "FrozenList", self.FrozenList)
-        copied = pickle.loads(pickle.dumps(orig))
+        copied = cast(FrozenList[object], pickle.loads(pickle.dumps(orig)))
         assert copied == orig
         assert copied.frozen
 
