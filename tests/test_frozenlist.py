@@ -2,6 +2,7 @@
 # mypy: disable-error-code="misc"
 
 import importlib
+import pickle
 import sys
 from collections.abc import MutableSequence
 from copy import copy, deepcopy
@@ -288,6 +289,21 @@ class FrozenListMixin:
         orig.append(4)
         assert len(orig) == 3
         assert len(copied) == 2
+
+    def test_pickle_unfrozen(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        orig = self.FrozenList([1, 2, 3])
+        monkeypatch.setattr(sys.modules["frozenlist"], "FrozenList", self.FrozenList)
+        copied = pickle.loads(pickle.dumps(orig))
+        assert copied == orig
+        assert not copied.frozen
+
+    def test_pickle_frozen(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        orig = self.FrozenList([1, 2, 3])
+        orig.freeze()
+        monkeypatch.setattr(sys.modules["frozenlist"], "FrozenList", self.FrozenList)
+        copied = pickle.loads(pickle.dumps(orig))
+        assert copied == orig
+        assert copied.frozen
 
     def test_deepcopy_unfrozen(self) -> None:
         orig = self.FrozenList([1, 2, 3])

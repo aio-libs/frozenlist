@@ -9,6 +9,13 @@ import types
 from collections.abc import MutableSequence
 
 
+def _unpickle_frozen_list(cls, items, frozen):
+    new_list = cls(items)
+    if frozen:
+        new_list.freeze()
+    return new_list
+
+
 cdef class FrozenList:
     __class_getitem__ = classmethod(types.GenericAlias)
 
@@ -129,6 +136,10 @@ cdef class FrozenList:
         if self._frozen.load():
             new_list.freeze()
         return new_list
+
+    def __reduce__(self):
+        return (_unpickle_frozen_list,
+                (self.__class__, self._items, self._frozen.load()))
 
     def __deepcopy__(self, memo):
         cdef FrozenList new_list
