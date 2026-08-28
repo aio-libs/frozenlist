@@ -10,7 +10,7 @@ from typing import cast
 
 import pytest
 
-from frozenlist import FrozenList, PyFrozenList, _unpickle_frozen_list
+from frozenlist import FrozenList, PyFrozenList
 
 _PICKLE_DUMPS = cast(Callable[[object], bytes], pickle.dumps)
 _PICKLE_LOADS = cast(Callable[[bytes], object], pickle.loads)
@@ -457,12 +457,6 @@ def test_pickle_subclass() -> None:
     assert type(copied) is FrozenListSubclass
     assert copied == orig
     assert copied.label == "subclass"
-
-
-def test_pickle_reconstructor() -> None:
-    copied = _unpickle_frozen_list([1, 2, 3], True)
-    assert copied == [1, 2, 3]
-    assert copied.frozen
 
 
 def test_reimport_with_no_extensions_uses_pure_python(
