@@ -161,7 +161,12 @@ def _restore_frozen_list_state(obj: Any, state: tuple[Any, bool]) -> None:
             else:
                 dict_state, slot_state = object_state, {}
             if dict_state is not None:
-                obj.__dict__.update(dict_state)
+                instance_dict = getattr(obj, "__dict__", None)
+                if instance_dict is not None:
+                    instance_dict.update(dict_state)
+                else:
+                    for slot, value in dict_state.items():
+                        setattr(obj, slot, value)
             for slot, value in slot_state.items():
                 setattr(obj, slot, value)
     if frozen:

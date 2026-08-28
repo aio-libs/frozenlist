@@ -82,6 +82,17 @@ class FrozenListGetStateSubclass(FrozenList[object]):
         return {"label": self.label}
 
 
+class FrozenListSlotsGetStateSubclass(FrozenList[object]):
+    __slots__ = "label"
+
+    def __init__(self) -> None:
+        super().__init__([1, 2, 3])
+        self.label = "slots-getstate"
+
+    def __getstate__(self) -> dict[str, object]:
+        return {"label": self.label}
+
+
 class FrozenListSlotsStateSubclass(FrozenList[object]):
     __slots__ = "label"
 
@@ -564,6 +575,7 @@ class TestFrozenListPy(FrozenListMixin):
         (FrozenListStateSubclass, "state", True),
         (FrozenListDefaultStateSubclass, "default", False),
         (FrozenListGetStateSubclass, "getstate", False),
+        (FrozenListSlotsGetStateSubclass, "slots-getstate", False),
         (FrozenListSlotsStateSubclass, "slot-state", False),
     ],
 )
