@@ -1,7 +1,7 @@
 import copy
 import os
 import types
-from collections.abc import MutableSequence
+from collections.abc import Iterator, MutableSequence
 from functools import total_ordering
 from typing import Any
 
@@ -118,6 +118,31 @@ def _has_custom_setstate(obj: Any) -> bool:
     )
 
 
+def _get_slot_name(cls: type[Any], slot: str) -> str:
+    if slot.startswith("__") and not slot.endswith("__"):
+        return f"_{cls.__name__.lstrip('_')}{slot}"
+    return slot
+
+
+def _get_frozen_list_slot_names(cls: type[Any]) -> dict[str, str]:
+    slot_names = {}
+    for owner in cls.__mro__:
+        slots = owner.__dict__.get("__slots__", ())
+        if isinstance(slots, str):
+            slots = (slots,)
+        for slot in slots:
+            if slot in {"_frozen", "_items", "__dict__", "__weakref__"}:
+                continue
+            slot_name = _get_slot_name(owner, slot)
+            slot_names[slot] = slot_name
+            slot_names[slot_name] = slot_name
+    return slot_names
+
+
+def _iter_frozen_list_slots(cls: type[Any]) -> Iterator[str]:
+    yield from _get_frozen_list_slot_names(cls).values()
+
+
 def _get_frozen_list_state(obj: Any) -> Any:
     object_getstate = getattr(object, "__getstate__", None)
     getstate = getattr(type(obj), "__getstate__", None)
@@ -129,16 +154,10 @@ def _get_frozen_list_state(obj: Any) -> Any:
         dict_state = dict_state.copy()
 
     slot_state = {}
-    for cls in type(obj).__mro__:
-        slots = cls.__dict__.get("__slots__", ())
-        if isinstance(slots, str):
-            slots = (slots,)
-        for slot in slots:
-            if slot in {"_frozen", "_items", "__dict__", "__weakref__"}:
-                continue
-            value = getattr(obj, slot, _MISSING)
-            if value is not _MISSING:
-                slot_state[slot] = value
+    for slot in _iter_frozen_list_slots(type(obj)):
+        value = getattr(obj, slot, _MISSING)
+        if value is not _MISSING:
+            slot_state[slot] = value
 
     if _has_custom_setstate(obj):
         if dict_state is None:
@@ -162,11 +181,13 @@ def _restore_frozen_list_state(obj: Any, state: tuple[Any, bool]) -> None:
                 dict_state, slot_state = object_state, {}
             if dict_state is not None:
                 instance_dict = getattr(obj, "__dict__", None)
-                if instance_dict is not None:
-                    instance_dict.update(dict_state)
-                else:
-                    for slot, value in dict_state.items():
-                        setattr(obj, slot, value)
+                slot_names = _get_frozen_list_slot_names(type(obj))
+                for name, value in dict_state.items():
+                    slot_name = slot_names.get(name)
+                    if slot_name is not None or instance_dict is None:
+                        setattr(obj, slot_name or name, value)
+                    else:
+                        instance_dict[name] = value
             for slot, value in slot_state.items():
                 setattr(obj, slot, value)
     if frozen:

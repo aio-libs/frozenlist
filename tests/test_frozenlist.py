@@ -93,6 +93,30 @@ class FrozenListSlotsGetStateSubclass(FrozenList[object]):
         return {"label": self.label}
 
 
+class FrozenListPrivateSlotsSubclass(FrozenList[object]):
+    __slots__ = "__label"
+
+    def __init__(self) -> None:
+        super().__init__([1, 2, 3])
+        self.__label = "private-slots"
+
+    @property
+    def label(self) -> str:
+        return self.__label
+
+
+class FrozenListDictSlotsGetStateSubclass(FrozenList[object]):
+    __slots__ = ("slot_label", "__dict__")
+
+    def __init__(self) -> None:
+        super().__init__([1, 2, 3])
+        self.label = "dict"
+        self.slot_label = "slot"
+
+    def __getstate__(self) -> dict[str, object]:
+        return {"label": self.label, "slot_label": self.slot_label}
+
+
 class FrozenListSlotsStateSubclass(FrozenList[object]):
     __slots__ = "label"
 
@@ -576,6 +600,7 @@ class TestFrozenListPy(FrozenListMixin):
         (FrozenListDefaultStateSubclass, "default", False),
         (FrozenListGetStateSubclass, "getstate", False),
         (FrozenListSlotsGetStateSubclass, "slots-getstate", False),
+        (FrozenListPrivateSlotsSubclass, "private-slots", False),
         (FrozenListSlotsStateSubclass, "slot-state", False),
     ],
 )
@@ -633,6 +658,19 @@ def test_pickle_subclass_preserves_dict_and_slot_state() -> None:
     assert copied.slot_label == "slot"
 
 
+def test_pickle_subclass_restores_custom_dict_and_slot_state() -> None:
+    orig = FrozenListDictSlotsGetStateSubclass()
+    copied = cast(
+        FrozenListDictSlotsGetStateSubclass,
+        _PICKLE_LOADS(_PICKLE_DUMPS(orig)),
+    )
+
+    assert copied == orig
+    assert copied.label == "dict"
+    assert copied.slot_label == "slot"
+    assert "slot_label" not in copied.__dict__
+
+
 def test_unpickle_uses_pure_python(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -663,6 +701,10 @@ def test_unpickle_uses_pure_python(
         "label": "state",
     }
     assert get_state(FrozenListSlotsSubclass()) == (None, {"label": "slots"})
+    assert get_state(FrozenListPrivateSlotsSubclass()) == (
+        None,
+        {"_FrozenListPrivateSlotsSubclass__label": "private-slots"},
+    )
 
 
 def test_reimport_with_no_extensions_uses_pure_python(
