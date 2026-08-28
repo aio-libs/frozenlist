@@ -4,13 +4,16 @@
 import importlib
 import pickle
 import sys
-from collections.abc import MutableSequence
+from collections.abc import Callable, MutableSequence
 from copy import copy, deepcopy
 from typing import cast
 
 import pytest
 
 from frozenlist import FrozenList, PyFrozenList
+
+
+_PICKLE_LOADS = cast(Callable[[bytes], object], pickle.loads)
 
 
 class FrozenListMixin:
@@ -292,17 +295,21 @@ class FrozenListMixin:
         assert len(copied) == 2
 
     def test_pickle_unfrozen(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        orig = self.FrozenList([1, 2, 3])
-        monkeypatch.setattr(sys.modules["frozenlist"], "FrozenList", self.FrozenList)
-        copied = cast(FrozenList[object], pickle.loads(pickle.dumps(orig)))
+        frozen_list_type = cast(type[FrozenList[object]], self.FrozenList)
+        orig = frozen_list_type([1, 2, 3])
+        monkeypatch.setattr(sys.modules["frozenlist"], "FrozenList", frozen_list_type)
+        copied = _PICKLE_LOADS(pickle.dumps(orig))
+        assert isinstance(copied, frozen_list_type)
         assert copied == orig
         assert not copied.frozen
 
     def test_pickle_frozen(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        orig = self.FrozenList([1, 2, 3])
+        frozen_list_type = cast(type[FrozenList[object]], self.FrozenList)
+        orig = frozen_list_type([1, 2, 3])
         orig.freeze()
-        monkeypatch.setattr(sys.modules["frozenlist"], "FrozenList", self.FrozenList)
-        copied = cast(FrozenList[object], pickle.loads(pickle.dumps(orig)))
+        monkeypatch.setattr(sys.modules["frozenlist"], "FrozenList", frozen_list_type)
+        copied = _PICKLE_LOADS(pickle.dumps(orig))
+        assert isinstance(copied, frozen_list_type)
         assert copied == orig
         assert copied.frozen
 
