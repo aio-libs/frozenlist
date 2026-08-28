@@ -304,7 +304,7 @@ class FrozenListMixin:
         frozen_list_type = cast(type[FrozenList[object]], self.FrozenList)
         orig = frozen_list_type([1, 2, 3])
         monkeypatch.setattr(sys.modules["frozenlist"], "FrozenList", frozen_list_type)
-        copied = _PICKLE_LOADS(pickle.dumps(orig))
+        copied = _PICKLE_LOADS(_PICKLE_DUMPS(orig))
         assert isinstance(copied, frozen_list_type)
         assert copied == orig
         assert not copied.frozen
@@ -314,7 +314,7 @@ class FrozenListMixin:
         orig = frozen_list_type([1, 2, 3])
         orig.freeze()
         monkeypatch.setattr(sys.modules["frozenlist"], "FrozenList", frozen_list_type)
-        copied = _PICKLE_LOADS(pickle.dumps(orig))
+        copied = _PICKLE_LOADS(_PICKLE_DUMPS(orig))
         assert isinstance(copied, frozen_list_type)
         assert copied == orig
         assert copied.frozen
