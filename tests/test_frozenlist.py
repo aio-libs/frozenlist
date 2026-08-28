@@ -486,9 +486,7 @@ class TestFrozenListPy(FrozenListMixin):
         (FrozenListStateSubclass, "state"),
     ],
 )
-def test_pickle_subclass(
-    subclass: type[FrozenList[object]], label: str
-) -> None:
+def test_pickle_subclass(subclass: type[FrozenList[object]], label: str) -> None:
     orig = subclass()
     copied = cast(FrozenList[object], _PICKLE_LOADS(_PICKLE_DUMPS(orig)))
     assert type(copied) is subclass
