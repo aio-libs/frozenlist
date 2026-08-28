@@ -9,6 +9,13 @@ import types
 from collections.abc import MutableSequence
 
 
+def _unpickle_frozen_list(cls, items, frozen):
+    fl = cls(items)
+    if frozen:
+        fl.freeze()
+    return fl
+
+
 cdef class FrozenList:
     __class_getitem__ = classmethod(types.GenericAlias)
 
@@ -27,6 +34,13 @@ cdef class FrozenList:
     def frozen(self):
         return PyBool_FromLong(self._frozen.load())
 
+    def __reduce__(self):
+        # The default Cython-generated reducer cannot serialize the C++
+        # atomic[bint] `_frozen` member, so pickle the state explicitly.
+        return (
+            _unpickle_frozen_list,
+            (type(self), list(self._items), bool(self._frozen.load())),
+        )
     cdef object _check_frozen(self):
         if self._frozen.load():
             raise RuntimeError("Cannot modify frozen list.")

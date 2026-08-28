@@ -2,6 +2,7 @@
 # mypy: disable-error-code="misc"
 
 import importlib
+import pickle
 import sys
 from collections.abc import MutableSequence
 from copy import copy, deepcopy
@@ -438,3 +439,34 @@ def test_reimport_without_no_extensions_attempts_extension(
     monkeypatch.delitem(sys.modules, "frozenlist", raising=False)
     reloaded = importlib.import_module("frozenlist")
     assert reloaded.NO_EXTENSIONS is False
+
+
+class TestPickleC(FrozenListMixin):
+    # Class-attr alias assignment is intentional: the mixin dispatches on this
+    # attribute, and mypy cannot know it always holds a class at runtime.
+    FrozenList = FrozenList  # type: ignore[assignment]
+
+
+class TestPicklePy(FrozenListMixin):
+    FrozenList = PyFrozenList  # type: ignore[assignment]
+
+
+class _SubC(FrozenList):  # type: ignore[type-arg]
+    pass
+
+
+class _SubPy(PyFrozenList):  # type: ignore[valid-type]
+    pass
+
+
+class TestPickleSubclass(FrozenListMixin):
+    FrozenList = FrozenList  # type: ignore[assignment]
+
+    def test_subclass_roundtrip_preserves_class(self) -> None:
+        for cls in (_SubC, _SubPy):
+            sub = cls([1, 2])
+            sub.freeze()
+            restored = pickle.loads(pickle.dumps(sub))
+            assert type(restored) is cls
+            assert restored.frozen
+            assert list(restored) == [1, 2]
