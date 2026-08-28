@@ -83,6 +83,22 @@ class FrozenList(MutableSequence):
 PyFrozenList = FrozenList
 
 
+def _unpickle_frozen_list(items, frozen, cls=None, state=None):
+    if cls is None:
+        cls = FrozenList
+
+    new_list = cls.__new__(cls)
+    if issubclass(cls, PyFrozenList):
+        PyFrozenList.__init__(new_list, items)
+    else:
+        FrozenList.__init__(new_list, items)
+    if state is not None:
+        new_list.__dict__.update(state)
+    if frozen:
+        new_list.freeze()
+    return new_list
+
+
 if not NO_EXTENSIONS:
     try:
         from ._frozenlist import FrozenList as CFrozenList  # type: ignore

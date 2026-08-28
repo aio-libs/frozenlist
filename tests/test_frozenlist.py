@@ -10,13 +10,30 @@ from typing import cast
 
 import pytest
 
-from frozenlist import FrozenList, PyFrozenList
+from frozenlist import (  # type: ignore[attr-defined]
+    FrozenList,
+    PyFrozenList,
+    _unpickle_frozen_list,
+)
 
 _PICKLE_LOADS = cast(Callable[[bytes], object], pickle.loads)
 
 
+class FrozenListSubclass(FrozenList):  # type: ignore[type-arg]
+    def __init__(self) -> None:
+        super().__init__([1, 2, 3])
+        self.label = "subclass"
+
+
+class PyFrozenListSubclass(PyFrozenList):  # type: ignore[valid-type]
+    def __init__(self) -> None:
+        super().__init__([1, 2, 3])
+        self.label = "subclass"
+
+
 class FrozenListMixin:
     FrozenList = NotImplemented
+    Subclass: type[object]
 
     SKIP_METHODS = {
         "__abstractmethods__",
@@ -312,6 +329,25 @@ class FrozenListMixin:
         assert copied == orig
         assert copied.frozen
 
+    def test_pickle_subclass(self) -> None:
+        orig = self.Subclass()
+        copied = _PICKLE_LOADS(pickle.dumps(orig))
+        assert type(copied) is self.Subclass
+        assert copied == orig
+        assert getattr(copied, "label") == "subclass"
+
+    def test_pickle_reconstructor(self) -> None:
+        copied = _unpickle_frozen_list([1, 2, 3], True)
+        assert isinstance(copied, FrozenList)
+        assert copied.frozen
+
+        copied_subclass = _unpickle_frozen_list(
+            [1, 2, 3], False, self.Subclass, {"label": "subclass"}
+        )
+        assert type(copied_subclass) is self.Subclass
+        assert copied_subclass == [1, 2, 3]
+        assert getattr(copied_subclass, "label") == "subclass"
+
     def test_deepcopy_unfrozen(self) -> None:
         orig = self.FrozenList([1, 2, 3])
         copied = deepcopy(orig)
@@ -438,10 +474,12 @@ class FrozenListMixin:
 
 class TestFrozenList(FrozenListMixin):
     FrozenList = FrozenList  # type: ignore[assignment]  # FIXME
+    Subclass = FrozenListSubclass
 
 
 class TestFrozenListPy(FrozenListMixin):
     FrozenList = PyFrozenList  # type: ignore[assignment]  # FIXME
+    Subclass = PyFrozenListSubclass
 
 
 def test_reimport_with_no_extensions_uses_pure_python(
