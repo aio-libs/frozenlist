@@ -504,9 +504,7 @@ def test_unpickle_uses_pure_python(
     monkeypatch.setenv("FROZENLIST_NO_EXTENSIONS", "1")
     monkeypatch.delitem(sys.modules, "frozenlist", raising=False)
     reloaded = importlib.import_module("frozenlist")
-    frozen_list_type = cast(
-        type[FrozenList[object]], reloaded.__dict__["FrozenList"]
-    )
+    frozen_list_type = cast(type[FrozenList[object]], reloaded.__dict__["FrozenList"])
     unpickle = cast(
         Callable[[list[object], bool], object],
         reloaded.__dict__["_unpickle_frozen_list"],
