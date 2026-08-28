@@ -141,7 +141,10 @@ def _get_frozen_list_state(obj: Any) -> Any:
                 slot_state[slot] = value
 
     if _has_custom_setstate(obj):
-        return dict_state if dict_state is not None else slot_state
+        if dict_state is None:
+            return slot_state
+        dict_state.update(slot_state)
+        return dict_state
     if dict_state is None and not slot_state:
         return None
     return dict_state, slot_state
