@@ -12,7 +12,6 @@ import pytest
 
 from frozenlist import FrozenList, PyFrozenList
 
-
 _PICKLE_LOADS = cast(Callable[[bytes], object], pickle.loads)
 
 
