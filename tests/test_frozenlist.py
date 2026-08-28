@@ -22,6 +22,33 @@ class FrozenListSubclass(FrozenList[object]):
         self.label = "subclass"
 
 
+class FrozenListSlotsSubclass(FrozenList[object]):
+    __slots__ = "label"
+
+    def __init__(self) -> None:
+        super().__init__([1, 2, 3])
+        self.label = "slots"
+
+
+class FrozenListStateSubclass(FrozenList[object]):
+    def __init__(self) -> None:
+        super().__init__([1, 2, 3])
+        self.label = "state"
+
+    def __getstate__(self) -> dict[str, object]:
+        return {
+            "items": list(self),
+            "frozen": self.frozen,
+            "label": self.label,
+        }
+
+    def __setstate__(self, state: dict[str, object]) -> None:
+        FrozenList.__init__(self, cast(list[object], state["items"]))
+        if cast(bool, state["frozen"]):
+            self.freeze()
+        self.label = cast(str, state["label"])
+
+
 class FrozenListMixin:
     FrozenList = NotImplemented
 
@@ -451,12 +478,40 @@ class TestFrozenListPy(FrozenListMixin):
     FrozenList = PyFrozenList  # type: ignore[assignment]  # FIXME
 
 
-def test_pickle_subclass() -> None:
-    orig = FrozenListSubclass()
-    copied = cast(FrozenListSubclass, _PICKLE_LOADS(_PICKLE_DUMPS(orig)))
-    assert type(copied) is FrozenListSubclass
+@pytest.mark.parametrize(
+    "subclass, label",
+    [
+        (FrozenListSubclass, "subclass"),
+        (FrozenListSlotsSubclass, "slots"),
+        (FrozenListStateSubclass, "state"),
+    ],
+)
+def test_pickle_subclass(
+    subclass: type[FrozenList[object]], label: str
+) -> None:
+    orig = subclass()
+    copied = cast(FrozenList[object], _PICKLE_LOADS(_PICKLE_DUMPS(orig)))
+    assert type(copied) is subclass
     assert copied == orig
-    assert copied.label == "subclass"
+    assert getattr(copied, "label") == label
+
+
+def test_unpickle_uses_pure_python(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("FROZENLIST_NO_EXTENSIONS", "1")
+    monkeypatch.delitem(sys.modules, "frozenlist", raising=False)
+    reloaded = importlib.import_module("frozenlist")
+    unpickle = cast(
+        Callable[[list[object], bool], object],
+        getattr(reloaded, "_unpickle_frozen_list"),
+    )
+
+    copied = cast(FrozenList[object], unpickle([1, 2, 3], True))
+
+    assert type(copied) is reloaded.FrozenList
+    assert copied == [1, 2, 3]
+    assert copied.frozen
 
 
 def test_reimport_with_no_extensions_uses_pure_python(

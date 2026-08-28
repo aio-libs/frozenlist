@@ -84,11 +84,40 @@ class FrozenList(MutableSequence):
 PyFrozenList = FrozenList
 
 
+_MISSING = object()
+
+
+def _get_frozen_list_state(obj: Any) -> Any:
+    object_getstate = getattr(object, "__getstate__", None)
+    getstate = getattr(type(obj), "__getstate__", None)
+    if getstate is not None and getstate is not object_getstate:
+        return obj.__getstate__()
+
+    dict_state = getattr(obj, "__dict__", None)
+    if dict_state is not None:
+        dict_state = dict_state.copy()
+
+    slot_state = {}
+    for cls in type(obj).__mro__:
+        slots = cls.__dict__.get("__slots__", ())
+        if isinstance(slots, str):
+            slots = (slots,)
+        for slot in slots:
+            if slot in {"_frozen", "_items", "__dict__", "__weakref__"}:
+                continue
+            value = getattr(obj, slot, _MISSING)
+            if value is not _MISSING:
+                slot_state[slot] = value
+
+    if dict_state is None and not slot_state:
+        return None
+    return dict_state, slot_state
+
+
 def _unpickle_frozen_list(
     items: list[Any],
     frozen: bool,
     cls: type[Any] | None = None,
-    state: dict[str, Any] | None = None,
 ) -> Any:
     if cls is None:
         cls = FrozenList
@@ -98,8 +127,6 @@ def _unpickle_frozen_list(
         PyFrozenList.__init__(new_list, items)
     else:
         FrozenList.__init__(new_list, items)
-    if state is not None:
-        new_list.__dict__.update(state)
     if frozen:
         new_list.freeze()
     return new_list
