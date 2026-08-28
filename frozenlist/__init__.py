@@ -2,6 +2,7 @@ import os
 import types
 from collections.abc import MutableSequence
 from functools import total_ordering
+from typing import Any
 
 __version__ = "1.8.1.dev0"
 
@@ -83,7 +84,12 @@ class FrozenList(MutableSequence):
 PyFrozenList = FrozenList
 
 
-def _unpickle_frozen_list(items, frozen, cls=None, state=None):
+def _unpickle_frozen_list(
+    items: list[Any],
+    frozen: bool,
+    cls: type[Any] | None = None,
+    state: dict[str, Any] | None = None,
+) -> Any:
     if cls is None:
         cls = FrozenList
 

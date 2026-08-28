@@ -1,5 +1,5 @@
 from collections.abc import Iterable, Iterator, MutableSequence
-from typing import Generic, TypeVar, overload
+from typing import Any, Generic, TypeVar, overload
 
 _T = TypeVar("_T")
 _Arg = list[_T] | Iterable[_T]
@@ -34,6 +34,13 @@ class FrozenList(MutableSequence[_T], Generic[_T]):
     def __repr__(self) -> str: ...
     def __hash__(self) -> int: ...
     def __copy__(self) -> FrozenList[_T]: ...
+
+def _unpickle_frozen_list(
+    items: list[Any],
+    frozen: bool,
+    cls: type[Any] | None = ...,
+    state: dict[str, Any] | None = ...,
+) -> FrozenList[Any]: ...
 
 # types for C accelerators are the same
 CFrozenList = PyFrozenList = FrozenList
