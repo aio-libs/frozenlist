@@ -6,7 +6,7 @@ import pickle
 import sys
 from collections.abc import Callable, MutableSequence
 from copy import copy, deepcopy
-from typing import cast
+from typing import Protocol, cast
 
 import pytest
 
@@ -14,6 +14,10 @@ from frozenlist import FrozenList, PyFrozenList
 
 _PICKLE_DUMPS = cast(Callable[[object], bytes], pickle.dumps)
 _PICKLE_LOADS = cast(Callable[[bytes], object], pickle.loads)
+
+
+class _Labeled(Protocol):
+    label: str
 
 
 class FrozenListSubclass(FrozenList[object]):
@@ -491,7 +495,7 @@ def test_pickle_subclass(subclass: type[FrozenList[object]], label: str) -> None
     copied = cast(FrozenList[object], _PICKLE_LOADS(_PICKLE_DUMPS(orig)))
     assert type(copied) is subclass
     assert copied == orig
-    assert getattr(copied, "label") == label
+    assert cast(_Labeled, copied).label == label
 
 
 def test_unpickle_uses_pure_python(
@@ -500,14 +504,17 @@ def test_unpickle_uses_pure_python(
     monkeypatch.setenv("FROZENLIST_NO_EXTENSIONS", "1")
     monkeypatch.delitem(sys.modules, "frozenlist", raising=False)
     reloaded = importlib.import_module("frozenlist")
+    frozen_list_type = cast(
+        type[FrozenList[object]], reloaded.__dict__["FrozenList"]
+    )
     unpickle = cast(
         Callable[[list[object], bool], object],
-        getattr(reloaded, "_unpickle_frozen_list"),
+        reloaded.__dict__["_unpickle_frozen_list"],
     )
 
     copied = cast(FrozenList[object], unpickle([1, 2, 3], True))
 
-    assert type(copied) is reloaded.FrozenList
+    assert type(copied) is frozen_list_type
     assert copied == [1, 2, 3]
     assert copied.frozen
 
