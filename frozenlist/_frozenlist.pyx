@@ -7,7 +7,11 @@ from libcpp.atomic cimport atomic
 import copy
 import types
 from collections.abc import MutableSequence
-from frozenlist import _get_frozen_list_state, _unpickle_frozen_list
+from frozenlist import (
+    _get_frozen_list_state,
+    _restore_frozen_list_state,
+    _unpickle_frozen_list,
+)
 
 
 cdef class FrozenList:
@@ -135,11 +139,10 @@ cdef class FrozenList:
         cls = self.__class__
         if cls is FrozenList:
             cls = None
-        return (
-            _unpickle_frozen_list,
-            (self._items, self._frozen.load(), cls),
-            _get_frozen_list_state(self),
-        )
+        return (_unpickle_frozen_list,
+                (self._items, self._frozen.load(), cls, True),
+                (_get_frozen_list_state(self), self._frozen.load()),
+                None, None, _restore_frozen_list_state)
 
     def __deepcopy__(self, memo):
         cdef FrozenList new_list

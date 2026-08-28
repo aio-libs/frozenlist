@@ -1,3 +1,4 @@
+import copy
 import os
 import types
 from collections.abc import MutableSequence
@@ -80,11 +81,41 @@ class FrozenList(MutableSequence):
             new_list.freeze()
         return new_list
 
+    def __deepcopy__(self, memo):
+        obj_id = id(self)
+        if obj_id in memo:
+            return memo[obj_id]
+
+        new_list = self.__class__([])
+        memo[obj_id] = new_list
+        new_list._items[:] = [copy.deepcopy(item, memo) for item in self._items]
+
+        if self._frozen:
+            new_list.freeze()
+        return new_list
+
+    def __reduce__(self):
+        cls = self.__class__
+        return (
+            _unpickle_frozen_list,
+            (self._items, self._frozen, cls, True),
+            (_get_frozen_list_state(self), self._frozen),
+            None,
+            None,
+            _restore_frozen_list_state,
+        )
+
 
 PyFrozenList = FrozenList
 
 
 _MISSING = object()
+
+
+def _has_custom_setstate(obj: Any) -> bool:
+    return getattr(type(obj), "__setstate__", None) is not getattr(
+        object, "__setstate__", None
+    )
 
 
 def _get_frozen_list_state(obj: Any) -> Any:
@@ -109,15 +140,36 @@ def _get_frozen_list_state(obj: Any) -> Any:
             if value is not _MISSING:
                 slot_state[slot] = value
 
+    if _has_custom_setstate(obj):
+        return dict_state if dict_state is not None else slot_state
     if dict_state is None and not slot_state:
         return None
     return dict_state, slot_state
+
+
+def _restore_frozen_list_state(obj: Any, state: tuple[Any, bool]) -> None:
+    object_state, frozen = state
+    if object_state is not None:
+        if _has_custom_setstate(obj):
+            obj.__setstate__(object_state)
+        else:
+            if isinstance(object_state, tuple):
+                dict_state, slot_state = object_state
+            else:
+                dict_state, slot_state = object_state, {}
+            if dict_state is not None:
+                obj.__dict__.update(dict_state)
+            for slot, value in slot_state.items():
+                setattr(obj, slot, value)
+    if frozen:
+        obj.freeze()
 
 
 def _unpickle_frozen_list(
     items: list[Any],
     frozen: bool,
     cls: type[Any] | None = None,
+    defer_freeze: bool = False,
 ) -> Any:
     if cls is None:
         cls = FrozenList
@@ -127,7 +179,7 @@ def _unpickle_frozen_list(
         PyFrozenList.__init__(new_list, items)
     else:
         FrozenList.__init__(new_list, items)
-    if frozen:
+    if frozen and not defer_freeze:
         new_list.freeze()
     return new_list
 
