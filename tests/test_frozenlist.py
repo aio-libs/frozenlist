@@ -2,13 +2,163 @@
 # mypy: disable-error-code="misc"
 
 import importlib
+import pickle
 import sys
-from collections.abc import MutableSequence
+from collections.abc import Callable, MutableSequence
 from copy import copy, deepcopy
+from typing import Protocol, cast
 
 import pytest
 
 from frozenlist import FrozenList, PyFrozenList
+
+_PICKLE_DUMPS = cast(Callable[[object], bytes], pickle.dumps)
+_PICKLE_LOADS = cast(Callable[[bytes], object], pickle.loads)
+
+
+class _Labeled(Protocol):
+    label: str
+
+
+class _FrozenListModule(Protocol):
+    FrozenList: type[FrozenList[object]]
+    _unpickle_frozen_list: Callable[[list[object], bool], object]
+    _get_frozen_list_state: Callable[[object], object]
+
+
+class _EmptySlots:
+    __slots__ = ("unused",)
+    unused: object
+
+
+class FrozenListSubclass(FrozenList[object]):
+    def __init__(self) -> None:
+        super().__init__([1, 2, 3])
+        self.label = "subclass"
+
+
+class FrozenListSlotsSubclass(FrozenList[object]):
+    __slots__ = "label"
+
+    def __init__(self) -> None:
+        super().__init__([1, 2, 3])
+        self.label = "slots"
+
+
+class FrozenListStateSubclass(FrozenList[object]):
+    def __init__(self) -> None:
+        super().__init__([1, 2, 3])
+        self.label = "state"
+
+    def __getstate__(self) -> dict[str, object]:
+        return {
+            "items": list(self),
+            "frozen": self.frozen,
+            "label": self.label,
+        }
+
+    def __setstate__(self, state: dict[str, object]) -> None:
+        FrozenList.__init__(self, cast(list[object], state["items"]))
+        if cast(bool, state["frozen"]):
+            self.freeze()
+        self.label = cast(str, state["label"])
+
+
+class FrozenListDefaultStateSubclass(FrozenList[object]):
+    def __init__(self) -> None:
+        super().__init__([1, 2, 3])
+        self.label = "default"
+
+    def __setstate__(self, state: dict[str, object]) -> None:
+        self.label = cast(str, state["label"])
+
+
+class FrozenListGetStateSubclass(FrozenList[object]):
+    def __init__(self) -> None:
+        super().__init__([1, 2, 3])
+        self.label = "getstate"
+
+    def __getstate__(self) -> dict[str, object]:
+        return {"label": self.label}
+
+
+class FrozenListSlotsGetStateSubclass(FrozenList[object]):
+    __slots__ = "label"
+
+    def __init__(self) -> None:
+        super().__init__([1, 2, 3])
+        self.label = "slots-getstate"
+
+    def __getstate__(self) -> dict[str, object]:
+        return {"label": self.label}
+
+
+class FrozenListPrivateSlotsSubclass(FrozenList[object]):
+    __slots__ = "__label"
+
+    def __init__(self) -> None:
+        super().__init__([1, 2, 3])
+        self.__label = "private-slots"
+
+    @property
+    def label(self) -> str:
+        return self.__label
+
+
+class FrozenListDictSlotsGetStateSubclass(FrozenList[object]):
+    __slots__ = ("slot_label", "__dict__")
+
+    def __init__(self) -> None:
+        super().__init__([1, 2, 3])
+        self.label = "dict"
+        self.slot_label = "slot"
+
+    def __getstate__(self) -> dict[str, object]:
+        return {"label": self.label, "slot_label": self.slot_label}
+
+
+class FrozenListSlotsStateSubclass(FrozenList[object]):
+    __slots__ = "label"
+
+    def __init__(self) -> None:
+        super().__init__([1, 2, 3])
+        self.label = "slot-state"
+
+    def __setstate__(self, state: dict[str, object]) -> None:
+        self.label = cast(str, state["label"])
+
+
+class FrozenListDictSlotsStateSubclass(FrozenList[object]):
+    __slots__ = ("slot_label", "__dict__")
+
+    def __init__(self) -> None:
+        super().__init__([1, 2, 3])
+        self.label = "dict"
+        self.slot_label = "slot"
+
+    def __setstate__(self, state: dict[str, object]) -> None:
+        self.label = cast(str, state["label"])
+        self.slot_label = cast(str, state["slot_label"])
+
+
+class FrozenListMutatingStateSubclass(FrozenList[object]):
+    def __init__(self) -> None:
+        super().__init__([1, 2, 3])
+        self.label = "mutating"
+        self.self_ref = self
+
+    def __getstate__(self) -> dict[str, object]:
+        return {
+            "items": list(self),
+            "label": self.label,
+            "self_ref": self.self_ref,
+        }
+
+    def __setstate__(self, state: dict[str, object]) -> None:
+        self.clear()
+        self.extend(cast(list[object], state["items"]))
+        self.label = cast(str, state["label"])
+        self.self_ref = cast(FrozenListMutatingStateSubclass, state["self_ref"])
 
 
 class FrozenListMixin:
@@ -289,6 +439,25 @@ class FrozenListMixin:
         assert len(orig) == 3
         assert len(copied) == 2
 
+    def test_pickle_unfrozen(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        frozen_list_type = cast(type[FrozenList[object]], self.FrozenList)
+        orig = frozen_list_type([1, 2, 3])
+        monkeypatch.setattr(sys.modules["frozenlist"], "FrozenList", frozen_list_type)
+        copied = _PICKLE_LOADS(_PICKLE_DUMPS(orig))
+        assert isinstance(copied, frozen_list_type)
+        assert copied == orig
+        assert not copied.frozen
+
+    def test_pickle_frozen(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        frozen_list_type = cast(type[FrozenList[object]], self.FrozenList)
+        orig = frozen_list_type([1, 2, 3])
+        orig.freeze()
+        monkeypatch.setattr(sys.modules["frozenlist"], "FrozenList", frozen_list_type)
+        copied = _PICKLE_LOADS(_PICKLE_DUMPS(orig))
+        assert isinstance(copied, frozen_list_type)
+        assert copied == orig
+        assert copied.frozen
+
     def test_deepcopy_unfrozen(self) -> None:
         orig = self.FrozenList([1, 2, 3])
         copied = deepcopy(orig)
@@ -419,6 +588,123 @@ class TestFrozenList(FrozenListMixin):
 
 class TestFrozenListPy(FrozenListMixin):
     FrozenList = PyFrozenList  # type: ignore[assignment]  # FIXME
+
+
+@pytest.mark.parametrize(
+    "subclass, label, frozen",
+    [
+        (FrozenListSubclass, "subclass", False),
+        (FrozenListSlotsSubclass, "slots", False),
+        (FrozenListStateSubclass, "state", False),
+        (FrozenListStateSubclass, "state", True),
+        (FrozenListDefaultStateSubclass, "default", False),
+        (FrozenListGetStateSubclass, "getstate", False),
+        (FrozenListSlotsGetStateSubclass, "slots-getstate", False),
+        (FrozenListPrivateSlotsSubclass, "private-slots", False),
+        (FrozenListSlotsStateSubclass, "slot-state", False),
+    ],
+)
+def test_pickle_subclass(
+    subclass: type[FrozenList[object]], label: str, frozen: bool
+) -> None:
+    orig = subclass()
+    if frozen:
+        orig.freeze()
+    copied = cast(FrozenList[object], _PICKLE_LOADS(_PICKLE_DUMPS(orig)))
+    assert type(copied) is subclass
+    assert copied == orig
+    assert copied.frozen is frozen
+    assert cast(_Labeled, copied).label == label
+
+
+def test_deepcopy_returns_memoized_value() -> None:
+    orig = PyFrozenList([1, 2, 3])
+    marker = object()
+    deepcopy_method = cast(
+        Callable[[dict[int, object]], object], getattr(orig, "__deepcopy__")
+    )
+
+    assert deepcopy_method({id(orig): marker}) is marker
+
+
+@pytest.mark.parametrize("frozen", [False, True])
+def test_pickle_subclass_restores_custom_state_before_freezing(
+    frozen: bool,
+) -> None:
+    orig = FrozenListMutatingStateSubclass()
+    if frozen:
+        orig.freeze()
+
+    copied = cast(
+        FrozenListMutatingStateSubclass,
+        _PICKLE_LOADS(_PICKLE_DUMPS(orig)),
+    )
+
+    assert copied == orig
+    assert copied.frozen is frozen
+    assert copied.label == "mutating"
+    assert copied.self_ref is copied
+
+
+def test_pickle_subclass_preserves_dict_and_slot_state() -> None:
+    orig = FrozenListDictSlotsStateSubclass()
+    copied = cast(
+        FrozenListDictSlotsStateSubclass,
+        _PICKLE_LOADS(_PICKLE_DUMPS(orig)),
+    )
+
+    assert copied == orig
+    assert copied.label == "dict"
+    assert copied.slot_label == "slot"
+
+
+def test_pickle_subclass_restores_custom_dict_and_slot_state() -> None:
+    orig = FrozenListDictSlotsGetStateSubclass()
+    copied = cast(
+        FrozenListDictSlotsGetStateSubclass,
+        _PICKLE_LOADS(_PICKLE_DUMPS(orig)),
+    )
+
+    assert copied == orig
+    assert copied.label == "dict"
+    assert copied.slot_label == "slot"
+    assert "slot_label" not in copied.__dict__
+
+
+def test_unpickle_uses_pure_python(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("FROZENLIST_NO_EXTENSIONS", "1")
+    monkeypatch.delitem(sys.modules, "frozenlist", raising=False)
+    reloaded = cast(_FrozenListModule, importlib.import_module("frozenlist"))
+    frozen_list_type = reloaded.FrozenList
+    unpickle = reloaded._unpickle_frozen_list
+    get_state = reloaded._get_frozen_list_state
+
+    copied = cast(FrozenList[object], unpickle([1, 2, 3], True))
+
+    assert type(copied) is frozen_list_type
+    assert copied == [1, 2, 3]
+    assert copied.frozen
+    assert get_state(frozen_list_type([1, 2, 3])) is None
+    assert get_state(_EmptySlots()) is None
+    assert get_state(FrozenListSubclass()) == ({"label": "subclass"}, {})
+    assert get_state(FrozenListDefaultStateSubclass()) == {"label": "default"}
+    assert get_state(FrozenListSlotsStateSubclass()) == {"label": "slot-state"}
+    assert get_state(FrozenListDictSlotsStateSubclass()) == {
+        "label": "dict",
+        "slot_label": "slot",
+    }
+    assert get_state(FrozenListStateSubclass()) == {
+        "items": [1, 2, 3],
+        "frozen": False,
+        "label": "state",
+    }
+    assert get_state(FrozenListSlotsSubclass()) == (None, {"label": "slots"})
+    assert get_state(FrozenListPrivateSlotsSubclass()) == (
+        None,
+        {"_FrozenListPrivateSlotsSubclass__label": "private-slots"},
+    )
 
 
 def test_reimport_with_no_extensions_uses_pure_python(
