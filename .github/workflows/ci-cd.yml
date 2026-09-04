@@ -76,7 +76,7 @@ jobs:
     - name: Checkout project
       uses: actions/checkout@v7
     - name: Set up Python
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@v7
       with:
         python-version: ${{ env.PYTHON_LATEST }}
     - name: >-
@@ -262,7 +262,7 @@ jobs:
 
     - name: Setup Python ${{ matrix.pyver }}
       id: python-install
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.pyver }}
         allow-prereleases: true
