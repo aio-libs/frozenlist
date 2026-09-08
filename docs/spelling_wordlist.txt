@@ -52,7 +52,6 @@ charset
 charsetdetect
 chunked
 chunking
-cibuildwheel
 CIMultiDict
 ClientSession
 cls
@@ -223,7 +222,6 @@ py
 pyenv
 pyflakes
 pypa
-pyproject
 pytest
 Pytest
 pyupgrade
@@ -299,7 +297,6 @@ TestClient
 Testsuite
 Tf
 timestamps
-toml
 toolbar
 toplevel
 towncrier
