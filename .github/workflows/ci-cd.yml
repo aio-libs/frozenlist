@@ -344,7 +344,10 @@ jobs:
         )
       run: |
         set -eEuo pipefail
-        sed -i.bak 's/^plugins = .*//g' .coveragerc
+        # Wheels built with line tracing report Cython frames under the
+        # .pyx path even when the extension is only imported in passing;
+        # without the plugin coverage cannot read them, so leave them out.
+        sed -i.bak 's/^plugins = .*$/omit = *.pyx/' .coveragerc
       shell: bash
     - name: Run unittests
       env:
