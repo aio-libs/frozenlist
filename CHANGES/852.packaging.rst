@@ -1,0 +1,4 @@
+Modified :file:`.github/workflows/ci-cd.yml` to build for riscv64 with
+``ubuntu-24.04-riscv``, which is a native riscv64 Actions runner maintained by
+the RISE Project.
+-- by :user:`threexc`.
