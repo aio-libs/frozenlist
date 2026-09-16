@@ -2,5 +2,5 @@ Fixed the coverage builds of the C extension being compiled without
 optimization. The build backend set ``CFLAGS`` to add the Cython line
 tracing macro, which replaced the interpreter's own compiler flags
 instead of extending them; the macro now goes through ``CPPFLAGS``,
-which is appended
+which ``setuptools`` appends to the interpreter's flags
 -- by :user:`bdraco`.

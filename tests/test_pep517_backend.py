@@ -42,7 +42,7 @@ def test_tracing_macro_goes_through_cppflags(
     monkeypatch.setenv("CPPFLAGS", "-DUSER=1")
 
     with patched_env({}, tracing):
-        cppflags = shlex.split(os.environ["CPPFLAGS"])
+        cppflags = os.environ["CPPFLAGS"].split(" ")
         assert os.environ["CFLAGS"] == "-fuser-cflag"
 
     assert cppflags[0] == "-DUSER=1"
@@ -53,12 +53,18 @@ def test_tracing_macro_goes_through_cppflags(
 @pytest.mark.skipif(
     sys.platform == "win32", reason="MSVC does not read CFLAGS or CPPFLAGS"
 )
-def test_interpreter_flags_survive_the_build_env() -> None:
+def test_interpreter_flags_survive_the_build_env(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """The compiler still gets the interpreter's flags plus the macro.
 
     This drives setuptools' real compiler customization, so it fails if the
     backend ever goes back to setting CFLAGS.
     """
+    # A developer shell exporting these would replace the flags up front.
+    monkeypatch.delenv("CFLAGS", raising=False)
+    monkeypatch.delenv("CPPFLAGS", raising=False)
+
     with patched_env({}, True):
         command = _configured_compile_command()
 

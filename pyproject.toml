@@ -76,8 +76,10 @@ include = ["frozenlist*"]
 src = ["frozenlist/*.pyx"]
 
 [tool.local.cythonize.env]
-# Env vars provisioned during cythonize call
-#CFLAGS = "-DCYTHON_TRACE=1 ${CFLAGS}"
+# Env vars provisioned during cythonize call. Prefer CPPFLAGS over CFLAGS:
+# a CFLAGS environment variable replaces the interpreter's own compiler
+# flags in setuptools' distutils, while CPPFLAGS is appended to them.
+#CPPFLAGS = "-DCYTHON_TRACE=1 ${CPPFLAGS}"
 #LDFLAGS = "${LDFLAGS}"
 
 [tool.local.cythonize.flags]
