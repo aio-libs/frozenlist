@@ -115,9 +115,13 @@ def patched_env(env: dict[str, str], cython_line_tracing_requested: bool) -> Ite
     expanded_env = {name: expandvars(var_val) for name, var_val in env.items()}
     os.environ.update(expanded_env)
 
+    # The macro goes through ``CPPFLAGS`` rather than ``CFLAGS``: setuptools'
+    # distutils appends ``CPPFLAGS`` to the interpreter's own compiler flags,
+    # while a ``CFLAGS`` environment variable replaces them and silently
+    # drops ``-O3`` and ``-DNDEBUG`` from the build.
     if cython_line_tracing_requested:
-        os.environ['CFLAGS'] = ' '.join((
-            os.getenv('CFLAGS', ''),
+        os.environ['CPPFLAGS'] = ' '.join((
+            os.getenv('CPPFLAGS', ''),
             '-DCYTHON_TRACE_NOGIL=1',  # Implies CYTHON_TRACE=1
         )).strip()
     try:
