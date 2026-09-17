@@ -1,5 +1,5 @@
 -r cython.txt
-coverage==7.16.0
+coverage==7.16.1
 # Dependencies of the in-tree PEP 517 build backend under test:
 expandvars==1.1.2
 pytest==9.1.1
