@@ -7,7 +7,6 @@ requires = [
   # Next step should be >= 77.0 for PEP 639 support
   # Don't bump too early to give distributors time to update
   # their setuptools version.
-  "expandvars",
   "setuptools >= 67.0",
   "tomli; python_version < '3.11'",
 ]
