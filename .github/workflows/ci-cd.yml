@@ -454,6 +454,16 @@ jobs:
           tag: musllinux
           runner-vm-os: ubuntu-24.04-arm
           native-arch: true
+        # Build riscv64 natively on the custom riscv64gc runner instead of
+        # x86_64-under-QEMU, for the same reason as aarch64 above.
+        - qemu: riscv64
+          tag: ''
+          runner-vm-os: ubuntu-24.04-riscv
+          native-arch: true
+        - qemu: riscv64
+          tag: musllinux
+          runner-vm-os: ubuntu-24.04-riscv
+          native-arch: true
         # armv7l also builds on aarch64 hosts. We still register QEMU so
         # binfmt picks up the 32-bit ARM userspace handler regardless of
         # whether the host kernel has CONFIG_COMPAT enabled. Even with
