@@ -1,0 +1,7 @@
+Fixed pickling of ``FrozenList`` instances when the C extension is used -- by :user:`Mukller`.
+
+The free-threading change that stored the frozen flag in a C++ ``atomic[bint]``
+made Cython's default reducer fail with ``TypeError: self._frozen cannot be
+converted to a Python object for pickling``. An explicit ``__reduce__`` now
+serializes ``(items, frozen)`` explicitly, restoring parity with the
+pure-Python implementation.
