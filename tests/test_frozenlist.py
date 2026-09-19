@@ -321,7 +321,7 @@ class FrozenListMixin:
         assert copied[0] is not orig[0]
         assert isinstance(copied[0], self.FrozenList)
         # Modify the inner list in the copy
-        copied[0].append(3)
+        copied[0].append(3)  # type: ignore[unreachable]  # FIXME
         assert len(copied[0]) == 3
         assert len(orig[0]) == 2
 
@@ -380,7 +380,10 @@ class FrozenListMixin:
         # Verify structure
         assert len(copied) == 3
         assert isinstance(copied[0], self.FrozenList)
-        assert isinstance(copied[1], self.FrozenList)
+        assert isinstance(  # type: ignore[unreachable]  # FIXME
+            copied[1],
+            self.FrozenList,
+        )
         assert copied[2] is copied  # Self reference preserved
 
         # Verify nested circular references
@@ -407,7 +410,7 @@ class FrozenListMixin:
         assert isinstance(copied[0], self.FrozenList)
 
         # Modify through one reference
-        copied[0].append(3)
+        copied[0].append(3)  # type: ignore[unreachable]  # FIXME
         assert len(copied[0]) == 3
         assert len(copied[1]) == 3  # Should see the change
         assert len(shared) == 2  # Original unchanged
