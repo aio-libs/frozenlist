@@ -9,13 +9,6 @@ import types
 from collections.abc import MutableSequence
 
 
-def _unpickle_frozen_list(cls, items, frozen):
-    fl = cls(items)
-    if frozen:
-        fl.freeze()
-    return fl
-
-
 cdef class FrozenList:
     __class_getitem__ = classmethod(types.GenericAlias)
 
@@ -34,13 +27,27 @@ cdef class FrozenList:
     def frozen(self):
         return PyBool_FromLong(self._frozen.load())
 
-    def __reduce__(self):
-        # The default Cython-generated reducer cannot serialize the C++
-        # atomic[bint] `_frozen` member, so pickle the state explicitly.
-        return (
-            _unpickle_frozen_list,
-            (type(self), list(self._items), bool(self._frozen.load())),
-        )
+    def __getstate__(self):
+        # The default Cython-generated state handling cannot serialize the C++
+        # atomic[bint] `_frozen` member, so report the state explicitly.
+        # Report the same 2-tuple shape object.__getstate__() would, so a
+        # subclass that extends __getstate__/__setstate__ behaves identically
+        # here and on the pure-Python implementation. Reconstruction keeps the
+        # default path, which allocates via __new__ and never calls __init__.
+        inst_dict = getattr(self, "__dict__", None)
+        slots = {"_items": list(self._items), "_frozen": bool(self._frozen.load())}
+        return (dict(inst_dict) if inst_dict else None, slots)
+
+    def __setstate__(self, state):
+        if isinstance(state, tuple) and len(state) == 2:
+            inst_dict, slots = state
+        else:
+            inst_dict, slots = None, state
+        self._frozen.store(slots["_frozen"])
+        self._items = slots["_items"]
+        if inst_dict:
+            self.__dict__.update(inst_dict)
+
     cdef object _check_frozen(self):
         if self._frozen.load():
             raise RuntimeError("Cannot modify frozen list.")
