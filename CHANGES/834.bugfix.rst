@@ -1,0 +1,1 @@
+Fixed pickling for ``FrozenList`` instances when the C extension is used -- by :user:`cananoo`.
