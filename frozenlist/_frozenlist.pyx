@@ -2,6 +2,7 @@
 # distutils: language = c++
 
 from cpython.bool cimport PyBool_FromLong
+from cpython.list cimport PyList_Append
 from libcpp.atomic cimport atomic
 
 import copy
@@ -108,7 +109,7 @@ cdef class FrozenList:
 
     def append(self, item):
         self._check_frozen()
-        return self._items.append(item)
+        PyList_Append(self._items, item)
 
     def count(self, item):
         return self._items.count(item)
