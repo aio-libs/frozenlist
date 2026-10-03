@@ -1,0 +1,16 @@
+Fixed pickling of ``FrozenList`` instances when the C extension is used -- by
+:user:`Mukller`.
+
+The free-threading change that stored the frozen flag in a C++ ``atomic[bint]``
+made Cython's default state handling fail with ``TypeError: self._frozen cannot
+be converted to a Python object for pickling``. The class now defines
+``__getstate__``/``__setstate__`` so the flag is serialized explicitly, which
+restores parity with the pure-Python implementation.
+
+``__getstate__`` reports the same 2-tuple shape ``object.__getstate__()`` does, so
+reconstruction stays on the default protocol: the object is allocated with
+``__new__`` and ``__init__`` is not re-run. That also fixes subclassing, which
+the previous explicit ``__reduce__`` broke -- it reconstructed through
+``cls(items)``, raising ``TypeError`` for any subclass whose ``__init__`` does
+not take a single positional iterable, discarding instance state stored in
+``__dict__``, and re-running ``__init__`` side effects on every restore.
