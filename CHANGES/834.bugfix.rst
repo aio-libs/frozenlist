@@ -13,4 +13,4 @@ reconstruction stays on the default protocol: the object is allocated with
 the previous explicit ``__reduce__`` broke -- it reconstructed through
 ``cls(items)``, raising ``TypeError`` for any subclass whose ``__init__`` does
 not take a single positional iterable, discarding instance state stored in
-``__dict__``, and re-running ``__init__`` side effects on every unpickle.
+``__dict__``, and re-running ``__init__`` side effects on every restore.
