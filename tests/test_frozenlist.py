@@ -542,8 +542,10 @@ class _CustomStatePy(_SubPy):
         # floor this project still tests, build the same 2-tuple by hand.
         base = getattr(super(), "__getstate__", None)
         if base is None:
-            inst_dict, slots = None, {"_frozen": self._frozen,
-                                      "_items": list(self._items)}
+            inst_dict, slots = (
+                None,
+                {"_frozen": self._frozen, "_items": list(self._items)},
+            )
         else:
             inst_dict, slots = base()
         slots = dict(slots)
