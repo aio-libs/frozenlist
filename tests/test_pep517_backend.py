@@ -115,10 +115,14 @@ def clean_env(monkeypatch: pytest.MonkeyPatch) -> None:
     running the ``Test`` job; the backend's ``_is_truthy_setting_value``
     treats an empty string as truthy and would otherwise force
     ``maybe_prebuild_c_extensions`` into the pure-Python early-return,
-    skipping the stub-calling code these tests exercise.
+    skipping the stub-calling code these tests exercise. It is pinned to
+    ``false`` rather than removed because on PyPy the backend otherwise
+    defaults to a pure-Python build. ``IS_CPYTHON`` is forced on so the
+    "unsupported runtime" ``RuntimeWarning`` does not fire under PyPy.
     """
+    monkeypatch.setattr(_backend, "IS_CPYTHON", True)
     monkeypatch.delenv(BUILD_INPLACE_ENV_VAR, raising=False)
-    monkeypatch.delenv(PURE_PYTHON_ENV_VAR, raising=False)
+    monkeypatch.setenv(PURE_PYTHON_ENV_VAR, "false")
     monkeypatch.delenv(CYTHON_TRACING_ENV_VAR, raising=False)
     monkeypatch.delenv("CPPFLAGS", raising=False)
 
