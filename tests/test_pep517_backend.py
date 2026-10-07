@@ -4,8 +4,10 @@ import os
 import shlex
 import sys
 import sysconfig
+from types import SimpleNamespace
 
 import pytest
+from pep517_backend import cli
 from pep517_backend._cython_configuration import patched_env
 from setuptools._distutils.ccompiler import new_compiler
 from setuptools._distutils.sysconfig import customize_compiler
@@ -71,3 +73,24 @@ def test_interpreter_flags_survive_the_build_env(
     for flag in _interpreter_flags():
         assert flag in command
     assert TRACE_MACRO in command
+
+
+def test_translate_cython_requests_line_tracing(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The C files made for the coverage plugin carry trace calls.
+
+    Without the ``linetrace`` directive the regenerated C file has no
+    trace instrumentation, so ``Cython.Coverage`` records nothing for the
+    ``.pyx`` sources.
+    """
+    directives: list[dict[str, object]] = []
+
+    def translate(sources: list[str], options: SimpleNamespace) -> SimpleNamespace:
+        directives.append(options.compiler_directives)
+        return SimpleNamespace(num_errors=0)
+
+    monkeypatch.setattr(cli, "_translate_cython_cli_cmd", translate)
+
+    assert cli.run_main_program(["cli", "translate-cython"]) == 0
+    assert directives[0]["linetrace"] is True
