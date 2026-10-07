@@ -19,24 +19,28 @@ coverage:
     patch:
       default:
         target: 100%
-        flags:
-        - pytest
     project:
       default:
         target: 100%
-      lib:
-        flags:
-        - pytest
+      lib-combined:
         paths:
         - frozenlist/
+        target: 100%
+      lib-cython:
+        paths:
+        - frozenlist/*.pyx
+        - frozenlist/**/*.pyx
+        target: 100%
+      lib-python:
+        paths:
+        - frozenlist/*.py
+        - frozenlist/**/*.py
         target: 100%
       packaging:
         paths:
         - packaging/
         target: 75.24%
       tests:
-        flags:
-        - pytest
         paths:
         - tests/
         target: 100%
