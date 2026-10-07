@@ -117,53 +117,34 @@ def patched_env(
 
     :yields: None
     """
-    extra_cppflags: list[str] = []
-    if cython_line_tracing_requested:
-        extra_cppflags.append('-DCYTHON_TRACE_NOGIL=1')  # Implies CYTHON_TRACE=1
-    # When building in a temporary directory, rewrite the random tmp dir
-    # path back to the original source directory so the compiled artifacts
-    # are reproducible. `-ffile-prefix-map` is a GCC/Clang flag and is not
-    # understood by MSVC, so skip it on Windows. Validation runs before we
-    # touch ``os.environ`` so a configuration error cannot leave the process
-    # environment half-mutated.
-    # Ref: https://github.com/aio-libs/frozenlist/issues/577
-    if temporary_build_directory is not None and sys.platform != 'win32':
-        if original_source_directory is None:
-            raise ValueError(
-                'original_source_directory is required '
-                'when temporary_build_directory is set',
-            )
-        tmp_path = str(temporary_build_directory)
-        src_path = str(original_source_directory)
-        # ``CPPFLAGS`` is split on whitespace by the compiler driver, so a
-        # build path containing a space would silently tokenise into
-        # multiple arguments and break the mapping. Fail loudly instead of
-        # producing a broken-but-quiet reproducibility result.
-        if ' ' in tmp_path or ' ' in src_path:
-            raise ValueError(
-                'Build paths must not contain whitespace for '
-                '`-ffile-prefix-map` to apply cleanly; got '
-                f'temporary_build_directory={tmp_path!r}, '
-                f'original_source_directory={src_path!r}',
-            )
-        extra_cppflags.append(f'-ffile-prefix-map={tmp_path}={src_path}')
-
     orig_env = os.environ.copy()
     # Unset self-references such as ${LDFLAGS} must expand to empty strings.
     for env_var in env:
         os.environ.setdefault(env_var, '')
     expanded_env = {name: expandvars(var_val) for name, var_val in env.items()}
     os.environ.update(expanded_env)
-    # The flags go through ``CPPFLAGS`` rather than ``CFLAGS``: setuptools'
-    # distutils appends ``CPPFLAGS`` to the interpreter's own compiler flags
-    # (for both the C and C++ compile steps), while a ``CFLAGS`` environment
-    # variable replaces them and silently drops ``-O3`` and ``-DNDEBUG`` from
-    # the build.
-    if extra_cppflags:
-        os.environ['CPPFLAGS'] = ' '.join((
-            os.getenv('CPPFLAGS', ''),
-            *extra_cppflags,
-        )).strip()
+
+    extra_compiler_flags: list[str] = []
+    if cython_line_tracing_requested:
+        extra_compiler_flags.append('-DCYTHON_TRACE_NOGIL=1')  # Implies CYTHON_TRACE=1
+    # When building in a temporary directory, rewrite the random tmp dir
+    # path back to the original source directory so the compiled artifacts
+    # are reproducible. `-ffile-prefix-map` is a GCC/Clang flag and is not
+    # understood by MSVC, so skip it on Windows.
+    # Ref: https://github.com/aio-libs/frozenlist/issues/577
+    if temporary_build_directory is not None and sys.platform != 'win32':
+        assert original_source_directory is not None
+        extra_compiler_flags.append(
+            f'-ffile-prefix-map={temporary_build_directory!s}={original_source_directory!s}',
+        )
+    # Add the extra flags through ``CPPFLAGS`` rather than ``CFLAGS``:
+    # setuptools' distutils appends ``CPPFLAGS`` to the interpreter's own
+    # compiler flags, while a ``CFLAGS`` environment variable replaces them
+    # and silently drops ``-O3`` and ``-DNDEBUG`` from the build.
+    if extra_compiler_flags:
+        os.environ['CPPFLAGS'] = ' '.join(
+            (os.getenv('CPPFLAGS', ''), *extra_compiler_flags),
+        ).strip()
     try:
         yield
     finally:

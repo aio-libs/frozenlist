@@ -76,14 +76,14 @@ CYTHON_TRACING_ENV_VAR = 'FROZENLIST_CYTHON_TRACING'
 PURE_PYTHON_CONFIG_SETTING = 'pure-python'
 """Config setting name toggle that is used to opt out of making C-exts."""
 
-PURE_PYTHON_ENV_VAR = 'FROZENLIST_NO_EXTENSIONS'
-"""Environment variable name toggle used to opt out of making C-exts."""
-
 BUILD_INPLACE_CONFIG_SETTING = 'build-inplace'
 """Config setting name toggle for building C-exts in-place."""
 
 BUILD_INPLACE_ENV_VAR = 'FROZENLIST_BUILD_INPLACE'
 """Environment variable name toggle for building C-exts in-place."""
+
+PURE_PYTHON_ENV_VAR = 'FROZENLIST_NO_EXTENSIONS'
+"""Environment variable name toggle used to opt out of making C-exts."""
 
 IS_CPYTHON = _system_implementation.name == "cpython"
 """A flag meaning that the current interpreter implementation is CPython."""
@@ -293,6 +293,10 @@ def maybe_prebuild_c_extensions(
 
     print("**********************", file=_standard_error_stream)
     print("* Accelerated build *", file=_standard_error_stream)
+    print(
+        f'* Build location: {"in-tree" if build_inplace else "tmp dir"} *',
+        file=_standard_error_stream,
+    )
     print("**********************", file=_standard_error_stream)
     if not IS_CPYTHON:
         _warn_that(
