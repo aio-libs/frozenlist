@@ -27,6 +27,34 @@ cdef class FrozenList:
     def frozen(self):
         return PyBool_FromLong(self._frozen.load())
 
+    def __getstate__(self):
+        # The default Cython-generated state handling cannot serialize the C++
+        # atomic[bint] `_frozen` member, so report the state explicitly.
+        # Report the same 2-tuple shape object.__getstate__() would, so a
+        # subclass that extends __getstate__ can chain super() the same way it
+        # would against the pure-Python implementation.
+        #
+        # Caveat worth knowing: __setstate__ is reachable via super() only on
+        # this cdef class. PyFrozenList defines neither method, and
+        # object.__setstate__ does not exist, so a subclass of the pure-Python
+        # implementation cannot chain super() for __setstate__ on any version,
+        # nor for __getstate__ below Python 3.11 (object.__getstate__ was added
+        # in 3.11). Subclasses of the two implementations are therefore not
+        # fully symmetric today.
+        inst_dict = getattr(self, "__dict__", None)
+        slots = {"_items": list(self._items), "_frozen": bool(self._frozen.load())}
+        return (dict(inst_dict) if inst_dict else None, slots)
+
+    def __setstate__(self, state):
+        if isinstance(state, tuple) and len(state) == 2:
+            inst_dict, slots = state
+        else:
+            inst_dict, slots = None, state
+        self._frozen.store(slots["_frozen"])
+        self._items = slots["_items"]
+        if inst_dict:
+            self.__dict__.update(inst_dict)
+
     cdef object _check_frozen(self):
         if self._frozen.load():
             raise RuntimeError("Cannot modify frozen list.")

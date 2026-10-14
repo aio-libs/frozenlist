@@ -2,9 +2,11 @@
 # mypy: disable-error-code="misc"
 
 import importlib
+import pickle
 import sys
 from collections.abc import MutableSequence
 from copy import copy, deepcopy
+from typing import Any
 
 import pytest
 
@@ -441,3 +443,171 @@ def test_reimport_without_no_extensions_attempts_extension(
     monkeypatch.delitem(sys.modules, "frozenlist", raising=False)
     reloaded = importlib.import_module("frozenlist")
     assert reloaded.NO_EXTENSIONS is False
+
+
+class TestPickleC(FrozenListMixin):
+    # Class-attr alias assignment is intentional: the mixin dispatches on this
+    # attribute, and mypy cannot know it always holds a class at runtime.
+    FrozenList = FrozenList  # type: ignore[assignment]
+
+
+class TestPicklePy(FrozenListMixin):
+    FrozenList = PyFrozenList  # type: ignore[assignment]
+
+
+class _SubC(FrozenList):  # type: ignore[type-arg]
+    pass
+
+
+class _SubPy(PyFrozenList):  # type: ignore[valid-type]
+    pass
+
+
+class TestPickleSubclass(FrozenListMixin):
+    FrozenList = FrozenList  # type: ignore[assignment]
+
+    def test_subclass_roundtrip_preserves_class(self) -> None:
+        for cls in (_SubC, _SubPy):
+            sub = cls([1, 2])
+            sub.freeze()
+            restored = pickle.loads(pickle.dumps(sub))
+            assert type(restored) is cls
+            assert restored.frozen
+            assert list(restored) == [1, 2]
+
+
+class _NoArgInitC(FrozenList):  # type: ignore[type-arg]
+    def __init__(self) -> None:
+        super().__init__([1, 2, 3])
+        self.marker = "built"
+
+
+class _NoArgInitPy(PyFrozenList):  # type: ignore[valid-type]
+    def __init__(self) -> None:
+        super().__init__([1, 2, 3])
+        self.marker = "built"
+
+
+class _KwOnlyInitC(FrozenList):  # type: ignore[type-arg]
+    def __init__(self, *, name: str) -> None:
+        super().__init__([4])
+        self.name = name
+
+
+class _KwOnlyInitPy(PyFrozenList):  # type: ignore[valid-type]
+    def __init__(self, *, name: str) -> None:
+        super().__init__([4])
+        self.name = name
+
+
+class _StateC(_SubC):
+    pass
+
+
+class _StatePy(_SubPy):
+    pass
+
+
+class _CountingC(_SubC):
+    calls = 0
+
+    def __init__(self, items: Any = None) -> None:
+        type(self).calls += 1
+        super().__init__(items)
+
+
+class _CountingPy(_SubPy):
+    calls = 0
+
+    def __init__(self, items: Any = None) -> None:
+        type(self).calls += 1
+        super().__init__(items)
+
+
+class _CustomStateC(_SubC):
+    def __getstate__(self) -> Any:
+        # FrozenList is a cdef class, so its __getstate__ is not described in
+        # the .pyi stub; type the result loosely here.
+        state: Any = super().__getstate__()
+        inst_dict, slots = state[0], state[1]
+        slots["tag"] = "custom"
+        return (inst_dict, slots)
+
+    def __setstate__(self, state: Any) -> None:
+        super().__setstate__(state)
+        self.tag = state[1]["tag"]
+
+
+class _CustomStatePy(_SubPy):
+    def __getstate__(self) -> Any:
+        # PyFrozenList defines no __getstate__, so super() reaches
+        # object.__getstate__ -- which only exists on Python 3.11+. On the 3.10
+        # floor this project still tests, build the same 2-tuple by hand.
+        base = getattr(super(), "__getstate__", None)
+        if base is None:
+            inst_dict, slots = (
+                None,
+                {"_frozen": self._frozen, "_items": list(self._items)},
+            )
+        else:
+            inst_dict, slots = base()
+        slots = dict(slots)
+        slots["tag"] = "custom"
+        return (inst_dict, slots)
+
+    def __setstate__(self, state: Any) -> None:
+        # PyFrozenList defines no explicit __setstate__ -- the default protocol
+        # installs the slot state -- so set the slots directly here.
+        self._frozen = state[1]["_frozen"]
+        self._items = state[1]["_items"]
+        self.tag = state[1]["tag"]
+
+
+@pytest.mark.parametrize("cls", [_NoArgInitC, _NoArgInitPy])
+def test_unpickle_does_not_require_items_arg(cls: Any) -> None:
+    """A subclass whose __init__ takes no positional argument must unpickle.
+
+    Reconstruction must not go through ``cls(items)``: that raises TypeError for
+    these subclasses. The default pickle protocol allocates via ``__new__``.
+    """
+    restored: Any = pickle.loads(pickle.dumps(cls()))
+    assert list(restored) == [1, 2, 3]
+    assert restored.marker == "built"
+
+
+@pytest.mark.parametrize("cls", [_KwOnlyInitC, _KwOnlyInitPy])
+def test_unpickle_supports_keyword_only_init(cls: Any) -> None:
+    restored: Any = pickle.loads(pickle.dumps(cls(name="x")))
+    assert list(restored) == [4]
+    assert restored.name == "x"
+
+
+@pytest.mark.parametrize("cls", [_StateC, _StatePy])
+def test_unpickle_preserves_subclass_instance_state(cls: Any) -> None:
+    """Instance attributes set after construction survive the round trip."""
+    obj: Any = cls([1, 2])
+    obj.extra = "kept"
+    restored: Any = pickle.loads(pickle.dumps(obj))
+    assert type(restored) is cls
+    assert restored.extra == "kept"
+    assert list(restored) == [1, 2]
+
+
+@pytest.mark.parametrize("cls", [_CountingC, _CountingPy])
+def test_unpickle_does_not_rerun_init(cls: Any) -> None:
+    """Unpickling must not re-execute a subclass __init__, to avoid repeating
+    its side effects."""
+    cls.calls = 0
+    obj: Any = cls([9])
+    assert cls.calls == 1
+    restored: Any = pickle.loads(pickle.dumps(obj))
+    assert cls.calls == 1
+    assert list(restored) == [9]
+
+
+@pytest.mark.parametrize("cls", [_CustomStateC, _CustomStatePy])
+def test_unpickle_honours_custom_getstate(cls: Any) -> None:
+    """A subclass overriding __getstate__/__setstate__ is respected."""
+    restored: Any = pickle.loads(pickle.dumps(cls([1])))
+    assert restored.tag == "custom"
+    assert list(restored) == [1]

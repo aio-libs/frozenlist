@@ -22,6 +22,7 @@
 .tox
 .vimrc
 frozenlist/_frozenlist.c
+frozenlist/_frozenlist.cpp
 frozenlist/_frozenlist.html
 bin
 build
