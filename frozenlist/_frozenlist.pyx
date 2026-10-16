@@ -2,11 +2,41 @@
 # distutils: language = c++
 
 from cpython.bool cimport PyBool_FromLong
+from cpython.dict cimport PyDict_GetItemRef
+from cpython.object cimport PyObject
 from libcpp.atomic cimport atomic
 
 import copy
 import types
 from collections.abc import MutableSequence
+
+
+cdef extern from *:
+    # ``PyDict_GetItemRef`` gives us a new reference to the cached deepycopy.
+    # ``frozenlist_steal`` hands that reference to Cython as an ``object``
+    # without another incref, so a cache hit costs a single incref.
+    
+    # ``frozenlist_builtin_id`` uses the same function as __builtins__.id without 
+    # Cython needing it's own (saves on costly calling) 
+    # Audit is mimiced from CPython to keep __builtins__.id() running same as usual.
+    """
+    #define frozenlist_steal(value) (value)
+
+    static inline PyObject *
+    frozenlist_builtin_id(PyObject *v)
+    {
+        PyObject *id = PyLong_FromVoidPtr(v);
+
+        if (id && PySys_Audit("builtins.id", "O", id) < 0) {
+            Py_DECREF(id);
+            return NULL;
+        }
+        return id;
+    }
+    """
+    object frozenlist_steal(PyObject* value)
+    object frozenlist_builtin_id(object v)
+
 
 
 cdef class FrozenList:
@@ -131,12 +161,15 @@ cdef class FrozenList:
         return new_list
 
     def __deepcopy__(self, memo):
-        cdef FrozenList new_list
-        obj_id = id(self)
+        cdef:
+            FrozenList new_list
+            PyObject* val
+
+        obj_id = frozenlist_builtin_id(self)
 
         # Return existing copy if already processed (circular reference)
-        if obj_id in memo:
-            return memo[obj_id]
+        if PyDict_GetItemRef(memo, obj_id, &val):
+            return frozenlist_steal(val)
 
         # Create new instance and register immediately
         new_list = self.__class__([])
