@@ -18,7 +18,7 @@ cdef extern from *:
 
     # ``frozenlist_builtin_id`` uses the same function as __builtins__.id without
     # Cython needing it's own (saves on costly calling)
-    # Audit is mimiced from CPython to keep __builtins__.id() running same as usual.
+    # Audit is mimicked from CPython to keep __builtins__.id() running same as usual.
     """
     #define frozenlist_steal(value) (value)
 
