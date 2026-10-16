@@ -3,12 +3,22 @@
 
 import importlib
 import sys
-from collections.abc import MutableSequence
+from collections.abc import Callable, MutableSequence
 from copy import copy, deepcopy
+from typing import Any
 
 import pytest
 
 from frozenlist import FrozenList, PyFrozenList
+
+
+class TempAuditHook:
+    def __init__(self) -> None:
+        self.callbacks: list[Callable[[str, tuple[Any, ...]]]] = []
+
+    def __call__(self, name: str, args: tuple[Any, ...]) -> None:
+        for c in self.callbacks:
+            c(name, args)
 
 
 class FrozenListMixin:
@@ -414,6 +424,57 @@ class FrozenListMixin:
         assert len(copied[0]) == 3
         assert len(copied[1]) == 3  # Should see the change
         assert len(shared) == 2  # Original unchanged
+
+    def test_audit(self) -> None:
+        _TEMP_AUDIT = TempAuditHook()
+        sys.addaudithook(_TEMP_AUDIT)
+
+        shared = self.FrozenList([1, 2])
+        orig = self.FrozenList([shared, shared, 3])
+
+        names: set[str] = set()
+
+        def on_audit(name: str, args: tuple[Any, ...]) -> None:
+            names.add(name)
+
+        # temporarily add in an audit and then remove it.
+        _TEMP_AUDIT.callbacks.append(on_audit)
+        try:
+            copied = deepcopy(orig)
+        finally:
+            _TEMP_AUDIT.callbacks.clear()
+
+        assert names == {"builtins.id"}
+
+        # Both references should point to the same copied object
+        assert copied[0] is copied[1]
+        assert copied[0] is not shared
+        assert isinstance(copied[0], self.FrozenList)
+
+        # Modify through one reference
+        copied[0].append(3)  # type: ignore[unreachable]  # FIXME
+        assert len(copied[0]) == 3
+        assert len(copied[1]) == 3  # Should see the change
+        assert len(shared) == 2  # Original unchanged
+
+    def test_audit_rejection(self) -> None:
+        class Tornado(Exception):
+            pass
+
+        _TEMP_AUDIT = TempAuditHook()
+        sys.addaudithook(_TEMP_AUDIT)
+
+        shared = self.FrozenList([1, 2])
+        orig = self.FrozenList([shared, shared, 3])
+
+        def on_audit(name: str, args: tuple[Any, ...]) -> None:
+            if name == "builtins.id":
+                raise Tornado("rejected")
+
+        _TEMP_AUDIT.callbacks.append(on_audit)
+        with pytest.raises(Tornado, match=r"rejected"):
+            _ = deepcopy(orig)
+        _TEMP_AUDIT.callbacks.clear()
 
 
 class TestFrozenList(FrozenListMixin):
