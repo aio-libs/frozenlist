@@ -15,9 +15,9 @@ cdef extern from *:
     # ``PyDict_GetItemRef`` gives us a new reference to the cached deepycopy.
     # ``frozenlist_steal`` hands that reference to Cython as an ``object``
     # without another incref, so a cache hit costs a single incref.
-    
-    # ``frozenlist_builtin_id`` uses the same function as __builtins__.id without 
-    # Cython needing it's own (saves on costly calling) 
+
+    # ``frozenlist_builtin_id`` uses the same function as __builtins__.id without
+    # Cython needing it's own (saves on costly calling)
     # Audit is mimiced from CPython to keep __builtins__.id() running same as usual.
     """
     #define frozenlist_steal(value) (value)
