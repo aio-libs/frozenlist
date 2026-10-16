@@ -472,9 +472,11 @@ class FrozenListMixin:
                 raise Tornado("rejected")
 
         _TEMP_AUDIT.callbacks.append(on_audit)
-        with pytest.raises(Tornado, match=r"rejected"):
-            _ = deepcopy(orig)
-        _TEMP_AUDIT.callbacks.clear()
+        try:
+            with pytest.raises(Tornado, match=r"rejected"):
+                _ = deepcopy(orig)
+        finally:
+            _TEMP_AUDIT.callbacks.clear()
 
 
 class TestFrozenList(FrozenListMixin):
