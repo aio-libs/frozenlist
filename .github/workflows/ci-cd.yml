@@ -76,7 +76,7 @@ jobs:
     - name: Checkout project
       uses: actions/checkout@v7
     - name: Set up Python
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@v7
       with:
         python-version: ${{ env.PYTHON_LATEST }}
     - name: >-
@@ -189,7 +189,6 @@ jobs:
           || (matrix.tag == 'musllinux') && '*-manylinux_*'
         || '*-musllinux_*'
         }}
-        pp*
         EOF
 
   test:
@@ -262,7 +261,7 @@ jobs:
 
     - name: Setup Python ${{ matrix.pyver }}
       id: python-install
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.pyver }}
         allow-prereleases: true
@@ -333,7 +332,6 @@ jobs:
       run: |
         set -eEuo pipefail
 
-        python -Im pip install expandvars
         python -m pep517_backend.cli translate-cython
       shell: bash
     - name: Disable the Cython.Coverage Produce plugin
@@ -345,7 +343,11 @@ jobs:
         )
       run: |
         set -eEuo pipefail
-        sed -i.bak 's/^plugins = .*//g' .coveragerc
+        # Wheels built with line tracing report Cython frames under the
+        # .pyx path whenever the extension runs, and the reimport tests
+        # load it even on these legs; without the plugin coverage cannot
+        # read those frames, so leave them out.
+        sed -i.bak 's/^plugins = .*$/omit = *.pyx/' .coveragerc
       shell: bash
     - name: Run unittests
       env:
@@ -501,7 +503,7 @@ jobs:
           (matrix.tag == 'musllinux')
           && '*-manylinux_*'
           || '*-musllinux_*'
-        }} pp*
+        }}
 
   deploy:
     name: Deploy
@@ -585,7 +587,7 @@ jobs:
         skip-existing: true
 
     - name: Sign the dists with Sigstore
-      uses: sigstore/gh-action-sigstore-python@v3.4.0
+      uses: sigstore/gh-action-sigstore-python@v3.5.0
       with:
         inputs: >-
           ./dist/${{ needs.build-pure-python-dists.outputs.sdist-filename }}

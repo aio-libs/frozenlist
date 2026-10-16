@@ -10,6 +10,10 @@ _site-packages-to-src-mapping =
   *\Lib\site-packages
 
 [report]
+# The in-tree build backend is exercised by tests but is not library
+# code held to the coverage gate.
+omit =
+  packaging/*
 exclude_also =
   ^\s*@pytest\.mark\.xfail
 # fail_under = 98.95
