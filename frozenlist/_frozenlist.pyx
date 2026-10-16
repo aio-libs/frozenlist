@@ -38,7 +38,6 @@ cdef extern from *:
     object frozenlist_builtin_id(object v)
 
 
-
 cdef class FrozenList:
     __class_getitem__ = classmethod(types.GenericAlias)
 

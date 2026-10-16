@@ -1,2 +1,2 @@
-Optimized the ``__deepcopy__`` function in Cython with brand new ``frozenlist_builtin_id`` and ``frozenlist_steal`` functions.
+Optimize ``__deepcopy__`` function in Cython with brand new ``frozenlist_builtin_id`` and ``frozenlist_steal`` functions.
 -- by :user:`Vizonex`.
