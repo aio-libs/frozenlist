@@ -2,6 +2,8 @@
 # mypy: disable-error-code="misc"
 
 import pickle
+import importlib
+import sys
 from collections.abc import MutableSequence
 from copy import copy, deepcopy
 
@@ -320,7 +322,7 @@ class FrozenListMixin:
         assert copied[0] is not orig[0]
         assert isinstance(copied[0], self.FrozenList)
         # Modify the inner list in the copy
-        copied[0].append(3)
+        copied[0].append(3)  # type: ignore[unreachable]  # FIXME
         assert len(copied[0]) == 3
         assert len(orig[0]) == 2
 
@@ -379,7 +381,10 @@ class FrozenListMixin:
         # Verify structure
         assert len(copied) == 3
         assert isinstance(copied[0], self.FrozenList)
-        assert isinstance(copied[1], self.FrozenList)
+        assert isinstance(  # type: ignore[unreachable]  # FIXME
+            copied[1],
+            self.FrozenList,
+        )
         assert copied[2] is copied  # Self reference preserved
 
         # Verify nested circular references
@@ -406,7 +411,7 @@ class FrozenListMixin:
         assert isinstance(copied[0], self.FrozenList)
 
         # Modify through one reference
-        copied[0].append(3)
+        copied[0].append(3)  # type: ignore[unreachable]  # FIXME
         assert len(copied[0]) == 3
         assert len(copied[1]) == 3  # Should see the change
         assert len(shared) == 2  # Original unchanged
@@ -429,3 +434,22 @@ class TestFrozenList(FrozenListMixin):
 
 class TestFrozenListPy(FrozenListMixin):
     FrozenList = PyFrozenList  # type: ignore[assignment]  # FIXME
+
+
+def test_reimport_with_no_extensions_uses_pure_python(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("FROZENLIST_NO_EXTENSIONS", "1")
+    monkeypatch.delitem(sys.modules, "frozenlist", raising=False)
+    reloaded = importlib.import_module("frozenlist")
+    assert reloaded.NO_EXTENSIONS is True
+    assert reloaded.FrozenList is reloaded.PyFrozenList
+
+
+def test_reimport_without_no_extensions_attempts_extension(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("FROZENLIST_NO_EXTENSIONS", raising=False)
+    monkeypatch.delitem(sys.modules, "frozenlist", raising=False)
+    reloaded = importlib.import_module("frozenlist")
+    assert reloaded.NO_EXTENSIONS is False

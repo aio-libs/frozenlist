@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import os
+from collections.abc import Iterator
 from contextlib import contextmanager, nullcontext, suppress
 from functools import partial
 from pathlib import Path
@@ -11,7 +12,6 @@ from shutil import copytree
 from sys import implementation as _system_implementation
 from sys import stderr as _standard_error_stream
 from tempfile import TemporaryDirectory
-from typing import Dict, Iterator, List, Union
 from warnings import warn as _warn_that
 
 from setuptools.build_meta import build_sdist as _setuptools_build_sdist
@@ -64,7 +64,7 @@ __all__ = (  # noqa: WPS410
     ),
 )
 
-_ConfigDict = Dict[str, Union[str, List[str], None]]
+_ConfigDict = dict[str, str | list[str] | None]
 
 
 CYTHON_TRACING_CONFIG_SETTING = 'with-cython-tracing'

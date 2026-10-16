@@ -1,0 +1,3 @@
+Added separate Codecov statuses for the coverage of the library code
+written in Cython and in Python, next to the combined one, and dropped
+the ``pytest`` flag filter from the statuses -- by :user:`aiolibsbot`.

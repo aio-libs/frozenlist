@@ -74,9 +74,9 @@ jobs:
         ${{ steps.dist-filenames-detection.outputs.wheel-filename }}
     steps:
     - name: Checkout project
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
     - name: Set up Python
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@v7
       with:
         python-version: ${{ env.PYTHON_LATEST }}
     - name: >-
@@ -189,7 +189,6 @@ jobs:
           || (matrix.tag == 'musllinux') && '*-manylinux_*'
         || '*-musllinux_*'
         }}
-        pp*
         EOF
 
   test:
@@ -203,7 +202,6 @@ jobs:
         pyver:
         - 3.14t
         - 3.14
-        - 3.13t
         - 3.13
         - 3.12
         - 3.11
@@ -263,7 +261,7 @@ jobs:
 
     - name: Setup Python ${{ matrix.pyver }}
       id: python-install
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.pyver }}
         allow-prereleases: true
@@ -334,7 +332,6 @@ jobs:
       run: |
         set -eEuo pipefail
 
-        python -Im pip install expandvars
         python -m pep517_backend.cli translate-cython
       shell: bash
     - name: Disable the Cython.Coverage Produce plugin
@@ -346,7 +343,11 @@ jobs:
         )
       run: |
         set -eEuo pipefail
-        sed -i.bak 's/^plugins = .*//g' .coveragerc
+        # Wheels built with line tracing report Cython frames under the
+        # .pyx path whenever the extension runs, and the reimport tests
+        # load it even on these legs; without the plugin coverage cannot
+        # read those frames, so leave them out.
+        sed -i.bak 's/^plugins = .*$/omit = *.pyx/' .coveragerc
       shell: bash
     - name: Run unittests
       env:
@@ -384,7 +385,7 @@ jobs:
     - name: Send coverage data to Codecov
       if: >-
         !cancelled()
-      uses: codecov/codecov-action@v6
+      uses: codecov/codecov-action@v7
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: ./coverage.xml
@@ -438,22 +439,53 @@ jobs:
         tag:
         - ''
         - musllinux
+        include:
+        # Build aarch64 natively on the GH-hosted ARM runner instead of
+        # x86_64-under-QEMU; this drops the build from ~40 min of emulation
+        # to a few minutes of native execution. Each `(qemu, tag)` combo
+        # is listed explicitly so the include unambiguously augments the
+        # existing matrix cell rather than relying on the partial-key
+        # merge behaviour of `matrix.include`.
+        - qemu: aarch64
+          tag: ''
+          runner-vm-os: ubuntu-24.04-arm
+          native-arch: true
+        - qemu: aarch64
+          tag: musllinux
+          runner-vm-os: ubuntu-24.04-arm
+          native-arch: true
+        # armv7l also builds on aarch64 hosts. We still register QEMU so
+        # binfmt picks up the 32-bit ARM userspace handler regardless of
+        # whether the host kernel has CONFIG_COMPAT enabled. Even with
+        # emulation, aarch64-on-aarch64 hosting beats x86_64 by a wide
+        # margin.
+        - qemu: armv7l
+          tag: ''
+          runner-vm-os: ubuntu-24.04-arm
+        - qemu: armv7l
+          tag: musllinux
+          runner-vm-os: ubuntu-24.04-arm
     uses: ./.github/workflows/reusable-cibuildwheel.yml
     with:
       check-name: >-
         Build ${{ matrix.tag }} wheels for ${{ matrix.qemu }}
-      qemu: true
+      qemu: ${{ ! matrix.native-arch }}
+      runner-vm-os: ${{ matrix.runner-vm-os || 'ubuntu-latest' }}
       timeout-minutes: 25
       source-tarball-name: >-
         ${{ needs.build-pure-python-dists.outputs.sdist-filename }}
       dists-artifact-name: ${{ needs.pre-setup.outputs.dists-artifact-name }}
       # CIBW_ARCHS_LINUX: Build emulated architectures if QEMU, else "auto"
+      # CIBW_BUILD_FRONTEND: override pyproject.toml's `build[uv]` because
+      # the pypa odd-arch containers do not ship `uv` preinstalled
       # CIBW_CONFIG_SETTINGS: `with-cython-tracing` — for coverage collection
       # CIBW_CONFIG_SETTINGS: `pure-python` — force C-extensions
       environment-variables: |-
         CIBW_ARCHS_LINUX=${{ matrix.qemu }}
 
         CIBW_ARCHS_MACOS=x86_64 arm64 universal2
+
+        CIBW_BUILD_FRONTEND=build
 
         CIBW_CONFIG_SETTINGS<<EOF
         pure-python=false
@@ -471,7 +503,7 @@ jobs:
           (matrix.tag == 'musllinux')
           && '*-manylinux_*'
           || '*-musllinux_*'
-        }} pp*
+        }}
 
   deploy:
     name: Deploy
@@ -511,7 +543,29 @@ jobs:
     - name: Login
       run: |
         echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+    - name: Check whether the GitHub Release already exists
+      # Allows re-running the deploy job after a partial failure (e.g. PyPI
+      # upload error) without the Make Release step failing with HTTP 422
+      # because the tag/release was created on a prior attempt. Treat
+      # only the literal `release not found` reply as "does not exist";
+      # other failures (auth, rate-limit, network) re-raise so the job
+      # fails loudly instead of falling through to Make Release.
+      id: gh-release
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TAG: ${{ github.ref_name }}
+      run: |
+        if gh release view "${TAG}" --repo "${GITHUB_REPOSITORY}" \
+            >/dev/null 2>err; then
+          echo 'exists=true' >> "${GITHUB_OUTPUT}"
+        elif grep -qx 'release not found' err; then
+          echo 'exists=false' >> "${GITHUB_OUTPUT}"
+        else
+          cat err >&2
+          exit 1
+        fi
     - name: Make Release
+      if: steps.gh-release.outputs.exists != 'true'
       uses: aio-libs/create-release@v1.6.6
       with:
         changes_file: CHANGES.rst
@@ -527,9 +581,13 @@ jobs:
     - name: >-
         Publish 🐍📦 to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        # Allow re-running the deploy job after a partial PyPI upload
+        # without failing on dists that were already published.
+        skip-existing: true
 
     - name: Sign the dists with Sigstore
-      uses: sigstore/gh-action-sigstore-python@v3.3.0
+      uses: sigstore/gh-action-sigstore-python@v3.5.0
       with:
         inputs: >-
           ./dist/${{ needs.build-pure-python-dists.outputs.sdist-filename }}

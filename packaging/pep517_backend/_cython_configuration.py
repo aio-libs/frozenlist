@@ -3,12 +3,12 @@
 from __future__ import annotations
 
 import os
+from collections.abc import Iterator
 from contextlib import contextmanager
+from os.path import expandvars
 from pathlib import Path
 from sys import version_info as _python_version_tuple
-from typing import Iterator, TypedDict
-
-from expandvars import expandvars
+from typing import TypedDict
 
 from ._compat import load_toml_from_string
 from ._transformers import get_cli_kwargs_from_config, get_enabled_cli_flags_from_config
@@ -111,12 +111,19 @@ def patched_env(env: dict[str, str], cython_line_tracing_requested: bool) -> Ite
     :yields: None
     """
     orig_env = os.environ.copy()
+    # Unset self-references such as ${LDFLAGS} must expand to empty strings.
+    for env_var in env:
+        os.environ.setdefault(env_var, '')
     expanded_env = {name: expandvars(var_val) for name, var_val in env.items()}
     os.environ.update(expanded_env)
 
+    # The macro goes through ``CPPFLAGS`` rather than ``CFLAGS``: setuptools'
+    # distutils appends ``CPPFLAGS`` to the interpreter's own compiler flags,
+    # while a ``CFLAGS`` environment variable replaces them and silently
+    # drops ``-O3`` and ``-DNDEBUG`` from the build.
     if cython_line_tracing_requested:
-        os.environ['CFLAGS'] = ' '.join((
-            os.getenv('CFLAGS', ''),
+        os.environ['CPPFLAGS'] = ' '.join((
+            os.getenv('CPPFLAGS', ''),
             '-DCYTHON_TRACE_NOGIL=1',  # Implies CYTHON_TRACE=1
         )).strip()
     try:
