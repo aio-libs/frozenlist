@@ -1,8 +1,8 @@
 # FIXME:
 # mypy: disable-error-code="misc"
 
-import pickle
 import importlib
+import pickle
 import sys
 from collections.abc import MutableSequence
 from copy import copy, deepcopy
