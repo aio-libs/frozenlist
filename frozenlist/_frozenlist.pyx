@@ -171,8 +171,7 @@ cdef class FrozenList:
 
         # Preserve frozen state
         if self._frozen.load():
-            # faster to call .store directly rather than freeze()
-            new_list._frozen.store(True)
+            new_list.freeze()
 
         return new_list
 
