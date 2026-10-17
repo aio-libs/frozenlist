@@ -2,7 +2,6 @@ import os
 import types
 from collections.abc import MutableSequence
 from functools import total_ordering
-from typing import Any
 
 __version__ = "1.8.1.dev0"
 
