@@ -10,7 +10,8 @@ from collections.abc import MutableSequence
 
 cimport cython
 
-# Disable cython auto-pickling because it cannot handle atomic variables
+
+# Cython cannot pickle atomic variables
 @cython.auto_pickle(False)
 cdef class FrozenList:
     __class_getitem__ = classmethod(types.GenericAlias)
@@ -158,8 +159,8 @@ cdef class FrozenList:
         return type(self).__unreduce_ex__, (self.frozen, self._items)
 
     @classmethod
-    def __unreduce_ex__(cls, frozen: bool, _items: list):
-        fl = cls(_items)
+    def __unreduce_ex__(cls, frozen: bool, items: list):
+        fl = cls(items)
         if frozen:
             fl.freeze()
         return fl
