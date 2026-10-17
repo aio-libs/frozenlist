@@ -1,2 +1,2 @@
-Fix pickling in Cython Extension.
+Fixed pickling in Cython Extension.
 -- by :user:`Vizonex`
