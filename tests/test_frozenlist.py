@@ -416,12 +416,12 @@ class FrozenListMixin:
         assert len(copied[1]) == 3  # Should see the change
         assert len(shared) == 2  # Original unchanged
 
-    def test_pickling(self):
+    def test_pickling(self) -> None:
         f = self.FrozenList([1, 2])
         result = pickle.loads(pickle.dumps(f))
         assert result == f
 
-    def test_pickling_frozen(self):
+    def test_pickling_frozen(self) -> None:
         f = self.FrozenList([1, 2])
         f.freeze()
         result = pickle.loads(pickle.dumps(f))
