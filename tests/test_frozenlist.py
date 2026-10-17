@@ -420,11 +420,13 @@ class FrozenListMixin:
         f = self.FrozenList([1, 2])
         result = pickle.loads(pickle.dumps(f))
         assert result == f
+        assert result.frozen == f.frozen
 
-    def test_pickling_frozen(self) -> None:
+    def test_pickling_frozen(self):
         f = self.FrozenList([1, 2])
         f.freeze()
         result = pickle.loads(pickle.dumps(f))
+        assert result == f
         assert result.frozen == f.frozen
 
 
