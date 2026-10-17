@@ -422,7 +422,7 @@ class FrozenListMixin:
         assert result == f
         assert result.frozen == f.frozen
 
-    def test_pickling_frozen(self):
+    def test_pickling_frozen(self) -> None:
         f = self.FrozenList([1, 2])
         f.freeze()
         result = pickle.loads(pickle.dumps(f))
