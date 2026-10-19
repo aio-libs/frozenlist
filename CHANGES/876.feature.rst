@@ -1,0 +1,2 @@
+Optimized deep copies of ``FrozenList``.
+-- by :user:`Vizonex`.
