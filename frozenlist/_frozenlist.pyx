@@ -20,11 +20,9 @@ from collections.abc import MutableSequence
 
 cdef extern from "Python.h":
     # XXX: Cython makes an unessesary list-check in __iadd__
-    # changing the signature of the function to say it returns a list
+    # changing the return type of the function to a list
     # remedies the problems.
     list PySequence_InPlaceConcat(object o1, object o2)
-    # Signature in Cython's module is wrong.
-    Py_ssize_t PySequence_Count(object o, object value) except -1
 
 cdef class FrozenList:
     __class_getitem__ = classmethod(types.GenericAlias)
@@ -118,10 +116,6 @@ cdef class FrozenList:
         PyList_Reverse(self._items)
 
     def pop(self, index=-1):
-        # XXX: Currently pop is impossible to refactor
-        # any other ways as PyList_Pop doesn't exist yet...
-        # An equivalent of MutableSequence.pop gets
-        # around this problem.
         self._check_frozen()
         return self._items.pop(index)
 
@@ -133,9 +127,7 @@ cdef class FrozenList:
         PyList_Append(self._items, item)
 
     def count(self, item):
-        # NOTE: doing self._items.count(item) Generates expensive call
-        # making it a bit faster to call the direct C-API
-        return PySequence_Count(self._items, item)
+        return self._items.count(item)
 
     def __repr__(self):
         return '<FrozenList(frozen={}, {!r})>'.format(self._frozen.load(),
