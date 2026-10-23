@@ -4,5 +4,5 @@ coverage==7.16.1
 expandvars==1.1.2
 pytest==9.1.1
 pytest-cov==7.1.0
-setuptools==84.0.0
+setuptools==84.2.0
 tomli==2.5.0; python_version < "3.11"
