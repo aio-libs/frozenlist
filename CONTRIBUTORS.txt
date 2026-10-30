@@ -1,5 +1,6 @@
 - Contributors -
 ----------------
+Abhinav Maurya
 Andrew Svetlov
 Edgar Ramírez-Mondragón
 J. Nick Koston
