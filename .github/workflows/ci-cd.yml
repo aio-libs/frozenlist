@@ -139,14 +139,14 @@ jobs:
         - macos-latest
         tag:
         - ''
-        - 'musllinux'
+        - musllinux
         exclude:
         - runner-vm-os: windows-latest
-          tag: 'musllinux'
+          tag: musllinux
         - runner-vm-os: windows-11-arm
-          tag: 'musllinux'
+          tag: musllinux
         - runner-vm-os: macos-latest
-          tag: 'musllinux'
+          tag: musllinux
         - runner-vm-os: ubuntu-latest
           tag: >-
            ${{
@@ -207,7 +207,7 @@ jobs:
         - 3.11
         - >-
           3.10
-        no-extensions: ['', 'Y']
+        no-extensions: ['', Y]
         os:
         - ubuntu-latest
         - macos-latest
