@@ -125,6 +125,11 @@ def patched_env(env: dict[str, str], cython_line_tracing_requested: bool) -> Ite
         os.environ['CPPFLAGS'] = ' '.join((
             os.getenv('CPPFLAGS', ''),
             '-DCYTHON_TRACE_NOGIL=1',  # Implies CYTHON_TRACE=1
+            # Cython defaults this on for CPython 3.13+, routing
+            # tracing through sys.monitoring, which the
+            # Cython.Coverage plugin cannot consume. Ask for the
+            # legacy tracing hooks instead:
+            '-DCYTHON_USE_SYS_MONITORING=0',
         )).strip()
     try:
         yield
