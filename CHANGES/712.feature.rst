@@ -1,0 +1,3 @@
+Refactored methods ``__len__``, ``__iadd__``, ``index``, ``extend``, ``append``,
+``count`` and ``__deepcopy__`` and added notes for ``pop``, ``append`` and
+``extend`` for contributors -- by :user:`Vizonex`.
