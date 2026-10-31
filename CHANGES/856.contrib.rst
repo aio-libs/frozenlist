@@ -1,3 +1,3 @@
-Modernized the GitHub issues and pull request templates
+Modernized the GitHub issue and pull request templates
 to guide contributors through bug reports and feature
 requests more consistently -- by :user:`Polandia94`.
