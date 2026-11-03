@@ -4,13 +4,15 @@ import os
 import shlex
 import sys
 import sysconfig
+from types import SimpleNamespace
 
 import pytest
+from pep517_backend import cli
 from pep517_backend._cython_configuration import patched_env
 from setuptools._distutils.ccompiler import new_compiler
 from setuptools._distutils.sysconfig import customize_compiler
 
-TRACE_MACRO = "-DCYTHON_TRACE_NOGIL=1"
+TRACE_MACROS = ("-DCYTHON_TRACE_NOGIL=1", "-DCYTHON_USE_SYS_MONITORING=0")
 
 
 def _interpreter_flags() -> list[str]:
@@ -32,7 +34,7 @@ def _configured_compile_command() -> list[str]:
 def test_tracing_macro_goes_through_cppflags(
     monkeypatch: pytest.MonkeyPatch, tracing: bool
 ) -> None:
-    """The macro is appended to CPPFLAGS and CFLAGS is left alone.
+    """The macros are appended to CPPFLAGS and CFLAGS is left alone.
 
     A CFLAGS environment variable replaces the interpreter's own compiler
     flags in setuptools' distutils, which silently drops -O3 from the
@@ -46,7 +48,8 @@ def test_tracing_macro_goes_through_cppflags(
         assert os.environ["CFLAGS"] == "-fuser-cflag"
 
     assert cppflags[0] == "-DUSER=1"
-    assert (TRACE_MACRO in cppflags) is tracing
+    for macro in TRACE_MACROS:
+        assert (macro in cppflags) is tracing
     assert os.environ["CPPFLAGS"] == "-DUSER=1"
 
 
@@ -56,7 +59,7 @@ def test_tracing_macro_goes_through_cppflags(
 def test_interpreter_flags_survive_the_build_env(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    """The compiler still gets the interpreter's flags plus the macro.
+    """The compiler still gets the interpreter's flags plus the macros.
 
     This drives setuptools' real compiler customization, so it fails if the
     backend ever goes back to setting CFLAGS.
@@ -70,4 +73,26 @@ def test_interpreter_flags_survive_the_build_env(
 
     for flag in _interpreter_flags():
         assert flag in command
-    assert TRACE_MACRO in command
+    for macro in TRACE_MACROS:
+        assert macro in command
+
+
+def test_translate_cython_requests_line_tracing(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The C files made for the coverage plugin carry trace calls.
+
+    Without the ``linetrace`` directive the regenerated C file has no
+    trace instrumentation, so ``Cython.Coverage`` records nothing for the
+    ``.pyx`` sources.
+    """
+    directives: list[dict[str, object]] = []
+
+    def translate(sources: list[str], options: SimpleNamespace) -> SimpleNamespace:
+        directives.append(options.compiler_directives)
+        return SimpleNamespace(num_errors=0)
+
+    monkeypatch.setattr(cli, "_translate_cython_cli_cmd", translate)
+
+    assert cli.run_main_program(["cli", "translate-cython"]) == 0
+    assert directives[0]["linetrace"] is True
