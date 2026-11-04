@@ -1,7 +1,8 @@
 .. image:: FrozenList.svg
-    :width: 750px
+   :width: 750px
+   :height: 150px
 
-==========
+=========================
 
 .. image:: https://github.com/aio-libs/frozenlist/workflows/CI/badge.svg
    :target: https://github.com/aio-libs/frozenlist/actions
