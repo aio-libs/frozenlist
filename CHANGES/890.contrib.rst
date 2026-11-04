@@ -1,0 +1,2 @@
+Added logo to ``README.rst``
+-- by :user:`Vizonex`.
