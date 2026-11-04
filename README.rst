@@ -1,4 +1,6 @@
-frozenlist
+.. raw:: html
+   <p><img src="FrozenList.svg" alt="FrozenList" width="500"></p>
+
 ==========
 
 .. image:: https://github.com/aio-libs/frozenlist/workflows/CI/badge.svg
