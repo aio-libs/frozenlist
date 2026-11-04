@@ -1,9 +1,11 @@
-.. image:: FrozenList.svg
+.. |logo| image:: FrozenList.svg
    :width: 750px
    :height: 150px
+   :target: https://pypi.org/project/frozenlist
+   :alt: frozenlist @ PyPI
 
-frozenlist
-==========
+|logo|
+============
 
 .. image:: https://github.com/aio-libs/frozenlist/workflows/CI/badge.svg
    :target: https://github.com/aio-libs/frozenlist/actions
