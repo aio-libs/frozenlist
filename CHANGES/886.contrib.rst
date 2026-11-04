@@ -1,0 +1,3 @@
+Synchronized the ``.yamllint`` configuration with the ``tox-dev``
+template by adding the ``quoted-strings`` rule and removing redundant
+quotes across YAML files -- by :user:`Fire162`.
