@@ -1,5 +1,8 @@
 .. raw:: html
-   <p><img src="FrozenList.svg" alt="FrozenList" width="500"></p>
+
+    <p align="left">
+      <img src="FrozenList.svg" alt="frozenlist" width="750">
+    </p>
 
 ==========
 
