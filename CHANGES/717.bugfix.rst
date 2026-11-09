@@ -1,0 +1,2 @@
+Fixed pickling in Cython Extension.
+-- by :user:`Vizonex`
